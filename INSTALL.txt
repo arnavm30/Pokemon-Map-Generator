@@ -1,0 +1,5 @@
+install Graphics module 
+  run "opam install graphics"
+      "opam install user-setup"
+      "opam user-setup install"
+  in the terminal
