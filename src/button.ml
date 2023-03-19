@@ -1,4 +1,5 @@
 open Graphics
+open Random
 
 type t = { x : int; y : int; width : int; height : int }
 
@@ -19,8 +20,15 @@ let rec press b =
     && status.mouse_y >= b.y
     && status.mouse_y <= b.y + b.height
   then (
-    set_color black;
-    fill_rect (size_x () / 4) (size_y () / 5) (size_x () / 2) (size_y () / 10))
+    self_init ();
+    let c = rgb (int 255) (int 255) (int 255) in
+    set_color c;
+    fill_rect
+      (int (size_x ()))
+      (int (size_y ()))
+      (int (size_x ()))
+      (int (size_y ()));
+    press b)
   else (
     print_endline "did not press button";
     press b)
