@@ -1,5 +1,8 @@
-val sum : float array -> float
-(** sums of array *)
+val sumf : float array -> float
+(** sum of float array *)
+
+val sum : int array -> int
+(** sum of int array *)
 
 val ( +++. ) : float array -> float array -> float array
 val ( ---. ) : float array -> float array -> float array
