@@ -2,7 +2,7 @@ val sum : float array -> float
 (** sums of array *)
 
 val ( +++. ) : float array -> float array -> float array
-val ( --. ) : float array -> float array -> float array
+val ( ---. ) : float array -> float array -> float array
 val ( ***. ) : float array -> float array -> float array
 val ( ///. ) : float array -> float array -> float array
 
