@@ -31,9 +31,12 @@ let array_div_test (name : string) (arr1 : float array) (arr2 : float array)
     (expected_output : float array) : test =
   array_op_test name arr1 arr2 ( ///. ) expected_output
 
-let sum_test (name : string) (flts : float array) (expected_output : float) :
+let sumf_test (name : string) (flts : float array) (expected_output : float) :
     test =
-  name >:: fun _ -> assert_equal expected_output (sum flts)
+  name >:: fun _ -> assert_equal expected_output (sumf flts)
+
+let sum_test (name : string) (ints : int array) (expected_output : int) : test =
+  name >:: fun _ -> assert_equal expected_output (sum ints)
 
 let entropy_test (name : string) (w : float array) (expected_output : float) :
     test =
@@ -49,7 +52,8 @@ let tests =
       (Array.make 10 1.) (Array.make 10 5.);
     array_div_test "array div 1s array is same array" (Array.make 10 5.)
       (Array.make 10 1.) (Array.make 10 5.);
-    sum_test "[] has 0 sum" (Array.make 0 0.) 0.;
+    sumf_test "[] has 0 sum" (Array.make 0 0.) 0.;
+    sum_test "[] has 0 sum" (Array.make 0 0) 0;
     entropy_test "[0.5] has 0 entropy" (Array.make 1 0.5) 0.;
   ]
 
