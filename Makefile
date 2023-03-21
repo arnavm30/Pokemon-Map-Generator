@@ -1,3 +1,5 @@
+.PHONY: test check
+
 build:
 	dune build
 
@@ -17,7 +19,7 @@ graph:
 
 clean:
 	dune clean
-	rm -f adventure.zip
+	rm -f generator.zip
 
 doc:
 	dune build @doc
