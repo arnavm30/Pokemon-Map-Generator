@@ -13,4 +13,4 @@ val make : int -> int -> int -> int -> Graphics.color -> string -> t
 
 val press : t -> unit
 (** [press b] is whether mouse button press is inside button [b], if so then 
-    make a black rectangle*)
+    make random colored and sized rectangles*)

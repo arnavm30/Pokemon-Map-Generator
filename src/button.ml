@@ -6,9 +6,9 @@ type t = { x : int; y : int; width : int; height : int }
 let make x y w h c str =
   set_color c;
   fill_rect x y w h;
-  moveto (x + (w / 10)) (y + (y / 10));
+  moveto (x + (w / 3)) (y + (y / 2));
   set_color black;
-  set_text_size w;
+  (* set_text_size (w * 100); *)
   draw_string str;
   { x; y; width = w; height = h }
 
@@ -25,9 +25,10 @@ let rec press b =
     set_color c;
     fill_rect
       (int (size_x ()))
-      (int (size_y ()))
+      ((2 * b.y) + b.height + int (size_y () - (2 * b.y) - b.height))
       (int (size_x ()))
       (int (size_y ()));
+
     press b)
   else (
     print_endline "did not press button";
