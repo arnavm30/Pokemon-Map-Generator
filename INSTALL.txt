@@ -8,4 +8,4 @@ install Graphics module
   in the terminal
 
 compile code
-  run "make code"
+  run "make build"
