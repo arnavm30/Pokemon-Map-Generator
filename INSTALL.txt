@@ -1,5 +1,11 @@
+install Ocaml and opam 
+  follow these instructions: https://cs3110.github.io/textbook/chapters/preface/install.html 
+
 install Graphics module 
   run "opam install graphics"
       "opam install user-setup"
       "opam user-setup install"
   in the terminal
+
+compile code
+  run "make code"
