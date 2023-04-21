@@ -1,18 +1,29 @@
 open Util
 
 module Tile = struct
-  type t = { mutable collapsed : bool; options : float array }
+  type t = {
+    mutable collapsed : bool;
+    options : float array;
+    mutable sum_of_ones : int;
+        (* mutable sum_of_weights: float;
+           mutable sum_of_logweights: float;
+           weights: float array; *)
+  }
   (** Representation invariant: *)
 
   let check_collapsed t = if sumf t.options <= 1. then t.collapsed <- true
-  let make (l : int) = { collapsed = false; options = Array.make l 1. }
+
+  let make (l : int) =
+    { collapsed = false; options = Array.make l 1.; sum_of_ones = l }
 
   let observe (i : int) (t : t) =
     t.options.(i) <- 0.;
     check_collapsed t
-  (* let collapsed t = t.collapsed
-     let options t = t.options *)
+
+  let options t = t.options
 end
+
+open Tile
 
 type t = Tile.t array array
 
