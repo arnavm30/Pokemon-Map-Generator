@@ -1,11 +1,16 @@
 install Ocaml and opam 
   follow these instructions: https://cs3110.github.io/textbook/chapters/preface/install.html 
 
-install Graphics module 
+install necessary modules
   run "opam install graphics"
+      "brew install libpng"
+      "opam install camlimages"
       "opam install user-setup"
       "opam user-setup install"
   in the terminal
+
+  if you already have camlimages but not libpng downloaded, you will
+  need to uninstall camlimages, install libpng, then reinstall camlimages
 
 compile code
   run "make build"
