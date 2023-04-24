@@ -1,4 +1,5 @@
 open Util
+open Graphics
 
 module Tile = struct
   type t = {
@@ -16,6 +17,9 @@ module Tile = struct
   let make (l : int) =
     { collapsed = false; options = Array.make l 1.; sum_of_ones = l }
 
+  let make_test (l : int) =
+    { collapsed = true; options = Array.make l 1.; sum_of_ones = l }
+
   let observe (i : int) (t : t) =
     t.options.(i) <- 0.;
     check_collapsed t
@@ -28,6 +32,9 @@ open Tile
 type t = Tile.t array array
 
 let make (x : int) (y : int) (l : int) = Array.make_matrix x y (Tile.make l)
+
+let make_test (x : int) (y : int) (l : int) =
+  Array.make_matrix x y (Tile.make_test l)
 
 let smallest_entropies (st : t) (w : float array) =
   (* let aux (arr: Tile.t array) =
@@ -61,3 +68,17 @@ let smallest_entropy (st : t) (w : float array) =
   with Failure _ -> List.hd smallest
 
 let propogate (st : t) = failwith "not implemented"
+
+let draw (st : t) (x : int) (y : int) =
+  open_graph "";
+  let img = Png.load "assets/tall_grass_noalpha.png" [] in
+  let g = Graphic_image.of_image img in
+  let g_color_array = dump_image g in
+  let img_width = Array.length g_color_array in
+  let img_height = Array.length g_color_array.(0) in
+  for i = 0 to Array.length st - 1 do
+    for j = 0 to Array.length st.(0) - 1 do
+      Graphics.draw_image g (x + (img_width * i)) (y + (img_height * j))
+    done
+  done;
+  ignore (read_key ())

@@ -1,4 +1,4 @@
 (library
  (name generator)
  (public_name Generator)
- (libraries graphics))
+ (libraries graphics camlimages.core camlimages.png camlimages.graphics))
