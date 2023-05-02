@@ -71,7 +71,7 @@ let propogate (st : t) = failwith "not implemented"
 
 let draw (st : t) (x : int) (y : int) =
   open_graph "";
-  let img = Png.load "assets/tall_grass_noalpha.png" [] in
+  let img = Png.load "assets/corner.png" [] in
   let g = Graphic_image.of_image img in
   let g_color_array = dump_image g in
   let img_width = Array.length g_color_array in
