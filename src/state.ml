@@ -1,5 +1,6 @@
 open Util
 open Graphics
+open Random
 
 module Tile = struct
   type t = {
@@ -18,7 +19,9 @@ module Tile = struct
     { collapsed = false; options = Array.make l 1.; sum_of_ones = l }
 
   let make_test (l : int) =
-    { collapsed = true; options = Array.make l 1.; sum_of_ones = l }
+    self_init ();
+    let rnd_index = Random.float 4. in
+    { collapsed = true; options = Array.make 1 rnd_index; sum_of_ones = l }
 
   let observe (i : int) (t : t) =
     t.options.(i) <- 0.;
@@ -71,13 +74,14 @@ let propogate (st : t) = failwith "not implemented"
 
 let draw (st : t) (x : int) (y : int) =
   open_graph "";
-  let img = Png.load "assets/corner.png" [] in
-  let g = Graphic_image.of_image img in
-  let g_color_array = dump_image g in
-  let img_width = Array.length g_color_array in
-  let img_height = Array.length g_color_array.(0) in
   for i = 0 to Array.length st - 1 do
     for j = 0 to Array.length st.(0) - 1 do
+      let index = int_of_float st.(i).(j).options.(0) in
+      let img = Png.load ("assets/corner" ^ string_of_int index ^ ".png") [] in
+      let g = Graphic_image.of_image img in
+      let g_color_array = dump_image g in
+      let img_width = Array.length g_color_array in
+      let img_height = Array.length g_color_array.(0) in
       Graphics.draw_image g (x + (img_width * i)) (y + (img_height * j))
     done
   done;
