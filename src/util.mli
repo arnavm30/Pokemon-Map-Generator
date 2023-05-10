@@ -1,8 +1,8 @@
 val sumf : float array -> float
-(** sum of float array *)
+(** [sumf flt_arr] is the float sum of [flt_arr] *)
 
 val sum : int array -> int
-(** sum of int array *)
+(** [sum i_arr] is the int sum of [i_arr] *)
 
 val ( +++. ) : float array -> float array -> float array
 val ( ---. ) : float array -> float array -> float array
@@ -10,4 +10,4 @@ val ( ***. ) : float array -> float array -> float array
 val ( ///. ) : float array -> float array -> float array
 
 val entropy : float array -> float
-(** shannon entropy of a list of weights*)
+(** [entropy f_arr] is the shannon entropy of [f_arr], array of float weights *)

@@ -18,10 +18,10 @@ module Tile = struct
   let make (l : int) =
     { collapsed = false; options = Array.make l 1.; sum_of_ones = l }
 
-  let make_test (l : int) =
+  let make_test (cells : Cells.t array) =
     self_init ();
     let rnd_index = Random.float 4. in
-    { collapsed = true; options = Array.make 1 rnd_index; sum_of_ones = l }
+    { collapsed = true; options = [| rnd_index |]; sum_of_ones = 1 }
 
   let observe (i : int) (t : t) =
     t.options.(i) <- 0.;
@@ -36,8 +36,8 @@ type t = Tile.t array array
 
 let make (x : int) (y : int) (l : int) = Array.make_matrix x y (Tile.make l)
 
-let make_test (x : int) (y : int) (l : int) =
-  Array.make_matrix x y (Tile.make_test l)
+let make_test (x : int) (y : int) (cells : Cells.t array) =
+  Array.make_matrix x y (Tile.make_test cells)
 
 let smallest_entropies (st : t) (w : float array) =
   (* let aux (arr: Tile.t array) =
@@ -72,17 +72,15 @@ let smallest_entropy (st : t) (w : float array) =
 
 let propogate (st : t) = failwith "not implemented"
 
-let draw (st : t) (x : int) (y : int) =
-  open_graph "";
+let draw (st : t) (x : int) (y : int) (cells : Cells.t array) =
   for i = 0 to Array.length st - 1 do
     for j = 0 to Array.length st.(0) - 1 do
       let index = int_of_float st.(i).(j).options.(0) in
-      let img = Png.load ("assets/corner" ^ string_of_int index ^ ".png") [] in
-      let g = Graphic_image.of_image img in
-      let g_color_array = dump_image g in
-      let img_width = Array.length g_color_array in
-      let img_height = Array.length g_color_array.(0) in
-      Graphics.draw_image g (x + (img_width * i)) (y + (img_height * j))
+      let img = Cells.get_img cells.(index) in
+      let img_color_array = dump_image img in
+      let img_width = Array.length img_color_array in
+      let img_height = Array.length img_color_array.(0) in
+      Graphics.draw_image img (x + (img_width * i)) (y + (img_height * j))
     done
   done;
   ignore (read_key ())
