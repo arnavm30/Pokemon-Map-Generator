@@ -21,5 +21,31 @@ let allow a b dir s = AdjSet.add (a, b, dir) s
 
 (* Goes in order of UP, DOWN, LEFT, RIGHT *)
 let fold_dirs f acc = acc |> f UP |> f DOWN |> f LEFT |> f RIGHT
+let fold_dirs_tile_indexed f t acc = fold_dirs (f t) acc
 let allow_all a b s = fold_dirs (fun dir acc -> AdjSet.add (a, b, dir) acc) s
 let is_allowed a b dir s = AdjSet.mem (a, b, dir) s
+
+let get_all_allowed a t s =
+  let rec aux t dir acc =
+    if t < 0 then acc
+    else if is_allowed a t dir s then aux (t - 1) dir ((a, t, dir) :: acc)
+    else aux (t - 1) dir acc
+  in
+  fold_dirs_tile_indexed aux t []
+
+let count_enablers a t s =
+  let open Cell in
+  let rec aux t dir acc =
+    if t < 0 then acc
+    else if is_allowed a t dir s then
+      match dir with
+      | UP -> aux (t - 1) dir { acc with up = acc.up + 1 }
+      | DOWN -> aux (t - 1) dir { acc with down = acc.down + 1 }
+      | LEFT -> aux (t - 1) dir { acc with left = acc.left + 1 }
+      | RIGHT -> aux (t - 1) dir { acc with right = acc.right + 1 }
+    else aux (t - 1) dir acc
+  in
+  fold_dirs_tile_indexed aux t { up = 0; down = 0; left = 0; right = 0 }
+
+(* let get_allowed a b dir s =
+   let *)

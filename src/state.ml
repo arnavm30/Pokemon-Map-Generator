@@ -9,30 +9,39 @@ let init_weight_sums ws =
   in
   Array.fold_left aux (0., 0.) ws
 
-let count_enablers t num_tiles adj =
-  let open! Adj_rules in
-  let rec aux dir acc =
+let count_enablers c num_tiles adj =
+  Adj_rules.count_enablers c (num_tiles - 1) adj
+  (* let rec aux dir acc =
     match acc with
-    | n, (u, d, l, r) -> (
-        if n < 0 then acc
-        else if not (is_allowed t n dir adj) then aux dir (n - 1, (u, d, l, r))
+    | n, ({ up; down; left; right } as dirs) -> (
+        if n < 0 then (num_tiles - 1, dirs)
+          (* reset the tile counter to loop again *)
+        else if not (is_allowed c n dir adj) then aux dir (n - 1, dirs)
         else
           match dir with
-          | UP -> aux dir (n - 1, (u + 1, d, l, r))
-          | DOWN -> (n - 1, (u, d + 1, l, r))
-          | LEFT -> (n - 1, (u, d, l + 1, r))
-          | RIGHT -> (n - 1, (u, d, l, r + 1)))
+          | UP -> aux dir (n - 1, { dirs with up = up + 1 })
+          | DOWN -> (n - 1, { dirs with down = down + 1 })
+          | LEFT -> (n - 1, { dirs with left = left + 1 })
+          | RIGHT -> (n - 1, { dirs with right = right + 1 })) *)
+    (* | UP -> aux dir (n - 1, (u + 1, d, l, r))
+       | DOWN -> (n - 1, (u, d + 1, l, r))
+       | LEFT -> (n - 1, (u, d, l + 1, r))
+       | RIGHT -> (n - 1, (u, d, l, r + 1))) *)
   in
-  Adj_rules.fold_dirs aux (num_tiles, (0, 0, 0, 0))
+  let t = num_tiles - 1 in
+  match
+    Adj_rules.fold_dirs aux (t, { up = 0; down = 0; left = 0; right = 0 })
+  with
+  | _, dirs -> dirs
 
 let init_tile_enablers t num_tiles adj = count_enablers t num_tiles adj
 
 (* let make_test (l : int) =
    { collapsed = true; options = Array.make l 1.; sum_of_ones = 1 } *)
 
-let make (x : int) (y : int) (l : int) (ws : float array) (adj : Adj_rules.t) =
+let make (x : int) (y : int) (t : int) (ws : float array) (adj : Adj_rules.t) =
   let sw, swlw = init_weight_sums ws in
-  let state = Array.make_matrix x y (Cell.make l sw swlw) in
+  let state = Array.make_matrix x y (Cell.make t sw swlw) in
   let heap = create ~min_size:(x * y) ~cmp () in
   Array.iter (Array.iter (Pairing_heap.add heap)) state;
   { state; heap }
