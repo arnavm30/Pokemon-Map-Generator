@@ -33,7 +33,7 @@ let make (l : int) (w : float) (lw : float) =
     tile_enablers = { up = l; right = l; down = l; left = l };
   }
 
-let make_test (cells : Cells.t array) =
+let make_test (cells : Tile.t array) =
   Random.self_init ();
   let rnd_index = Random.float 4. in
   {

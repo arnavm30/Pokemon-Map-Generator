@@ -46,9 +46,9 @@ let make (x : int) (y : int) (t : int) (ws : float array) (adj : Adj_rules.t) =
   Array.iter (Array.iter (Pairing_heap.add heap)) state;
   { state; heap }
 
-let make_test (x : int) (y : int) (cells : Cells.t array) =
+let make_test (x : int) (y : int) (tiles : Tile.t array) =
   {
-    state = Array.make_matrix x y (Cell.make_test cells);
+    state = Array.make_matrix x y (Cell.make_test tiles);
     heap = Pairing_heap.create ~min_size:0 ~cmp:(fun a b -> 0) ();
   }
 
@@ -90,15 +90,15 @@ let rec smallest_entropy st =
      try smallest |> List.length |> Random.int |> List.nth smallest
      with Failure _ -> List.hd smallest *)
 
-let propogate (st : t) (cells : Cells.t array) = failwith "unimplemented"
+let propogate (st : t) (tiles : Tile.t array) = failwith "unimplemented"
 (* let (i,j) = smallest_entropy st (Array.make (Array.length cells) 1.) in
    let tile = st.(i).(j) in *)
 
-let draw (st : t) (x : int) (y : int) (cells : Cells.t array) =
+let draw (st : t) (x : int) (y : int) (cells : Tile.t array) =
   for i = 0 to Array.length st.state - 1 do
     for j = 0 to Array.length st.state.(0) - 1 do
       let index = int_of_float st.state.(i).(j).options.(0) in
-      let img = Cells.get_img cells.(index) in
+      let img = Tile.get_img cells.(index) in
       let img_color_array = Graphics.dump_image img in
       let img_width = Array.length img_color_array in
       let img_height = Array.length img_color_array.(0) in

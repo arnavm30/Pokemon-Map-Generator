@@ -7,7 +7,7 @@
 type t
 (** The abstract type of values representing toggles. *)
 
-val make : int -> int -> int -> int -> Cells.t array -> t
+val make : int -> int -> int -> int -> Tile.t array -> t
 (** [make x y w h cells] is the toggles for [cells] drawn in the window with 
       bottom left corner at ([x],[y]) with width [w], height [h] *)
 

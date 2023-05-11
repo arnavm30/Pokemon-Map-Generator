@@ -13,5 +13,5 @@ type t = {
 val cmp : t -> t -> int
 val check_collapsed : t -> unit
 val make : int -> float -> float -> t
-val make_test : Cells.t array -> t
+val make_test : Tile.t array -> t
 val collapse : t -> int
