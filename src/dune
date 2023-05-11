@@ -1,4 +1,9 @@
 (library
  (name generator)
  (public_name Generator)
- (libraries graphics camlimages.core camlimages.png camlimages.graphics))
+ (libraries
+  graphics
+  camlimages.core
+  camlimages.png
+  camlimages.graphics
+  core_kernel.pairing_heap))
