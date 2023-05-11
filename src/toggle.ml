@@ -7,12 +7,12 @@ type t = {
   y : int;
   width : int;
   height : int;
-  cells : Cells.t array;
+  tiles : Tile.t array;
   toggles : toggle array;
 }
 
-let make (x : int) (y : int) (w : int) (h : int) (cells : Cells.t array) : t =
-  let cells_len = Array.length cells in
+let make (x : int) (y : int) (w : int) (h : int) (tiles : Tile.t array) : t =
+  let cells_len = Array.length tiles in
   let radius = 10 in
   let toggle_width = w / cells_len in
   let toggle_height = y + (h / 4) in
@@ -21,7 +21,7 @@ let make (x : int) (y : int) (w : int) (h : int) (cells : Cells.t array) : t =
   in
   set_color red;
   for i = 0 to cells_len - 1 do
-    let img = Cells.get_img cells.(i) in
+    let img = Tile.get_img tiles.(i) in
     let img_color_array = dump_image img in
     let img_width = Array.length img_color_array in
     Graphics.draw_image img
@@ -30,7 +30,7 @@ let make (x : int) (y : int) (w : int) (h : int) (cells : Cells.t array) : t =
     toggles.(i).x <- x + (i * toggle_width) + (toggle_width / 2);
     fill_circle toggles.(i).x toggles.(i).y radius
   done;
-  { x; y; width = w; height = h; cells; toggles }
+  { x; y; width = w; height = h; tiles; toggles }
 
 let rec one_toggle_press (tggls : t) (toggle : toggle) (sts : status)
     (f : unit -> unit) : unit =
@@ -39,11 +39,19 @@ let rec one_toggle_press (tggls : t) (toggle : toggle) (sts : status)
       (float_of_int (sts.mouse_x - toggle.x))
       (float_of_int (sts.mouse_y - toggle.y))
     < float_of_int toggle.r
-  then (
-    set_color green;
-    fill_circle toggle.x toggle.y toggle.r;
-    f ();
-    press tggls f)
+  then
+    if toggle.on then (
+      set_color red;
+      fill_circle toggle.x toggle.y toggle.r;
+      toggle.on <- false;
+      f ();
+      press tggls f)
+    else (
+      set_color green;
+      fill_circle toggle.x toggle.y toggle.r;
+      toggle.on <- true;
+      f ();
+      press tggls f)
   else (
     print_endline "did not press toggle";
     press tggls f)
