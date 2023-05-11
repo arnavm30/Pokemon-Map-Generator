@@ -1,6 +1,5 @@
 open Util
 open Graphics
-open Random
 
 module Tile = struct
   type t = {
@@ -18,10 +17,8 @@ module Tile = struct
   let make (l : int) =
     { collapsed = false; options = Array.make l 1.; sum_of_ones = l }
 
-  let make_test (cells : Cells.t array) =
-    self_init ();
-    let rnd_index = Random.float 4. in
-    { collapsed = true; options = [| rnd_index |]; sum_of_ones = 1 }
+  let make_test (l : int) =
+    { collapsed = true; options = Array.make l 1.; sum_of_ones = 1 }
 
   let observe (i : int) (t : t) =
     t.options.(i) <- 0.;
@@ -37,7 +34,7 @@ type t = Tile.t array array
 let make (x : int) (y : int) (l : int) = Array.make_matrix x y (Tile.make l)
 
 let make_test (x : int) (y : int) (cells : Cells.t array) =
-  Array.make_matrix x y (Tile.make_test cells)
+  Array.make_matrix x y (Tile.make_test (Array.length cells))
 
 let smallest_entropies (st : t) (w : float array) =
   (* let aux (arr: Tile.t array) =
@@ -70,7 +67,9 @@ let smallest_entropy (st : t) (w : float array) =
   try smallest |> List.length |> Random.int |> List.nth smallest
   with Failure _ -> List.hd smallest
 
-let propogate (st : t) = failwith "not implemented"
+let propogate (st : t) (cells : Cells.t array) = failwith "unimplemented"
+(* let (i,j) = smallest_entropy st (Array.make (Array.length cells) 1.) in
+   let tile = st.(i).(j) in *)
 
 let draw (st : t) (x : int) (y : int) (cells : Cells.t array) =
   for i = 0 to Array.length st - 1 do

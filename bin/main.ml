@@ -2,10 +2,20 @@
 open Generator
 open Graphics
 
+(* draws a randomly sized and colored rectangle in the window *)
+let rnd_rects () =
+  Random.self_init ();
+  let c = rgb (Random.int 255) (Random.int 255) (Random.int 255) in
+  set_color c;
+  fill_rect
+    (Random.int (size_x ()))
+    (Random.int (size_y ()))
+    (Random.int (size_x ()))
+    (Random.int (size_y ()))
+
 (* create the cells with constraints filled in *)
 let preload_cells () : Cells.t array =
   (* edge constraints are given in clockwise order starting from up *)
-  open_graph "";
   let init_cells =
     [|
       Cells.make
@@ -29,11 +39,26 @@ let preload_cells () : Cells.t array =
   done;
   init_cells
 
+let generate (cells : Cells.t array) () =
+  let width = size_x () in
+  let height = size_y () in
+  let map = State.make_test (width / 5) (height / 5) cells in
+  State.draw map 0 (height / 5) cells
+
 (** [main ()] opens a graphics window *)
 let main () =
+  open_graph "";
+  resize_window 1450 800;
   let cells = preload_cells () in
-  let map = State.make_test 37 28 cells in
-  State.draw map 2 1 cells
+  let width = size_x () in
+  let height = size_y () in
+  let b =
+    Button.make (width / 4) (height / 25) (width / 2) (height / 15) red
+      "Generate"
+  in
+  let t = Toggle.make 0 (height / 10) width (height / 4) cells in
+  Toggle.press t (generate cells);
+  Button.press b (generate cells)
 
 (* Execute the graphics engine. *)
 let () = main ()
