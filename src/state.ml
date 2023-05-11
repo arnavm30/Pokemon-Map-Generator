@@ -11,28 +11,28 @@ let init_weight_sums ws =
 
 let count_enablers c num_tiles adj =
   Adj_rules.count_enablers c (num_tiles - 1) adj
-  (* let rec aux dir acc =
-    match acc with
-    | n, ({ up; down; left; right } as dirs) -> (
-        if n < 0 then (num_tiles - 1, dirs)
-          (* reset the tile counter to loop again *)
-        else if not (is_allowed c n dir adj) then aux dir (n - 1, dirs)
-        else
-          match dir with
-          | UP -> aux dir (n - 1, { dirs with up = up + 1 })
-          | DOWN -> (n - 1, { dirs with down = down + 1 })
-          | LEFT -> (n - 1, { dirs with left = left + 1 })
-          | RIGHT -> (n - 1, { dirs with right = right + 1 })) *)
-    (* | UP -> aux dir (n - 1, (u + 1, d, l, r))
-       | DOWN -> (n - 1, (u, d + 1, l, r))
-       | LEFT -> (n - 1, (u, d, l + 1, r))
-       | RIGHT -> (n - 1, (u, d, l, r + 1))) *)
-  in
-  let t = num_tiles - 1 in
-  match
-    Adj_rules.fold_dirs aux (t, { up = 0; down = 0; left = 0; right = 0 })
-  with
-  | _, dirs -> dirs
+(* let rec aux dir acc =
+   match acc with
+   | n, ({ up; down; left; right } as dirs) -> (
+       if n < 0 then (num_tiles - 1, dirs)
+         (* reset the tile counter to loop again *)
+       else if not (is_allowed c n dir adj) then aux dir (n - 1, dirs)
+       else
+         match dir with
+         | UP -> aux dir (n - 1, { dirs with up = up + 1 })
+         | DOWN -> (n - 1, { dirs with down = down + 1 })
+         | LEFT -> (n - 1, { dirs with left = left + 1 })
+         | RIGHT -> (n - 1, { dirs with right = right + 1 })) *)
+(* | UP -> aux dir (n - 1, (u + 1, d, l, r))
+   | DOWN -> (n - 1, (u, d + 1, l, r))
+   | LEFT -> (n - 1, (u, d, l + 1, r))
+   | RIGHT -> (n - 1, (u, d, l, r + 1))) *)
+(* in
+   let t = num_tiles - 1 in
+   match
+     Adj_rules.fold_dirs aux (t, { up = 0; down = 0; left = 0; right = 0 })
+   with
+   | _, dirs -> dirs *)
 
 let init_tile_enablers t num_tiles adj = count_enablers t num_tiles adj
 
