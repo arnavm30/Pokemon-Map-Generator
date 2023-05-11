@@ -27,6 +27,9 @@ let count_enablers t num_tiles adj =
 
 let init_tile_enablers t num_tiles adj = count_enablers t num_tiles adj
 
+(* let make_test (l : int) =
+   { collapsed = true; options = Array.make l 1.; sum_of_ones = 1 } *)
+
 let make (x : int) (y : int) (l : int) (ws : float array) (adj : Adj_rules.t) =
   let sw, swlw = init_weight_sums ws in
   let state = Array.make_matrix x y (Cell.make l sw swlw) in
@@ -39,6 +42,8 @@ let make_test (x : int) (y : int) (cells : Cells.t array) =
     state = Array.make_matrix x y (Cell.make_test cells);
     heap = Pairing_heap.create ~min_size:0 ~cmp:(fun a b -> 0) ();
   }
+
+(* Array.make_matrix x y (Tile.make_test (Array.length cells)) *)
 
 let rec smallest_entropy st =
   match pop st.heap with
@@ -76,7 +81,9 @@ let rec smallest_entropy st =
      try smallest |> List.length |> Random.int |> List.nth smallest
      with Failure _ -> List.hd smallest *)
 
-let propogate (st : t) = failwith "not implemented"
+let propogate (st : t) (cells : Cells.t array) = failwith "unimplemented"
+(* let (i,j) = smallest_entropy st (Array.make (Array.length cells) 1.) in
+   let tile = st.(i).(j) in *)
 
 let draw (st : t) (x : int) (y : int) (cells : Cells.t array) =
   for i = 0 to Array.length st.state - 1 do
