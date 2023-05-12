@@ -6,7 +6,7 @@ let make (x : int) (y : int) (r : int) (img : Graphics.image) : t =
   { x; y; r; img; on = false }
 
 let draw (toggle : t) : unit =
-  set_color red;
+  set_color 0x757575;
   let img = toggle.img in
   let img_color_array = dump_image img in
   let img_width = Array.length img_color_array in
@@ -24,7 +24,7 @@ let mem (x, y) (toggle : t) =
 
 let press (toggle : t) (f : bool -> unit) : unit =
   if toggle.on then (
-    set_color red;
+    set_color 0x757575;
     fill_circle toggle.x toggle.y toggle.r;
     toggle.on <- false)
   else (
