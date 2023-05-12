@@ -55,8 +55,8 @@ let make_grid x y c =
 let make (x : int) (y : int) (t : int) (ws : float array) (adj : Adj_rules.t) =
   let sw, swlw = init_weight_sums ws in
   let enablers = init_tile_enablers t adj in
-  let grid = make_grid x y (Cell.make t sw swlw enablers) in
-  let heap = Pairing_heap.create ~min_size:(x * y) ~cmp () in
+  let grid = make_grid x y (Cell.make (t + 1) sw swlw enablers) in
+  let heap = Pairing_heap.create ~min_size:(x * y) ~cmp:Cell.cmp () in
   let stack = Stack.create () in
   Array.iter (Array.iter (Pairing_heap.add heap)) grid;
   { grid; heap; stack; w = x; h = y; uncollapsed = x * y }

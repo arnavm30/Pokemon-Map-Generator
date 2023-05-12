@@ -31,14 +31,14 @@ let check_contradiction t =
   if t.sum_of_ones = 0 then raise Contradiction else ()
 
 (* in theory, these are all the same at the beginning *)
-let make (l : int) (w : float) (lw : float) (enablers : directions array)
+let make (l : int) (sw : float) (swlw : float) (enablers : directions array)
     (coords : int * int) =
   {
     collapsed = false;
     options = Array.make l 1.;
     sum_of_ones = l;
-    sum_of_weights = w;
-    sum_of_weight_log_weights = lw;
+    sum_of_weights = sw;
+    sum_of_weight_log_weights = swlw;
     noise = Random.float 0.0000001;
     tile_enablers = enablers;
     coords;
