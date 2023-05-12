@@ -6,4 +6,5 @@
   camlimages.core
   camlimages.png
   camlimages.graphics
-  core_kernel.pairing_heap))
+  core_kernel.pairing_heap
+  yojson))

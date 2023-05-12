@@ -1,3 +1,5 @@
+open Yojson.Basic.Util
+
 type t = {
   img : Graphics.image;
   edges : string array;
@@ -26,3 +28,25 @@ let analyze (curr_tile : t) (tiles : t array) : t =
     else ()
   done;
   curr_tile
+
+let edges_of_json j =
+  let up_edge = j |> member "up" |> to_string in
+  let right_edge = j |> member "right" |> to_string in
+  let down_edge = j |> member "down" |> to_string in
+  let left_edge = j |> member "left" |> to_string in
+  [| up_edge; right_edge; down_edge; left_edge |]
+
+let tile_of_json j =
+  let img_path = j |> member "img_path" |> to_string in
+  let edges = j |> member "edges" |> edges_of_json in
+  make (Graphic_image.of_image (Png.load img_path [])) edges
+
+let from_json (j : Yojson.Basic.t) : t array =
+  let tiles_lst = j |> member "tiles" |> to_list |> List.map tile_of_json in
+  let tiles = Array.of_list tiles_lst in
+  for i = 0 to Array.length tiles - 1 do
+    let curr_cell = tiles.(i) in
+    let mutated_cell = analyze curr_cell tiles in
+    tiles.(i) <- mutated_cell
+  done;
+  tiles

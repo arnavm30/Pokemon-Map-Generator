@@ -3,6 +3,8 @@ install Ocaml and opam
 
 install necessary modules
   run "opam install graphics"
+      "opam install core_kernel"
+      "opam install yojson"
       "brew install libpng"
       "opam install camlimages"
       "opam install user-setup"

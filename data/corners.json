@@ -1,0 +1,40 @@
+{
+  "tiles": [
+    {
+      "img_path": "assets/corner1.png",
+      "edges": {
+        "up": "green",
+        "right": "green",
+        "down": "grey",
+        "left": "grey"
+      }
+    },
+    {
+      "img_path": "assets/corner2.png",
+      "edges": {
+        "up": "green",
+        "right": "grey",
+        "down": "grey",
+        "left": "green"
+      }
+    },
+    {
+      "img_path": "assets/corner3.png",
+      "edges": {
+        "up": "grey",
+        "right": "grey",
+        "down": "green",
+        "left": "green"
+      }
+    },
+    {
+      "img_path": "assets/corner4.png",
+      "edges": {
+        "up": "grey",
+        "right": "green",
+        "down": "green",
+        "left": "grey"
+      }
+    }
+  ]
+}
