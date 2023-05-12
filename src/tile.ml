@@ -1,3 +1,5 @@
+open Yojson.Basic.Util
+
 type t = {
   img : Graphics.image;
   edges : string array;
@@ -7,12 +9,10 @@ type t = {
   mutable left : int list;
 }
 
-let make (img : Graphics.image) (edges : string array) : t =
-  { img; edges; up = []; right = []; down = []; left = [] }
+let make img edges = { img; edges; up = []; right = []; down = []; left = [] }
+let get_img tile = tile.img
 
-let get_img (tile : t) = tile.img
-
-let analyze (curr_tile : t) (tiles : t array) : t =
+let analyze curr_tile tiles =
   for i = 0 to Array.length tiles - 1 do
     (* check bottom edge of cells.(i) matches top edge of curr_cell *)
     if tiles.(i).edges.(2) = curr_tile.edges.(0) then
@@ -26,3 +26,25 @@ let analyze (curr_tile : t) (tiles : t array) : t =
     else ()
   done;
   curr_tile
+
+let edges_of_json j =
+  let up_edge = j |> member "up" |> to_string in
+  let right_edge = j |> member "right" |> to_string in
+  let down_edge = j |> member "down" |> to_string in
+  let left_edge = j |> member "left" |> to_string in
+  [| up_edge; right_edge; down_edge; left_edge |]
+
+let tile_of_json j =
+  let img_path = j |> member "img_path" |> to_string in
+  let edges = j |> member "edges" |> edges_of_json in
+  make (Graphic_image.of_image (Png.load img_path [])) edges
+
+let from_json j =
+  let tiles_lst = j |> member "tiles" |> to_list |> List.map tile_of_json in
+  let tiles = Array.of_list tiles_lst in
+  for i = 0 to Array.length tiles - 1 do
+    let curr_cell = tiles.(i) in
+    let mutated_cell = analyze curr_cell tiles in
+    tiles.(i) <- mutated_cell
+  done;
+  tiles
