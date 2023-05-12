@@ -1,7 +1,16 @@
 (** Representation of a state. *)
 
-type t
+type t = {
+  grid : Cell.t array array;
+  heap : Cell.t Pairing_heap.t;
+  stack : (Cell.t * int) Stack.t;
+  w : int;
+  h : int;
+  mutable uncollapsed : int;
+}
 (** The abstract type of values representing a state. *)
+
+type result = FINISHED of t | CONTRADICTION
 
 val make : int -> int -> int -> float array -> Adj_rules.t -> t
 (** [make x y l] is the initial unobserved state with dimensions [x] by [y] and 
@@ -19,7 +28,9 @@ val smallest_entropy : t -> Cell.t option
 (** [smallest_entropy state weights] is the tile with the smallest 
     entropy in [state], chooses randomly if there are multiple possibilities *)
 
-val propogate : t -> Tile.t array -> unit
+val collapse_cell : float array -> Cell.t -> t -> unit
+
+val propogate : t -> result
 (** [propogate state cells] collapses the tile with the smallest entropy in [state] *)
 
 val draw : t -> int -> int -> Tile.t array -> unit

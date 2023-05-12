@@ -2,6 +2,7 @@ type directions = UP | DOWN | LEFT | RIGHT
 
 module TileTriple = struct
   type t = int * int * directions
+  (* (a, b, dir) implies that b is in the dir of a, i.e. (0, 1, UP) means that tile 1 is above 0*)
 
   let compare a b =
     match (a, b) with
@@ -33,7 +34,7 @@ let get_all_allowed a t s =
   in
   fold_dirs_tile_indexed aux t []
 
-let count_enablers a t s =
+let count_enablers_for_one a t s =
   let open Cell in
   let rec aux t dir acc =
     if t < 0 then acc
@@ -47,5 +48,19 @@ let count_enablers a t s =
   in
   fold_dirs_tile_indexed aux t { up = 0; down = 0; left = 0; right = 0 }
 
+let count_init_enablers t s =
+  let counts =
+    Array.make (t + 1) Cell.{ up = 0; down = 0; left = 0; right = 0 }
+  in
+  let rec aux a =
+    if a < 0 then counts
+    else
+      let _ = counts.(a) <- count_enablers_for_one a t s in
+      aux (a - 1)
+  in
+  aux t
+
+let opposite_dir dir =
+  match dir with UP -> DOWN | DOWN -> UP | LEFT -> RIGHT | RIGHT -> LEFT
 (* let get_allowed a b dir s =
    let *)
