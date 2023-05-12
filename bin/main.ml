@@ -33,7 +33,7 @@ let gen_interface tiles width height (x, y) : compn list =
   r := Butn genr_butn :: !r;
   !r
 
-(* [skel f_init f_end f_mouse f_except] is the event loop *)
+(* [event_loop f_init f_key f_mouse] is the event loop *)
 let event_loop f_init f_key f_mouse =
   f_init ();
   while true do
@@ -42,7 +42,7 @@ let event_loop f_init f_key f_mouse =
     else if s.button then f_mouse s.mouse_x s.mouse_y
   done
 
-(* create the map state that'll be passed to functions in skel *)
+(* create the map state that'll be passed to functions in event_loop *)
 let create_map_state () =
   open_graph "";
   resize_window 1450 800;
@@ -76,10 +76,7 @@ let f_mouse map_st x y =
             if b then State.draw map_st.s 0 (height / 5) map_st.tiles
             else clear_graph ())
     | Butn b -> Button.press b (fun () -> clear_graph ())
-  with Not_found -> print_endline "did not press toggle"
-
-(* handles when program ends *)
-let f_end e () = close_graph ()
+  with Not_found -> print_endline "did not press a component"
 
 (** [main ()] opens a graphics window and runs event loop*)
 let main () =

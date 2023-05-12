@@ -2,10 +2,9 @@ open Graphics
 
 type t = { x : int; y : int; r : int; img : Graphics.image; mutable on : bool }
 
-let make (x : int) (y : int) (r : int) (img : Graphics.image) : t =
-  { x; y; r; img; on = false }
+let make x y r img = { x; y; r; img; on = false }
 
-let draw (toggle : t) : unit =
+let draw toggle =
   set_color 0x757575;
   let img = toggle.img in
   let img_color_array = dump_image img in
@@ -16,13 +15,13 @@ let draw (toggle : t) : unit =
     (toggle.y + (2 * img_height));
   fill_circle toggle.x toggle.y toggle.r
 
-let mem (x, y) (toggle : t) =
+let mem (x, y) toggle =
   let x0 = toggle.x in
   let y0 = toggle.y in
   let r = toggle.r in
   Float.hypot (float_of_int (x - x0)) (float_of_int (y - y0)) < float_of_int r
 
-let press (toggle : t) (f : bool -> unit) : unit =
+let press toggle f =
   if toggle.on then (
     set_color 0x757575;
     fill_circle toggle.x toggle.y toggle.r;

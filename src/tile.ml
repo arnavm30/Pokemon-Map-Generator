@@ -9,12 +9,10 @@ type t = {
   mutable left : int list;
 }
 
-let make (img : Graphics.image) (edges : string array) : t =
-  { img; edges; up = []; right = []; down = []; left = [] }
+let make img edges = { img; edges; up = []; right = []; down = []; left = [] }
+let get_img tile = tile.img
 
-let get_img (tile : t) = tile.img
-
-let analyze (curr_tile : t) (tiles : t array) : t =
+let analyze curr_tile tiles =
   for i = 0 to Array.length tiles - 1 do
     (* check bottom edge of cells.(i) matches top edge of curr_cell *)
     if tiles.(i).edges.(2) = curr_tile.edges.(0) then
@@ -41,7 +39,7 @@ let tile_of_json j =
   let edges = j |> member "edges" |> edges_of_json in
   make (Graphic_image.of_image (Png.load img_path [])) edges
 
-let from_json (j : Yojson.Basic.t) : t array =
+let from_json j =
   let tiles_lst = j |> member "tiles" |> to_list |> List.map tile_of_json in
   let tiles = Array.of_list tiles_lst in
   for i = 0 to Array.length tiles - 1 do

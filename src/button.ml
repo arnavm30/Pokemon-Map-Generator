@@ -9,11 +9,9 @@ type t = {
   text : string;
 }
 
-let make (x : int) (y : int) (w : int) (h : int) (c : color) (str : string) : t
-    =
-  { x; y; width = w; height = h; c; text = str }
+let make x y w h c str = { x; y; width = w; height = h; c; text = str }
 
-let draw (b : t) : unit =
+let draw b =
   set_color b.c;
   let x = b.x in
   let y = b.y in
@@ -24,7 +22,7 @@ let draw (b : t) : unit =
   set_color black;
   draw_string b.text
 
-let mem (x, y) (b : t) =
+let mem (x, y) b =
   let x0 = b.x in
   let y0 = b.y in
   let w = b.width in
