@@ -11,6 +11,8 @@ let make (x : int) (y : int) (w : int) (h : int) (c : color) (str : string) : t
   draw_string str;
   { x; y; width = w; height = h }
 
+let mem (x, y) (x0, y0, w, h) = x >= x0 && x <= x0 + w && y >= y0 && y <= y0 + h
+
 let rec press (b : t) (f : unit -> unit) : unit =
   let status = wait_next_event [ Button_down ] in
   if

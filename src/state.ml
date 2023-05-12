@@ -187,5 +187,4 @@ let draw (st : t) (x : int) (y : int) (cells : Tile.t array) =
       let img_height = Array.length img_color_array.(0) in
       Graphics.draw_image img (x + (img_width * i)) (y + (img_height * j))
     done
-  done;
-  ignore (Graphics.read_key ())
+  done
