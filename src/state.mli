@@ -29,9 +29,11 @@ val smallest_entropy : t -> Cell.t option
     entropy in [state], chooses randomly if there are multiple possibilities *)
 
 val collapse_cell : float array -> Cell.t -> t -> unit
+(** [collapse weights cell state] collapses [cell] with the smallest entropy in [state] 
+with [weights] *)
 
 val propogate : t -> result
-(** [propogate state cells] collapses the tile with the smallest entropy in [state] *)
+(** [propogate state] eliminates tiles in cells of [state] that can no longer be chosen  *)
 
 val draw : t -> int -> int -> Tile.t array -> unit
 (** [draw state x y cells] renders the state to screen with bottom left corner 
