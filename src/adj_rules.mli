@@ -3,11 +3,8 @@
 type t
 (** The abstract type of values representing adjaceny rules. *)
 
-type directions =
-  | UP
-  | DOWN
-  | LEFT
-  | RIGHT  (** The abstract type of directions *)
+(** The abstract type of directions *)
+type directions = UP | DOWN | LEFT | RIGHT
 
 val empty : t
 (** [empty] is empty adjancey rules. *)

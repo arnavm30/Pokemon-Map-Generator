@@ -44,7 +44,7 @@ let make (num_tiles : int) (sw : float) (swlw : float)
     coords;
   }
 
-let make_test (cells : Tile.t array) =
+let make_test (tiles : Tile.t array) =
   Random.self_init ();
   let rnd_index = Random.float 4. in
   {
