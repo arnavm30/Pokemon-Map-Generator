@@ -76,12 +76,15 @@ let make_test (x : int) (y : int) (tiles : Tile.t array) =
 
 let rec smallest_entropy st =
   match Pairing_heap.pop st.heap with
+  (* avoid choosing an already collapsed cell*)
   | Some c -> if c.collapsed then smallest_entropy st else Some c
+  (* impossible *)
   | None -> None
 
 let collapse_cell ws c st =
   st.uncollapsed <- st.uncollapsed - 1;
   let removed = Cell.collapse ws c in
+  (* push every removed tile to the stack *)
   List.iter (fun x -> Stack.push (c, x) st.stack) removed
 
 (* let smallest_entropies (st : t) (w : float array) =
