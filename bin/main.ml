@@ -150,10 +150,16 @@ let f_mouse map_st x y =
     | Butn b -> Button.press b (run_wfc map_st)
   with Not_found -> print_endline "did not press a component"
 
+let f_key map_st k =
+  if k = ' ' then (
+    clear_graph ();
+    init map_st ())
+  else ()
+
 (** [main ()] opens a graphics window and runs event loop*)
 let main () =
   let s = create_map_state () in
-  event_loop (init s) (fun _ -> ()) (f_mouse s)
+  event_loop (init s) (f_key s) (f_mouse s)
 
 (* Execute the graphics engine. *)
 let () = main ()
