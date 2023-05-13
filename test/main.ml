@@ -85,10 +85,35 @@ let opposite_dir_test (name : string) (dir : Adj_rules.directions)
   assert_equal expected_output (Adj_rules.opposite_dir dir) ~printer:pp_dir
 
 (*------------------------Button Tests----------------------------------------*)
+let button_mem_test (name : string) ((x, y) : int * int) (b : Button.t)
+    (expected_output : bool) : test =
+  name >:: fun _ ->
+  assert_equal expected_output (Button.mem (x, y) b) ~printer:string_of_bool
+
 (*------------------------Cell Tests------------------------------------------*)
 (*------------------------State Tests-----------------------------------------*)
 (*------------------------Tile Tests------------------------------------------*)
 (*------------------------Toggle Tests----------------------------------------*)
+
+let test_img =
+  Graphics.open_graph "";
+  Graphics.make_image (Array.make_matrix 2 2 1)
+
+let toggle_is_on_test (name : string) (t : Toggle.t) (expected_output : bool) :
+    test =
+  name >:: fun _ ->
+  assert_equal expected_output (Toggle.is_on t) ~printer:string_of_bool
+
+let toggle_get_index_test (name : string) (t : Toggle.t) (expected_output : int)
+    : test =
+  name >:: fun _ ->
+  assert_equal expected_output (Toggle.get_index t) ~printer:string_of_int
+
+let toggle_mem_test (name : string) ((x, y) : int * int) (t : Toggle.t)
+    (expected_output : bool) : test =
+  name >:: fun _ ->
+  assert_equal expected_output (Toggle.mem (x, y) t) ~printer:string_of_bool
+
 (*------------------------Utility Tests---------------------------------------*)
 let array_add_test (name : string) (arr1 : float array) (arr2 : float array)
     (expected_output : float array) : test =
@@ -186,10 +211,44 @@ let tests =
     opposite_dir_test "opposite direction of RIGHT = LEFT" Adj_rules.RIGHT
       Adj_rules.LEFT;
     (* button tests *)
+    button_mem_test "w/i edges of button mem test" (8, 10)
+      (Button.make 0 0 10 20 Graphics.red "")
+      true;
+    button_mem_test "outside edges of button mem test" (11, 20)
+      (Button.make 0 0 10 20 Graphics.red "")
+      false;
+    button_mem_test "on edge of button mem test" (11, 0)
+      (Button.make 0 0 11 20 Graphics.red "")
+      true;
+    button_mem_test "on upper right corner of button mem test" (11, 20)
+      (Button.make 0 0 11 20 Graphics.red "")
+      true;
+    button_mem_test "on lower left corner of button mem test" (0, 0)
+      (Button.make 0 0 11 20 Graphics.red "")
+      true;
+    button_mem_test "on upper left corner of button mem test" (0, 20)
+      (Button.make 0 0 11 20 Graphics.red "")
+      true;
+    button_mem_test "on lower right corner of button mem test" (11, 0)
+      (Button.make 0 0 11 20 Graphics.red "")
+      true;
     (* cell tests *)
     (* state tests *)
     (* tile tests *)
     (* toggle tests *)
+    toggle_is_on_test "on toggle is on" (Toggle.make 10 10 10 test_img 0) true;
+    toggle_get_index_test "toggle w/ index 1 = 1"
+      (Toggle.make 10 10 10 test_img 1)
+      1;
+    toggle_get_index_test "toggle w/ index -1 = -1"
+      (Toggle.make 10 10 10 test_img (-1))
+      (-1);
+    toggle_mem_test "w/i toggle mem test" (11, 5)
+      (Toggle.make 10 10 10 test_img 0)
+      true;
+    toggle_mem_test "outside toggle mem test" (110, 5)
+      (Toggle.make 10 10 10 test_img 0)
+      false;
     (* util tests *)
     array_add_test "array add 0s array is same array" (Array.make 10 5.)
       (Array.make 10 0.) (Array.make 10 5.);
