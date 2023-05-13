@@ -66,6 +66,10 @@ let opposite_dir dir =
 (* let get_allowed a b dir s =
    let *)
 
+let get_all_rules s =
+  let elem_lst = AdjSet.elements s in
+  List.map (fun elem -> match elem with i, j, dir -> (i, j, dir)) elem_lst
+
 let print_to_string t =
   AdjSet.iter
     (fun (i, j, dir) ->

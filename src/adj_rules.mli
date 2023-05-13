@@ -45,5 +45,8 @@ val count_init_enablers : int -> t -> Cell.directions array
 val opposite_dir : directions -> directions
 (** [opposite_dir dir] returns the opposite direction from [dir] *)
 
+val get_all_rules : t -> (int * int * directions) list
+(** [get_all_rules set] returns list of adjacency rules of [set] *)
+
 val print_to_string : t -> unit
 (** [print_to_string s] prints the adjacency rules [s] to screen *)

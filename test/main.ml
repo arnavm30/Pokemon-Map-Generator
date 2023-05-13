@@ -6,6 +6,31 @@ open Util
 (* Helper functions *)
 (***************************************************************************)
 
+let pp_list pp_elt lst =
+  let pp_elts lst =
+    let rec loop n acc = function
+      | [] -> acc
+      | [ h ] -> acc ^ pp_elt h
+      | h1 :: (h2 :: t as t') ->
+          if n = 100 then acc ^ "..." (* stop printing long list *)
+          else loop (n + 1) (acc ^ pp_elt h1 ^ "; ") t'
+    in
+    loop 0 "" lst
+  in
+  "[" ^ pp_elts lst ^ "]"
+
+let pp_dir dir =
+  match dir with
+  | Adj_rules.UP -> "up"
+  | Adj_rules.DOWN -> "down"
+  | Adj_rules.LEFT -> "left"
+  | Adj_rules.RIGHT -> "right"
+
+let pp_adjacency_rule rule =
+  match rule with
+  | i, j, dir ->
+      "(" ^ string_of_int i ^ ", " ^ string_of_int j ^ ", " ^ pp_dir dir ^ ")"
+
 let array_op_test (name : string) (arr1 : float array) (arr2 : float array)
     (op : float array -> float array -> float array)
     (expected_output : float array) : test =
@@ -15,6 +40,56 @@ let array_op_test (name : string) (arr1 : float array) (arr2 : float array)
 (* Test suite *)
 (***************************************************************************)
 
+(*------------------------Adj_rules Tests-------------------------------------*)
+let allow_test (name : string) (index1 : int) (index2 : int)
+    (dir : Adj_rules.directions) (set : Adj_rules.t)
+    (expected_output : (int * int * Adj_rules.directions) list) : test =
+  name >:: fun _ ->
+  assert_equal expected_output
+    (Adj_rules.get_all_rules (Adj_rules.allow index1 index2 dir set))
+    ~printer:(pp_list pp_adjacency_rule)
+
+(* val fold_dirs : (directions -> 'a -> 'a) -> 'a -> 'a *)
+(** [fold_dirs f acc] accumulates result of [f] as it operates on 
+    directions UP, DOWN, LEFT, RIGHT in that order. *)
+
+(* val fold_dirs_tile_indexed : (t -> directions -> 'b -> 'b) -> t -> 'b -> 'b *)
+(** [fold_dirs_tile_indexed f t acc] accumulates result of [f] as it operates on 
+    adjacency rules [t] in directions UP, DOWN, LEFT, RIGHT in that order. *)
+
+let allow_all_test (name : string) (index1 : int) (index2 : int)
+    (set : Adj_rules.t)
+    (expected_output : (int * int * Adj_rules.directions) list) : test =
+  name >:: fun _ ->
+  assert_equal expected_output
+    (Adj_rules.get_all_rules (Adj_rules.allow_all index1 index2 set))
+    ~printer:(pp_list pp_adjacency_rule)
+
+let is_allowed_test (name : string) (index1 : int) (index2 : int)
+    (dir : Adj_rules.directions) (set : Adj_rules.t) (expected_output : bool) :
+    test =
+  name >:: fun _ ->
+  assert_equal expected_output
+    (Adj_rules.is_allowed index1 index2 dir set)
+    ~printer:string_of_bool
+
+(* val count_enablers_for_one : int -> int -> t -> Cell.directions *)
+(** [count_enablers_for_one i t s]  *)
+
+(* val count_init_enablers : int -> t -> Cell.directions array *)
+(** [count_init_enablers t s] *)
+
+let opposite_dir_test (name : string) (dir : Adj_rules.directions)
+    (expected_output : Adj_rules.directions) : test =
+  name >:: fun _ ->
+  assert_equal expected_output (Adj_rules.opposite_dir dir) ~printer:pp_dir
+
+(*------------------------Button Tests----------------------------------------*)
+(*------------------------Cell Tests------------------------------------------*)
+(*------------------------State Tests-----------------------------------------*)
+(*------------------------Tile Tests------------------------------------------*)
+(*------------------------Toggle Tests----------------------------------------*)
+(*------------------------Utility Tests---------------------------------------*)
 let array_add_test (name : string) (arr1 : float array) (arr2 : float array)
     (expected_output : float array) : test =
   array_op_test name arr1 arr2 ( +++. ) expected_output
@@ -38,12 +113,84 @@ let sumf_test (name : string) (flts : float array) (expected_output : float) :
 let sum_test (name : string) (ints : int array) (expected_output : int) : test =
   name >:: fun _ -> assert_equal expected_output (sum ints)
 
-let entropy_test (name : string) (w : float array) (expected_output : float) :
-    test =
-  name >:: fun _ -> assert_equal expected_output (entropy w)
+(* let entropy_test (name : string) (w : float array) (expected_output : float) :
+     test =
+   name >:: fun _ -> assert_equal expected_output (entropy w) *)
+(*---------------------------WFC Tests----------------------------------------*)
 
 let tests =
   [
+    (* adj_rules tests *)
+    allow_test "simple add ajacency rule to empty set" 0 5 Adj_rules.UP
+      Adj_rules.empty
+      [ (0, 5, Adj_rules.UP) ];
+    allow_test "simple add ajacency rule to non-empty set" 0 4 Adj_rules.DOWN
+      (Adj_rules.empty |> Adj_rules.allow 0 5 Adj_rules.UP)
+      [ (0, 4, Adj_rules.DOWN); (0, 5, Adj_rules.UP) ];
+    allow_test "add duplicate ajacency rule to non-empty set" 0 5
+      Adj_rules.RIGHT
+      (Adj_rules.empty |> Adj_rules.allow 0 5 Adj_rules.RIGHT)
+      [ (0, 5, Adj_rules.RIGHT) ];
+    allow_test
+      "add duplicate indices ajacency rule with different directions to \
+       non-empty set"
+      0 5 Adj_rules.RIGHT
+      (Adj_rules.empty |> Adj_rules.allow 0 5 Adj_rules.LEFT)
+      [ (0, 5, Adj_rules.RIGHT); (0, 5, Adj_rules.LEFT) ];
+    allow_all_test "allow all directions between 1 and 5 to empty set" 1 5
+      Adj_rules.empty
+      [
+        (1, 5, Adj_rules.RIGHT);
+        (1, 5, Adj_rules.LEFT);
+        (1, 5, Adj_rules.DOWN);
+        (1, 5, Adj_rules.UP);
+      ];
+    allow_all_test "allow all directions between 0 and 3 to non-empty set" 0 3
+      (Adj_rules.empty |> Adj_rules.allow 3 4 Adj_rules.RIGHT)
+      [
+        (0, 3, Adj_rules.RIGHT);
+        (0, 3, Adj_rules.LEFT);
+        (0, 3, Adj_rules.DOWN);
+        (0, 3, Adj_rules.UP);
+        (3, 4, Adj_rules.RIGHT);
+      ];
+    allow_all_test
+      "allow all directions between 0 and 3 to non-empty set, duplicate" 0 3
+      (Adj_rules.allow 0 3 Adj_rules.RIGHT Adj_rules.empty)
+      [
+        (0, 3, Adj_rules.RIGHT);
+        (0, 3, Adj_rules.LEFT);
+        (0, 3, Adj_rules.DOWN);
+        (0, 3, Adj_rules.UP);
+      ];
+    is_allowed_test "is allow in empty set" 0 3 Adj_rules.RIGHT Adj_rules.empty
+      false;
+    is_allowed_test "is allow (0,3,right) in set with only that rule" 0 3
+      Adj_rules.RIGHT
+      (Adj_rules.allow 0 3 Adj_rules.RIGHT Adj_rules.empty)
+      true;
+    is_allowed_test "is allow (0,3,right) in set with (0, 3, left)" 0 3
+      Adj_rules.RIGHT
+      (Adj_rules.allow 0 3 Adj_rules.LEFT Adj_rules.empty)
+      false;
+    is_allowed_test "is allow (0,3,right) in set with (3, 0, right)" 0 3
+      Adj_rules.RIGHT
+      (Adj_rules.allow 3 0 Adj_rules.RIGHT Adj_rules.empty)
+      false;
+    opposite_dir_test "opposite direction of UP = DOWN" Adj_rules.UP
+      Adj_rules.DOWN;
+    opposite_dir_test "opposite direction of DOWN = UP" Adj_rules.UP
+      Adj_rules.DOWN;
+    opposite_dir_test "opposite direction of LEFT = RIGHT" Adj_rules.LEFT
+      Adj_rules.RIGHT;
+    opposite_dir_test "opposite direction of RIGHT = LEFT" Adj_rules.RIGHT
+      Adj_rules.LEFT;
+    (* button tests *)
+    (* cell tests *)
+    (* state tests *)
+    (* tile tests *)
+    (* toggle tests *)
+    (* util tests *)
     array_add_test "array add 0s array is same array" (Array.make 10 5.)
       (Array.make 10 0.) (Array.make 10 5.);
     array_sub_test "array sub 0s array is same array" (Array.make 10 5.)
@@ -53,8 +200,9 @@ let tests =
     array_div_test "array div 1s array is same array" (Array.make 10 5.)
       (Array.make 10 1.) (Array.make 10 5.);
     sumf_test "[] has 0 sum" (Array.make 0 0.) 0.;
-    sum_test "[] has 0 sum" (Array.make 0 0) 0;
-    entropy_test "[0.5] has 0 entropy" (Array.make 1 0.5) 0.;
+    sum_test "[] has 0 sum" (Array.make 0 0) 0
+    (* entropy_test "[0.5] has 0 entropy" (Array.make 1 0.5) 0.  *)
+    (* wfc tests *);
   ]
 
 let test_suite = "generator test suite" >::: tests

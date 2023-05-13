@@ -50,11 +50,3 @@ let tile_of_json j =
 let from_json j =
   let tiles_lst = j |> member "tiles" |> to_list |> List.map tile_of_json in
   Array.of_list tiles_lst
-
-(* let tiles = Array.of_list tiles_lst in
-   for i = 0 to Array.length tiles - 1 do
-     let curr_cell = tiles.(i) in
-     let mutated_cell = analyze curr_cell tiles in
-     tiles.(i) <- mutated_cell
-   done;
-   tiles *)
