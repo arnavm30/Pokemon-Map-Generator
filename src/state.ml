@@ -127,10 +127,10 @@ let get_neighbors c st =
     if x > 0 then (LEFT, (x - 1, y)) :: neighbors else neighbors
   in
   let neighbors =
-    if x < st.w then (RIGHT, (x + 1, y)) :: neighbors else neighbors
+    if x < st.w - 1 then (RIGHT, (x + 1, y)) :: neighbors else neighbors
   in
   let neighbors = if y > 0 then (UP, (x, y - 1)) :: neighbors else neighbors in
-  if y < st.h then (DOWN, (x, y + 1)) :: neighbors else neighbors
+  if y < st.h - 1 then (DOWN, (x, y + 1)) :: neighbors else neighbors
 
 let decr_dir t dir c =
   let open Adj_rules in

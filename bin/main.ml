@@ -82,7 +82,7 @@ let run_wfc map_st () =
   choose_tiles map_st;
   let adj_rules = create_adj_rules map_st.chosen_tiles in
   let result_state =
-    Wfc.wfc 2 2 (tiles_len - 1) (Array.make tiles_len 1.) adj_rules
+    Wfc.wfc 2 2 tiles_len (Array.make tiles_len 1.) adj_rules
   in
   State.draw result_state 100 100 map_st.tiles
 
