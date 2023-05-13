@@ -11,19 +11,22 @@ type t = {
 
 let make img edges = { img; edges; up = []; right = []; down = []; left = [] }
 let get_img tile = tile.img
+let get_up tile = tile.up
+let get_right tile = tile.right
+let get_down tile = tile.down
+let get_left tile = tile.left
 
 let analyze curr_tile tiles =
   for i = 0 to Array.length tiles - 1 do
     (* check bottom edge of cells.(i) matches top edge of curr_cell *)
     if tiles.(i).edges.(2) = curr_tile.edges.(0) then
-      curr_tile.up <- i :: curr_tile.up
-    else if tiles.(i).edges.(3) = curr_tile.edges.(1) then
-      curr_tile.right <- i :: curr_tile.right
-    else if tiles.(i).edges.(0) = curr_tile.edges.(2) then
-      curr_tile.down <- i :: curr_tile.down
-    else if tiles.(i).edges.(1) = curr_tile.edges.(3) then
+      curr_tile.up <- i :: curr_tile.up;
+    if tiles.(i).edges.(3) = curr_tile.edges.(1) then
+      curr_tile.right <- i :: curr_tile.right;
+    if tiles.(i).edges.(0) = curr_tile.edges.(2) then
+      curr_tile.down <- i :: curr_tile.down;
+    if tiles.(i).edges.(1) = curr_tile.edges.(3) then
       curr_tile.left <- i :: curr_tile.left
-    else ()
   done;
   curr_tile
 

@@ -2,12 +2,59 @@
 open Generator
 open Graphics
 
-(*--------------------------EVENT LOOP----------------------------------------*)
-
 type compn = Butn of Button.t | Tog of Toggle.t
 
 (* state of window *)
 type map_state = { s : State.t; ui : compn list; tiles : Tile.t array }
+
+let pp_list pp_elt lst =
+  let pp_elts lst =
+    let rec loop n acc = function
+      | [] -> acc
+      | [ h ] -> acc ^ pp_elt h
+      | h1 :: (h2 :: t as t') ->
+          if n = 100 then acc ^ "..." (* stop printing long list *)
+          else loop (n + 1) (acc ^ pp_elt h1 ^ "; ") t'
+    in
+    loop 0 "" lst
+  in
+  "[" ^ pp_elts lst ^ "]"
+
+let create_adj_rules (tiles : Tile.t array) =
+  let r = ref Adj_rules.empty in
+  for i = 0 to Array.length tiles - 1 do
+    let tile = tiles.(i) in
+    let tile_up = Tile.get_up tile in
+    let tile_right = Tile.get_right tile in
+    let tile_down = Tile.get_down tile in
+    let tile_left = Tile.get_left tile in
+    let rules =
+      Adj_rules.empty
+      |> List.fold_right (fun indx acc -> Adj_rules.allow_up i indx acc) tile_up
+      |> List.fold_right
+           (fun indx acc -> Adj_rules.allow_down i indx acc)
+           tile_down
+      |> List.fold_right
+           (fun indx acc -> Adj_rules.allow_left i indx acc)
+           tile_left
+      |> List.fold_right
+           (fun indx acc -> Adj_rules.allow_right i indx acc)
+           tile_right
+    in
+    r := Adj_rules.combine rules !r
+  done;
+  Adj_rules.print_to_string !r;
+  !r
+
+let run_wfc map_st () =
+  let tiles_len = Array.length map_st.tiles in
+  let adj_rules = create_adj_rules map_st.tiles in
+  let result_state =
+    Wfc.wfc 2 2 tiles_len (Array.make tiles_len 1.) adj_rules
+  in
+  State.draw result_state 100 100 map_st.tiles
+
+(*--------------------------EVENT LOOP----------------------------------------*)
 
 (* generate interface of UI elements, where to place them *)
 let gen_interface tiles width height (x, y) : compn list =
@@ -69,13 +116,14 @@ let f_mouse map_st x y =
           | Butn b -> Button.mem (x, y) b)
         map_st.ui
     in
-    let height = size_y () in
+    (* let height = size_y () in *)
     match compn with
     | Tog t ->
-        Toggle.press t (fun b ->
+        Toggle.press t (fun b -> ())
+        (* (fun b ->
             if b then State.draw map_st.s 0 (height / 5) map_st.tiles
-            else clear_graph ())
-    | Butn b -> Button.press b (fun () -> clear_graph ())
+            else clear_graph ()) *)
+    | Butn b -> Button.press b (run_wfc map_st)
   with Not_found -> print_endline "did not press a component"
 
 (** [main ()] opens a graphics window and runs event loop*)
