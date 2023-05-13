@@ -16,18 +16,6 @@ val allow : int -> int -> directions -> t -> t
 (** [allow i j dir adj_rules] adds the adjaceny rule [(i, j, dir)] to [adj_rules]
     where tile with index [j] can tile next to tile with index [i] in direction [dir] *)
 
-val allow_up : int -> int -> t -> t
-(** [allow_up i j adj_rules] adds the adjaceny rule [(i, j, UP)] to [adj_rules]*)
-
-val allow_down : int -> int -> t -> t
-(** [allow_down i j adj_rules] adds the adjaceny rule [(i, j, DOWN)] to [adj_rules]*)
-
-val allow_left : int -> int -> t -> t
-(** [allow_left i j adj_rules] adds the adjaceny rule [(i, j, LEFT)] to [adj_rules]*)
-
-val allow_right : int -> int -> t -> t
-(** [allow_right i j adj_rules] adds the adjaceny rule [(i, j, RIGHT)] to [adj_rules]*)
-
 val combine : t -> t -> t
 (** [combine s1 s2] combines the adjaceny rules of [s1] and [s2] into one set *)
 

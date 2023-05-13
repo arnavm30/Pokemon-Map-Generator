@@ -30,15 +30,17 @@ let create_adj_rules (tiles : Tile.t array) =
     let tile_left = Tile.get_left tile in
     let rules =
       Adj_rules.empty
-      |> List.fold_right (fun indx acc -> Adj_rules.allow_up i indx acc) tile_up
       |> List.fold_right
-           (fun indx acc -> Adj_rules.allow_down i indx acc)
+           (fun indx acc -> Adj_rules.allow i indx Adj_rules.UP acc)
+           tile_up
+      |> List.fold_right
+           (fun indx acc -> Adj_rules.allow i indx Adj_rules.DOWN acc)
            tile_down
       |> List.fold_right
-           (fun indx acc -> Adj_rules.allow_left i indx acc)
+           (fun indx acc -> Adj_rules.allow i indx Adj_rules.LEFT acc)
            tile_left
       |> List.fold_right
-           (fun indx acc -> Adj_rules.allow_right i indx acc)
+           (fun indx acc -> Adj_rules.allow i indx Adj_rules.RIGHT acc)
            tile_right
     in
     r := Adj_rules.combine rules !r
@@ -50,7 +52,7 @@ let run_wfc map_st () =
   let tiles_len = Array.length map_st.tiles in
   let adj_rules = create_adj_rules map_st.tiles in
   let result_state =
-    Wfc.wfc 2 2 tiles_len (Array.make tiles_len 1.) adj_rules
+    Wfc.wfc 2 2 (tiles_len - 1) (Array.make tiles_len 1.) adj_rules
   in
   State.draw result_state 100 100 map_st.tiles
 

@@ -19,10 +19,6 @@ type t = AdjSet.t
 
 let empty = AdjSet.empty
 let allow a b dir s = AdjSet.add (a, b, dir) s
-let allow_up a b s = allow a b UP s
-let allow_down a b s = allow a b DOWN s
-let allow_left a b s = allow a b LEFT s
-let allow_right a b s = allow a b RIGHT s
 let combine s1 s2 = AdjSet.union s1 s2
 
 (* Goes in order of UP, DOWN, LEFT, RIGHT *)
