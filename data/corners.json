@@ -1,7 +1,7 @@
 {
   "tiles": [
     {
-      "img_path": "assets/corner1.png",
+      "img_path": "assets/testing_corners/corner1.png",
       "edges": {
         "up": "green",
         "right": "green",
@@ -10,7 +10,7 @@
       }
     },
     {
-      "img_path": "assets/corner2.png",
+      "img_path": "assets/testing_corners/corner2.png",
       "edges": {
         "up": "green",
         "right": "grey",
@@ -19,7 +19,7 @@
       }
     },
     {
-      "img_path": "assets/corner3.png",
+      "img_path": "assets/testing_corners/corner3.png",
       "edges": {
         "up": "grey",
         "right": "grey",
@@ -28,7 +28,7 @@
       }
     },
     {
-      "img_path": "assets/corner4.png",
+      "img_path": "assets/testing_corners/corner4.png",
       "edges": {
         "up": "grey",
         "right": "green",
