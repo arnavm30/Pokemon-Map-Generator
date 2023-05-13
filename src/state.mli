@@ -32,7 +32,7 @@ val collapse_cell : float array -> Cell.t -> t -> unit
 (** [collapse weights cell state] collapses [cell] with the smallest entropy in [state] 
 with [weights] *)
 
-val propogate : t -> result
+val propogate : float array -> t -> result
 (** [propogate state] eliminates tiles in cells of [state] that can no longer be chosen  *)
 
 val draw : t -> int -> int -> Tile.t array -> unit

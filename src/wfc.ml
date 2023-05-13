@@ -12,7 +12,7 @@ let run_once ws st =
     | None -> raise Unfinished
   in
   State.collapse_cell ws c st;
-  State.propogate st
+  State.propogate ws st
 
 let rec run ws st =
   try

@@ -49,5 +49,10 @@ val has_zero_direction : int -> t -> bool
 (** [has_zero_direction tile c] is if tile [tile] from cell [c] has any of its
    directions = 0 *)
 
-val remove_tile : int -> t -> unit
+val remove_tile : float array -> int -> t -> unit
 (** [remove_tile tile c] removes tile [tile] from this cell [c] *)
+
+val to_string : t -> string
+val enablers_to_string : t -> string
+val enabler_dirs_to_string : directions -> string
+val options_to_string : t -> string

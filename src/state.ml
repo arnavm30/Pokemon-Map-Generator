@@ -60,6 +60,7 @@ let make (x : int) (y : int) (t : int) (ws : float array) (adj : Adj_rules.t) =
   let heap = Pairing_heap.create ~min_size:(x * y) ~cmp:Cell.cmp () in
   let stack = Stack.create () in
   Array.iter (Array.iter (Pairing_heap.add heap)) grid;
+  (* print_endline (Cell.enablers_to_string grid.(0).(0)); *)
   { grid; heap; stack; w = x; h = y; uncollapsed = x * y }
 
 let make_test (x : int) (y : int) (tiles : Tile.t array) =
@@ -148,33 +149,35 @@ let enablers_in_direction t dir c =
   | LEFT -> c.tile_enablers.(t).left
   | RIGHT -> c.tile_enablers.(t).right
 
-let subtract_enablers t dir n st =
+let subtract_enablers ws t dir n st =
+  if n.coords = (0, 0) then print_endline (Cell.enablers_to_string n);
   let opp_dir = Adj_rules.opposite_dir dir in
   let enablers = enablers_in_direction t opp_dir n in
-  let _ =
-    if enablers = 1 then
-      if not (Cell.has_zero_direction t n) then (
-        Cell.remove_tile t n;
-        Cell.check_contradiction n;
-        Pairing_heap.add st.heap n;
-        Stack.push (n, t) st.stack)
-  in
+  if enablers = 1 && not (Cell.has_zero_direction t n) then (
+    Cell.remove_tile ws t n;
+    Cell.check_contradiction n;
+    Pairing_heap.add st.heap n;
+    Stack.push (n, t) st.stack);
   decr_dir t opp_dir n
 
-let rec propogate (st : t) =
+let rec propogate (ws : float array) (st : t) =
   try
     (* using pop allows us to exit early *)
-    let c, tiles = Stack.pop st.stack in
+    let c, tile = Stack.pop st.stack in
+    (* print_endline ("cell:" ^ string_of_int tile); *)
     let neighbors = get_neighbors c st in
     let rec process_neighbors ns =
       match ns with
       | [] -> ()
       | (dir, (x, y)) :: t ->
-          subtract_enablers tiles dir st.grid.(y).(x) st;
+          (* if st.grid.(y).(x).coords = (0, 0) then print_endline (Cell.enablers_to_string st.grid.(y).(x)); *)
+          subtract_enablers ws tile dir st.grid.(y).(x) st;
+          (* if st.grid.(x).(y).coords = (0, 0) then
+             print_endline (Cell.enablers_to_string st.grid.(y).(x)); *)
           process_neighbors t
     in
     process_neighbors neighbors;
-    propogate st
+    propogate ws st
   with
   | Stack.Empty -> FINISHED st
   | Cell.Contradiction -> CONTRADICTION
