@@ -2,7 +2,7 @@ type directions = UP | DOWN | LEFT | RIGHT
 
 module TileTriple = struct
   type t = int * int * directions
-  (* (a, b, dir) implies that b is in the dir of a, i.e. (0, 1, UP) means that tile 1 is above 0*)
+  (* (a, b, dir) implies that b is in the dir of a, i.e. (0, 1, UP) means that tile 1 is above 0 *)
 
   let compare a b =
     match (a, b) with
@@ -19,6 +19,11 @@ type t = AdjSet.t
 
 let empty = AdjSet.empty
 let allow a b dir s = AdjSet.add (a, b, dir) s
+let allow_up a b s = allow a b UP s
+let allow_down a b s = allow a b DOWN s
+let allow_left a b s = allow a b LEFT s
+let allow_right a b s = allow a b RIGHT s
+let combine s1 s2 = AdjSet.union s1 s2
 
 (* Goes in order of UP, DOWN, LEFT, RIGHT *)
 let fold_dirs f acc = acc |> f UP |> f DOWN |> f LEFT |> f RIGHT
@@ -64,3 +69,19 @@ let opposite_dir dir =
   match dir with UP -> DOWN | DOWN -> UP | LEFT -> RIGHT | RIGHT -> LEFT
 (* let get_allowed a b dir s =
    let *)
+
+let print_to_string t =
+  AdjSet.iter
+    (fun (i, j, dir) ->
+      let str =
+        ("(" ^ string_of_int i ^ ", " ^ string_of_int j ^ ", "
+        ^
+        match dir with
+        | UP -> "up"
+        | DOWN -> "down"
+        | LEFT -> "left"
+        | RIGHT -> "right")
+        ^ ")"
+      in
+      print_endline str)
+    t

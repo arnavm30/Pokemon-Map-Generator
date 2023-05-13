@@ -64,6 +64,12 @@ let choose_random_option ws t =
   let i = ref 0 in
   while !i < Array.length t.options && !r >= 0. do
     incr i;
+    print_endline "length: ";
+    print_endline (string_of_int (Array.length t.options));
+    print_endline "options: ";
+    print_endline (string_of_float t.options.(!i));
+    print_endline "weights: ";
+    print_endline (string_of_float ws.(!i));
     if t.options.(!i) = 1. then r := !r -. ws.(!i)
   done;
   !i
