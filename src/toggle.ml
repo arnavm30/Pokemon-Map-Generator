@@ -14,7 +14,7 @@ let is_on toggle = toggle.on
 let get_index toggle = toggle.tile_index
 
 let draw toggle =
-  set_color green;
+  if toggle.on then set_color green else set_color 0x757575;
   let img = toggle.img in
   let img_color_array = dump_image img in
   let img_width = Array.length img_color_array in
@@ -33,10 +33,9 @@ let mem (x, y) toggle =
 let press toggle f =
   if toggle.on then (
     set_color 0x757575;
-    fill_circle toggle.x toggle.y toggle.r;
     toggle.on <- false)
   else (
     set_color green;
-    fill_circle toggle.x toggle.y toggle.r;
     toggle.on <- true);
+  fill_circle toggle.x toggle.y toggle.r;
   f toggle.on
