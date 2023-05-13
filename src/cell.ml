@@ -62,9 +62,9 @@ let make_test (cells : Tile.t array) =
 let choose_random_option ws t =
   let r = Random.float t.sum_of_weights |> ref in
   let i = ref 0 in
-  while !i < Array.length t.options && !r >= 0. do
-    incr i;
-    if t.options.(!i) = 1. then r := !r -. ws.(!i)
+  while !i < Array.length ws && !r >= 0. do
+    if t.options.(!i) = 1. then r := !r -. ws.(!i);
+    incr i
   done;
   !i
 
