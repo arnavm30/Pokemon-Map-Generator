@@ -12,19 +12,6 @@ type map_state = {
   mutable chosen_tiles : Tile.t array;
 }
 
-let pp_list pp_elt lst =
-  let pp_elts lst =
-    let rec loop n acc = function
-      | [] -> acc
-      | [ h ] -> acc ^ pp_elt h
-      | h1 :: (h2 :: t as t') ->
-          if n = 100 then acc ^ "..." (* stop printing long list *)
-          else loop (n + 1) (acc ^ pp_elt h1 ^ "; ") t'
-    in
-    loop 0 "" lst
-  in
-  "[" ^ pp_elts lst ^ "]"
-
 let create_adj_rules (tiles : Tile.t array) =
   let r = ref Adj_rules.empty in
   for i = 0 to Array.length tiles - 1 do
@@ -82,9 +69,9 @@ let run_wfc map_st () =
   choose_tiles map_st;
   let adj_rules = create_adj_rules map_st.chosen_tiles in
   let result_state =
-    Wfc.wfc 2 2 tiles_len (Array.make tiles_len 1.) adj_rules
+    Wfc.wfc 20 20 tiles_len (Array.make tiles_len 1.) adj_rules
   in
-  State.draw result_state 100 100 map_st.tiles
+  State.draw result_state 600 (size_y () / 2) map_st.chosen_tiles
 
 (*--------------------------EVENT LOOP----------------------------------------*)
 
