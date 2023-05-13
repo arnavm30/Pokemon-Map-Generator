@@ -10,6 +10,7 @@ type directions = {
 
 type t = {
   mutable collapsed : bool;
+  mutable tile : int;
   mutable options : float array;
   mutable sum_of_ones : int;
   mutable sum_of_weights : float;
