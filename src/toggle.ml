@@ -1,11 +1,20 @@
 open Graphics
 
-type t = { x : int; y : int; r : int; img : Graphics.image; mutable on : bool }
+type t = {
+  x : int;
+  y : int;
+  r : int;
+  img : Graphics.image;
+  tile_index : int;
+  mutable on : bool;
+}
 
-let make x y r img = { x; y; r; img; on = false }
+let make x y r img index = { x; y; r; img; tile_index = index; on = true }
+let is_on toggle = toggle.on
+let get_index toggle = toggle.tile_index
 
 let draw toggle =
-  set_color 0x757575;
+  set_color green;
   let img = toggle.img in
   let img_color_array = dump_image img in
   let img_width = Array.length img_color_array in
