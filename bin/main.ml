@@ -6,7 +6,6 @@ type compn = Butn of Button.t | Tog of Toggle.t | LstPanel of List_panel.t
 type size_data = { dims : int * int; place : int * int }
 
 (* state of window *)
-(* state of window *)
 type map_state = {
   mutable ui : compn list;
   tiles : Tile.t array array;
@@ -15,10 +14,6 @@ type map_state = {
   mutable chosen_tiles : Tile.t array;
   mutable size : string;
 }
-
-(* based on panel, change size of map rendered *)
-(* let change_size map_st (p : List_panel.t) () =
-   map_st.size <- List_panel.get_active_text p *)
 
 (* create the adjacency rules based on the given tiles*)
 let create_adj_rules (tiles : Tile.t array) =
@@ -112,7 +107,9 @@ let gen_interface tiles width height (x, y) active_size active_file : compn list
   let file_lst_pnl =
     List_panel.make
       ((12 * width / 15) + 20)
-      50 (width / 10) 75 [ "pipes"; "pokemon" ] active_file
+      50 (width / 7) 75
+      [ "pipes"; "pokemon grass"; "pokemon concrete"; "pokemon water" ]
+      active_file
   in
   r := LstPanel file_lst_pnl :: !r;
   !r
@@ -211,8 +208,16 @@ let handle_menus map_st (p : List_panel.t) () =
       map_st.active_tiles <- 0;
       update_map_state map_st;
       clear map_st ()
-  | "pokemon" ->
+  | "pokemon grass" ->
       map_st.active_tiles <- 1;
+      update_map_state map_st;
+      clear map_st ()
+  | "pokemon concrete" ->
+      map_st.active_tiles <- 2;
+      update_map_state map_st;
+      clear map_st ()
+  | "pokemon water" ->
+      map_st.active_tiles <- 3;
       update_map_state map_st;
       clear map_st ()
   | _ -> failwith "what's going on"
@@ -283,10 +288,15 @@ let f_key map_st k = if k = ' ' then clear map_st () else ()
 
 (** [main ()] opens a graphics window and runs event loop*)
 let main () =
-  (* "data/corners.json" *)
-  (* "data/pokemon_grass.json" *)
   let s =
-    create_map_state [| "data/corners.json"; "data/pokemon_grass.json" |] ()
+    create_map_state
+      [|
+        "data/corners.json";
+        "data/pokemon_grass.json";
+        "data/pokemon_concrete.json";
+        "data/pokemon_water.json";
+      |]
+      ()
   in
   event_loop (init s) (f_key s) (f_mouse s)
 

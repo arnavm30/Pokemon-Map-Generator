@@ -1,6 +1,69 @@
 {
   "tiles": [
     {
+      "img_path": "assets/grass/concrete_center.png",
+      "edges": {
+        "up": "concrete",
+        "right": "concrete",
+        "down": "concrete",
+        "left": "concrete"
+      }
+    },
+    {
+      "img_path": "assets/grass/concrete_horiz_down.png",
+      "edges": {
+        "up": "concrete",
+        "right": "concrete_horiz_down",
+        "down": "grass",
+        "left": "concrete_horiz_down"
+      }
+    },
+    {
+      "img_path": "assets/grass/concrete_horiz_up.png",
+      "edges": {
+        "up": "grass",
+        "right": "concrete_horiz_up",
+        "down": "concrete",
+        "left": "concrete_horiz_up"
+      }
+    },
+    {
+      "img_path": "assets/grass/concrete_lower_left_corner.png",
+      "edges": {
+        "up": "concrete_vert_left",
+        "right": "concrete_horiz_down",
+        "down": "grass",
+        "left": "grass"
+      }
+    },
+    {
+      "img_path": "assets/grass/concrete_lower_right_corner.png",
+      "edges": {
+        "up": "concrete_vert_right",
+        "right": "grass",
+        "down": "grass",
+        "left": "concrete_horiz_down"
+      }
+    },
+    {
+      "img_path": "assets/grass/concrete_vert_left.png",
+      "edges": {
+        "up": "concrete_vert_left",
+        "right": "concrete",
+        "down": "concrete_vert_left",
+        "left": "grass"
+      }
+    },
+    {
+      "img_path": "assets/grass/concrete_vert_right.png",
+      "edges": {
+        "up": "concrete_vert_right",
+        "right": "grass",
+        "down": "concrete_vert_right",
+        "left": "concrete"
+      }
+    },
+    {
       "img_path": "assets/grass/bush.png",
       "edges": {
         "up": "grass",
