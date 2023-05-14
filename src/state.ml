@@ -52,10 +52,11 @@ let make_grid x y c =
   let make_row x y = Array.init x (give_coords y) in
   Array.init y (make_row x)
 
-let make (x : int) (y : int) (t : int) (ws : float array) (adj : Adj_rules.t) =
+let make (x : int) (y : int) (num_tiles : int) (ws : float array)
+    (adj : Adj_rules.t) =
   let sw, swlw = init_weight_sums ws in
-  let enablers = init_tile_enablers t adj in
-  let grid = make_grid x y (Cell.make (t + 1) sw swlw enablers) in
+  let enablers = init_tile_enablers (num_tiles - 1) adj in
+  let grid = make_grid x y (Cell.make num_tiles sw swlw enablers) in
   (* let grid = make_grid x y (Cell.make t sw swlw enablers) in *)
   let heap = Pairing_heap.create ~min_size:(x * y) ~cmp:Cell.cmp () in
   let stack = Stack.create () in
@@ -86,7 +87,7 @@ let collapse_cell ws c st =
   st.uncollapsed <- st.uncollapsed - 1;
   let removed = Cell.collapse ws c in
   (* push every removed tile to the stack *)
-  List.iter (fun x -> Stack.push (c, x) st.stack) removed
+  List.iter (fun t -> Stack.push (c, t) st.stack) removed
 
 (* let smallest_entropies (st : t) (w : float array) =
    (* let aux (arr: Tile.t array) =
@@ -149,35 +150,54 @@ let enablers_in_direction t dir c =
   | LEFT -> c.tile_enablers.(t).left
   | RIGHT -> c.tile_enablers.(t).right
 
-let subtract_enablers ws t dir n st =
-  let opp_dir = Adj_rules.opposite_dir dir in
-  let enablers = enablers_in_direction t opp_dir n in
-  if enablers = 1 && not (Cell.has_zero_direction t n) then (
-    Cell.remove_tile ws t n;
-    Cell.check_contradiction n;
-    Pairing_heap.add st.heap n;
-    Stack.push (n, t) st.stack);
-  if n.coords = (0, 0) then print_endline (Cell.enablers_to_string n);
-  decr_dir t opp_dir n
+let get_enabled num_tiles tile dir adj_rules n =
+  let enabled = ref [] in
+  for i = 0 to num_tiles - 1 do
+    if Adj_rules.is_allowed i tile dir adj_rules then enabled := i :: !enabled
+  done;
+  !enabled
 
-let rec propogate (ws : float array) (st : t) =
+let subtract_enablers num_tiles tile dir ws adj_rules n st =
+  let opp_dir = Adj_rules.opposite_dir dir in
+  let enabled = get_enabled num_tiles tile dir adj_rules n in
+  let rec aux enabled =
+    match enabled with
+    | [] -> ()
+    | h :: t ->
+        let enablers = enablers_in_direction h opp_dir n in
+        if
+          enablers = 1 && (not (Cell.has_zero_direction h n)) && not n.collapsed
+        then (
+          Cell.remove_tile ws h n;
+          Cell.check_contradiction n;
+          Pairing_heap.add st.heap n;
+          Stack.push (n, h) st.stack);
+        decr_dir h opp_dir n;
+        aux t
+  in
+  aux enabled
+(* print_endline "subtract enablers: ";
+   print_endline ("tile: " ^ string_of_int tile);
+   print_endline ("dir: " ^ Adj_rules.string_of_dir dir);
+   print_endline ("n: " ^ Util.string_of_int_pair n.coords);
+   print_endline (Cell.enablers_to_string n);
+   print_endline "" *)
+
+let rec propogate (num_tiles : int) (ws : float array) (adj_rules : Adj_rules.t)
+    (st : t) =
   try
     (* using pop allows us to exit early *)
     let c, tile = Stack.pop st.stack in
-    (* print_endline ("cell:" ^ string_of_int tile); *)
     let neighbors = get_neighbors c st in
     let rec process_neighbors ns =
       match ns with
       | [] -> ()
       | (dir, (x, y)) :: t ->
-          (* if st.grid.(y).(x).coords = (0, 0) then print_endline (Cell.enablers_to_string st.grid.(y).(x)); *)
-          subtract_enablers ws tile dir st.grid.(y).(x) st;
-          (* if st.grid.(x).(y).coords = (0, 0) then
-             print_endline (Cell.enablers_to_string st.grid.(y).(x)); *)
+          subtract_enablers num_tiles tile dir ws adj_rules st.grid.(y).(x) st;
           process_neighbors t
     in
     process_neighbors neighbors;
-    propogate ws st
+    propogate num_tiles ws adj_rules st
   with
   | Stack.Empty -> FINISHED st
   | Cell.Contradiction -> CONTRADICTION
@@ -187,7 +207,7 @@ let rec propogate (ws : float array) (st : t) =
 let draw (st : t) (x : int) (y : int) (cells : Tile.t array) =
   for i = 0 to Array.length st.grid - 1 do
     for j = 0 to Array.length st.grid.(0) - 1 do
-      let index = int_of_float st.grid.(i).(j).options.(0) in
+      let index = st.grid.(i).(j).tile in
       let img = Tile.get_img cells.(index) in
       let img_color_array = Graphics.dump_image img in
       let img_width = Array.length img_color_array in

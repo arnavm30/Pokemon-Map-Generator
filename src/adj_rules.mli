@@ -50,3 +50,5 @@ val get_all_rules : t -> (int * int * directions) list
 
 val print_to_string : t -> unit
 (** [print_to_string s] prints the adjacency rules [s] to screen *)
+
+val string_of_dir : directions -> string
