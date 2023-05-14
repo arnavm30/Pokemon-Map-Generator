@@ -113,9 +113,11 @@ let event_loop f_init f_key f_mouse =
 let create_map_state () =
   open_graph "";
   resize_window 1450 800;
-  (* let tiles = Tile.from_json (Yojson.Basic.from_file "data/corners.json") in *)
+  (* let tiles = Tile.from_json (Yojson.Basic.from_file "data/corners.json") *)
+  (* let tiles =
+     Tile.from_json (Yojson.Basic.from_file "data/flexible_corners.json") *)
   let tiles =
-    Tile.from_json (Yojson.Basic.from_file "data/flexible_corners.json")
+    Tile.from_json (Yojson.Basic.from_file "data/pokemon_grass.json")
   in
   let width = size_x () in
   let height = size_y () in
