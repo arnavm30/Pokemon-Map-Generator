@@ -242,6 +242,6 @@ let draw (st : t) (x, y) (tiles : Tile.t array) =
       let img_color_array = Graphics.dump_image img in
       let img_width = Array.length img_color_array in
       let img_height = Array.length img_color_array.(0) in
-      Graphics.draw_image img (x + (img_width * i)) (y + (img_height * j))
+      Graphics.draw_image img (x + (img_width * j)) (y + (img_height * i))
     done
   done
