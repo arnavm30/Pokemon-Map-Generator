@@ -20,7 +20,7 @@ let change_size map_st (p : List_panel.t) () =
 
 (* create the adjacency rules based on the given tiles*)
 let create_adj_rules (tiles : Tile.t array) =
-  let r = ref (Adj_rules.empty ()) in
+  let r = ref (Adj_rules.empty (Array.length tiles)) in
   print_endline "initial adjacency rules, should be empty: ";
   Adj_rules.print_to_string !r;
   for i = 0 to Array.length tiles - 1 do
@@ -30,7 +30,7 @@ let create_adj_rules (tiles : Tile.t array) =
     let tile_down = Tile.get_down tile in
     let tile_left = Tile.get_left tile in
     let rules =
-      Adj_rules.empty ()
+      Adj_rules.empty (Array.length tiles)
       |> List.fold_right
            (fun indx acc -> Adj_rules.allow i indx Adj_rules.UP acc)
            tile_up
@@ -212,7 +212,7 @@ let f_mouse map_st x y =
     in
     match compn with
     | Tog t -> Toggle.press t (fun b -> ())
-    | Butn b -> Button.press b (concurrent_wfc b map_st)
+    | Butn b -> Button.press b (run_wfc map_st)
     | LstPanel l -> List_panel.press l (x, y) (change_size map_st l)
   with Not_found -> print_endline "did not press a component"
 

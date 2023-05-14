@@ -22,7 +22,8 @@ let string_of_dir dir =
   | LEFT -> "left"
   | RIGHT -> "right"
 
-let empty () = Hashtbl.create 10
+(* initializes with |num_tiles x num_tiles| * |num_directions|, where x is cartesian product *)
+let empty num_tiles = Hashtbl.create (num_tiles * num_tiles * 4)
 
 let allow a b dir ht =
   Hashtbl.add ht (a, b, dir) ();
