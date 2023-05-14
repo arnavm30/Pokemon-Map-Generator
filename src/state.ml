@@ -151,31 +151,32 @@ let enablers_in_direction t dir c =
   | RIGHT -> c.tile_enablers.(t).right
 
 let get_enabled num_tiles tile dir adj_rules n =
-  let enabled = ref [] in
+  let enabled = Array.make num_tiles 0 in
   for i = 0 to num_tiles - 1 do
-    if Adj_rules.is_allowed i tile dir adj_rules then enabled := i :: !enabled
+    if Adj_rules.is_allowed i tile dir adj_rules then enabled.(i) <- 1
   done;
-  !enabled
+  enabled
 
 let subtract_enablers num_tiles tile dir ws adj_rules n st =
-  let opp_dir = Adj_rules.opposite_dir dir in
   let enabled = get_enabled num_tiles tile dir adj_rules n in
-  let rec aux enabled =
-    match enabled with
-    | [] -> ()
-    | h :: t ->
-        let enablers = enablers_in_direction h opp_dir n in
-        if
-          enablers = 1 && (not (Cell.has_zero_direction h n)) && not n.collapsed
-        then (
-          Cell.remove_tile ws h n;
-          Cell.check_contradiction n;
-          Pairing_heap.add st.heap n;
-          Stack.push (n, h) st.stack);
-        decr_dir h opp_dir n;
-        aux t
+  let opp_dir = Adj_rules.opposite_dir dir in
+  print_endline "asdf2";
+  let aux h x =
+    if x = 1 then (
+      let enablers = enablers_in_direction h opp_dir n in
+      print_endline "asdf3";
+      if enablers = 1 && (not (Cell.has_zero_direction h n)) && not n.collapsed
+      then (
+        Cell.remove_tile ws h n;
+        print_endline "asdf4";
+        Cell.check_contradiction n;
+        print_endline "asdf5";
+        Pairing_heap.add st.heap n;
+        print_endline "asdf6";
+        Stack.push (n, h) st.stack);
+      decr_dir h opp_dir n)
   in
-  aux enabled
+  Array.iteri aux enabled
 (* print_endline "subtract enablers: ";
    print_endline ("tile: " ^ string_of_int tile);
    print_endline ("dir: " ^ Adj_rules.string_of_dir dir);

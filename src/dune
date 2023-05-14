@@ -7,4 +7,5 @@
   camlimages.png
   camlimages.graphics
   core_kernel.pairing_heap
-  yojson))
+  yojson
+  threads))

@@ -220,6 +220,7 @@ let handle_menus map_st (p : List_panel.t) () =
 (* run the wfc algorithm given the map state *)
 let run_wfc map_st () =
   clear map_st ();
+  print_endline "hello1";
   choose_tiles map_st;
   let tiles_len = Array.length map_st.chosen_tiles in
   let adj_rules = create_adj_rules map_st.chosen_tiles in
@@ -234,15 +235,26 @@ let run_wfc map_st () =
   let result_state =
     Wfc.wfc map_size tiles_len (Array.make tiles_len 1.) adj_rules
   in
-  State.draw result_state map_posi map_st.chosen_tiles
+  print_endline "hello2";
+  State.draw result_state map_posi map_st.chosen_tiles;
+  print_endline "hello3"
+
+let copy_map_state { ui; tiles; size_data; active_tiles; chosen_tiles; size } =
+  let copy_tiles =
+    Array.init (Array.length chosen_tiles) (fun i -> Tile.copy chosen_tiles.(i))
+  in
+  { ui; tiles; size_data; active_tiles; chosen_tiles = copy_tiles; size }
 
 (* run the wfc algorithm concurrently given map state and status of button *)
 let concurrent_wfc b map_st () =
+  (* let map_st = copy_map_state map_st in *)
   let _ =
     Thread.create
       (fun () ->
         Button.disallow_press b;
+        print_endline "hello";
         run_wfc map_st ();
+        print_endline "hello";
         Button.allow_press b)
       ()
   in
@@ -262,7 +274,7 @@ let f_mouse map_st x y =
     in
     match compn with
     | Tog t -> Toggle.press t (fun b -> ())
-    | Butn b -> Button.press b (run_wfc map_st)
+    | Butn b -> Button.press b (concurrent_wfc b map_st)
     | LstPanel l -> List_panel.press l (x, y) (handle_menus map_st l)
   with Not_found -> print_endline "did not press a component"
 

@@ -64,3 +64,7 @@ let from_json j =
   let tiles_lst = j |> member "tiles" |> to_list |> List.map tile_of_json in
   let placement = j |> member "placement" |> palcement_of_json in
   (Array.of_list tiles_lst, placement)
+
+let copy { img; edges; up; down; left; right } =
+  let copy_edges = Array.init (Array.length edges) (fun i -> edges.(i)) in
+  { img; edges = copy_edges; up; down; left; right }

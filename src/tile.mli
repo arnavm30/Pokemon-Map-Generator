@@ -33,3 +33,5 @@ val analyze : t -> t array -> t
 val from_json : Yojson.Basic.t -> t array * (string * (string * int) list) list
 (** [from_json j] is the (tiles, size placements) that [j] represents. 
     Requires: [j] is a valid JSON tiles representation. *)
+
+val copy : t -> t

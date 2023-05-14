@@ -6,5 +6,4 @@
   camlimages.core
   camlimages.png
   camlimages.graphics
-  lwt
-  lwt.unix))
+  threads))
