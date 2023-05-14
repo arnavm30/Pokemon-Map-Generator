@@ -37,12 +37,11 @@ let draw p =
   fill_rect x y w h;
   set_color 0x303030;
   let active_option = p.options.(p.active) in
-
   fill_rect x active_option.y0 w active_option.h0;
   set_color white;
   set_font "-*-fixed-medium-r-semicondensed--20-*-*-*-*-*-iso8859-1";
   for i = 0 to Array.length p.options - 1 do
-    moveto (x + (w / 3)) (p.options.(i).y0 + 5);
+    moveto (x + (w / 8)) (p.options.(i).y0 + 5);
     draw_string p.options.(i).text
   done
 
