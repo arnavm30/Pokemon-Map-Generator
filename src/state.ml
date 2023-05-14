@@ -150,7 +150,6 @@ let enablers_in_direction t dir c =
   | RIGHT -> c.tile_enablers.(t).right
 
 let subtract_enablers ws t dir n st =
-  if n.coords = (0, 0) then print_endline (Cell.enablers_to_string n);
   let opp_dir = Adj_rules.opposite_dir dir in
   let enablers = enablers_in_direction t opp_dir n in
   if enablers = 1 && not (Cell.has_zero_direction t n) then (
@@ -158,6 +157,7 @@ let subtract_enablers ws t dir n st =
     Cell.check_contradiction n;
     Pairing_heap.add st.heap n;
     Stack.push (n, t) st.stack);
+  if n.coords = (0, 0) then print_endline (Cell.enablers_to_string n);
   decr_dir t opp_dir n
 
 let rec propogate (ws : float array) (st : t) =

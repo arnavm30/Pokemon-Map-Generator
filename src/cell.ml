@@ -129,7 +129,7 @@ let collapse ws t =
   t.options <- Array.make (Array.length t.options) 0.;
   t.options.(chosen) <- 1.;
   t.sum_of_ones <- 1;
-  t.tile <- 1;
+  t.tile <- chosen;
   removed
 
 let has_zero_direction tile t =
@@ -138,7 +138,7 @@ let has_zero_direction tile t =
 
 let remove_tile ws tile t =
   t.options.(tile) <- 0.;
-  if t.coords = (0, 0) then print_endline "hello";
+  print_endline "hello";
   t.sum_of_ones <- t.sum_of_ones - 1;
   t.sum_of_weights <- t.sum_of_weights -. ws.(tile);
   t.sum_of_weight_log_weights <-
