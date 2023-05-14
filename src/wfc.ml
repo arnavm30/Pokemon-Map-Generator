@@ -24,9 +24,9 @@ let rec run num_tiles ws adj_rules st =
       | CONTRADICTION -> CONTRADICTION
   with Unfinished -> raise Unfinished (* CONTRADICTION *)
 
-let rec wfc x y num_tiles ws adj_rules =
+let rec wfc (x, y) num_tiles ws adj_rules =
   let init_st = init x y num_tiles ws adj_rules in
   match run num_tiles ws adj_rules init_st with
   | FINISHED st -> st
   (* start over again if there is a contradiction *)
-  | CONTRADICTION -> wfc x y num_tiles ws adj_rules
+  | CONTRADICTION -> wfc (x, y) num_tiles ws adj_rules

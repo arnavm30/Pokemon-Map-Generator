@@ -1,6 +1,6 @@
 (**  Main algorithm: Wave Function Collapse *)
 
-val wfc : int -> int -> int -> float array -> Adj_rules.t -> State.t
+val wfc : int * int -> int -> float array -> Adj_rules.t -> State.t
 (** [wfc x y num_tiles ws adj_rules] runs wfc and outputs the resulting state *)
 
 (* exposed for testing *)

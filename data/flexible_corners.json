@@ -1,0 +1,40 @@
+{
+  "tiles": [
+    {
+      "img_path": "assets/testing_corners/corner1.png",
+      "edges": {
+        "up": "green",
+        "right": "grey",
+        "down": "green",
+        "left": "grey"
+      }
+    },
+    {
+      "img_path": "assets/testing_corners/corner2.png",
+      "edges": {
+        "up": "green",
+        "right": "grey",
+        "down": "green",
+        "left": "green"
+      }
+    },
+    {
+      "img_path": "assets/testing_corners/corner3.png",
+      "edges": {
+        "up": "green",
+        "right": "grey",
+        "down": "green",
+        "left": "green"
+      }
+    },
+    {
+      "img_path": "assets/testing_corners/corner4.png",
+      "edges": {
+        "up": "green",
+        "right": "green",
+        "down": "green",
+        "left": "grey"
+      }
+    }
+  ]
+}

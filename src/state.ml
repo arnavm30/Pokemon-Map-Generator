@@ -204,11 +204,11 @@ let rec propogate (num_tiles : int) (ws : float array) (adj_rules : Adj_rules.t)
 (* let (i,j) = smallest_entropy st (Array.make (Array.length cells) 1.) in
    let tile = st.(i).(j) in *)
 
-let draw (st : t) (x : int) (y : int) (cells : Tile.t array) =
+let draw (st : t) (x, y) (tiles : Tile.t array) =
   for i = 0 to Array.length st.grid - 1 do
     for j = 0 to Array.length st.grid.(0) - 1 do
       let index = st.grid.(i).(j).tile in
-      let img = Tile.get_img cells.(index) in
+      let img = Tile.get_img tiles.(index) in
       let img_color_array = Graphics.dump_image img in
       let img_width = Array.length img_color_array in
       let img_height = Array.length img_color_array.(0) in
