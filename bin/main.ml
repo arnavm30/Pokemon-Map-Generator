@@ -2,7 +2,7 @@
 open Generator
 open Graphics
 
-type compn = Butn of Button.t | Tog of Toggle.t
+type compn = Butn of Button.t | Tog of Toggle.t | LstPanel of List_panel.t
 
 (* state of window *)
 type map_state = {
@@ -10,7 +10,11 @@ type map_state = {
   ui : compn list;
   tiles : Tile.t array;
   mutable chosen_tiles : Tile.t array;
+  mutable size : string;
 }
+
+let change_size map_st (p : List_panel.t) () =
+  map_st.size <- List_panel.get_active_text p
 
 let create_adj_rules (tiles : Tile.t array) =
   let r = ref Adj_rules.empty in
@@ -47,7 +51,8 @@ let choose_tiles map_st =
       (fun acc c ->
         match c with
         | Tog t -> if Toggle.is_on t then Toggle.get_index t :: acc else acc
-        | Butn b -> acc)
+        | Butn b -> acc
+        | LstPanel l -> acc)
       [] compn_lst
   in
   let index_array = Array.of_list index_lst in
@@ -63,15 +68,6 @@ let choose_tiles map_st =
     new_tiles.(i) <- mutated_tile
   done;
   map_st.chosen_tiles <- new_tiles
-
-let run_wfc map_st () =
-  let tiles_len = Array.length map_st.tiles in
-  choose_tiles map_st;
-  let adj_rules = create_adj_rules map_st.chosen_tiles in
-  let result_state =
-    Wfc.wfc 20 20 tiles_len (Array.make tiles_len 1.) adj_rules
-  in
-  State.draw result_state 600 (size_y () / 2) map_st.chosen_tiles
 
 (*--------------------------EVENT LOOP----------------------------------------*)
 
@@ -97,6 +93,11 @@ let gen_interface tiles width height (x, y) : compn list =
   let width = size_x () in
   let genr_butn = Button.make (width / 4) 50 (width / 2) 50 red "generate" in
   r := Butn genr_butn :: !r;
+  let lst_pnl =
+    List_panel.make (width / 15) 50 (width / 10) 75
+      [ "small"; "medium"; "large" ]
+  in
+  r := LstPanel lst_pnl :: !r;
   !r
 
 (* [event_loop f_init f_key f_mouse] is the event loop *)
@@ -121,13 +122,46 @@ let create_map_state () =
     ui = components;
     tiles;
     chosen_tiles = tiles;
+    size = "small";
   }
 
 (* initialize things, render UI elements *)
 let init map_st () =
   List.iter
-    (fun c -> match c with Tog t -> Toggle.draw t | Butn b -> Button.draw b)
+    (fun c ->
+      match c with
+      | Tog t -> Toggle.draw t
+      | Butn b -> Button.draw b
+      | LstPanel l -> List_panel.draw l)
     map_st.ui
+
+let clear map_st () =
+  clear_graph ();
+  init map_st ()
+
+let run_wfc map_st () =
+  clear map_st ();
+  let tiles_len = Array.length map_st.tiles in
+  choose_tiles map_st;
+  let adj_rules = create_adj_rules map_st.chosen_tiles in
+  let map_size =
+    match map_st.size with
+    | "small" -> (20, 20)
+    | "medium" -> (35, 75)
+    | "large" -> (55, 130)
+    | _ -> (20, 20)
+  in
+  let result_state =
+    Wfc.wfc map_size tiles_len (Array.make tiles_len 1.) adj_rules
+  in
+  let map_posi =
+    match map_st.size with
+    | "small" -> (600, size_y () / 2)
+    | "medium" -> (350, (size_y () / 3) + 20)
+    | "large" -> (75, size_y () / 4)
+    | _ -> (600, size_y () / 2)
+  in
+  State.draw result_state map_posi map_st.chosen_tiles
 
 (* handles what happens when mouse clicks *)
 let f_mouse map_st x y =
@@ -137,17 +171,14 @@ let f_mouse map_st x y =
         (fun c ->
           match c with
           | Tog t -> Toggle.mem (x, y) t
-          | Butn b -> Button.mem (x, y) b)
+          | Butn b -> Button.mem (x, y) b
+          | LstPanel l -> List_panel.mem (x, y) l)
         map_st.ui
     in
-    (* let height = size_y () in *)
     match compn with
-    | Tog t ->
-        Toggle.press t (fun b -> ())
-        (* (fun b ->
-            if b then State.draw map_st.s 0 (height / 5) map_st.tiles
-            else clear_graph ()) *)
+    | Tog t -> Toggle.press t (fun b -> ())
     | Butn b -> Button.press b (run_wfc map_st)
+    | LstPanel l -> List_panel.press l (x, y) (change_size map_st l)
   with Not_found -> print_endline "did not press a component"
 
 let f_key map_st k =
