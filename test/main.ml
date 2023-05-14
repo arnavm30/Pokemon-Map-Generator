@@ -147,23 +147,23 @@ let tests =
   [
     (* adj_rules tests *)
     allow_test "simple add ajacency rule to empty set" 0 5 Adj_rules.UP
-      Adj_rules.empty
+      (Adj_rules.empty 2)
       [ (0, 5, Adj_rules.UP) ];
     allow_test "simple add ajacency rule to non-empty set" 0 4 Adj_rules.DOWN
-      (Adj_rules.empty |> Adj_rules.allow 0 5 Adj_rules.UP)
+      (Adj_rules.empty 2 |> Adj_rules.allow 0 5 Adj_rules.UP)
       [ (0, 4, Adj_rules.DOWN); (0, 5, Adj_rules.UP) ];
     allow_test "add duplicate ajacency rule to non-empty set" 0 5
       Adj_rules.RIGHT
-      (Adj_rules.empty |> Adj_rules.allow 0 5 Adj_rules.RIGHT)
+      (Adj_rules.empty 2 |> Adj_rules.allow 0 5 Adj_rules.RIGHT)
       [ (0, 5, Adj_rules.RIGHT) ];
     allow_test
       "add duplicate indices ajacency rule with different directions to \
        non-empty set"
       0 5 Adj_rules.RIGHT
-      (Adj_rules.empty |> Adj_rules.allow 0 5 Adj_rules.LEFT)
+      (Adj_rules.empty 2 |> Adj_rules.allow 0 5 Adj_rules.LEFT)
       [ (0, 5, Adj_rules.RIGHT); (0, 5, Adj_rules.LEFT) ];
     allow_all_test "allow all directions between 1 and 5 to empty set" 1 5
-      Adj_rules.empty
+      (Adj_rules.empty 2)
       [
         (1, 5, Adj_rules.RIGHT);
         (1, 5, Adj_rules.LEFT);
@@ -171,7 +171,7 @@ let tests =
         (1, 5, Adj_rules.UP);
       ];
     allow_all_test "allow all directions between 0 and 3 to non-empty set" 0 3
-      (Adj_rules.empty |> Adj_rules.allow 3 4 Adj_rules.RIGHT)
+      (Adj_rules.empty 2 |> Adj_rules.allow 3 4 Adj_rules.RIGHT)
       [
         (0, 3, Adj_rules.RIGHT);
         (0, 3, Adj_rules.LEFT);
@@ -181,26 +181,26 @@ let tests =
       ];
     allow_all_test
       "allow all directions between 0 and 3 to non-empty set, duplicate" 0 3
-      (Adj_rules.allow 0 3 Adj_rules.RIGHT Adj_rules.empty)
+      (Adj_rules.allow 0 3 Adj_rules.RIGHT (Adj_rules.empty 2))
       [
         (0, 3, Adj_rules.RIGHT);
         (0, 3, Adj_rules.LEFT);
         (0, 3, Adj_rules.DOWN);
         (0, 3, Adj_rules.UP);
       ];
-    is_allowed_test "is allow in empty set" 0 3 Adj_rules.RIGHT Adj_rules.empty
-      false;
+    is_allowed_test "is allow in empty set" 0 3 Adj_rules.RIGHT
+      (Adj_rules.empty 2) false;
     is_allowed_test "is allow (0,3,right) in set with only that rule" 0 3
       Adj_rules.RIGHT
-      (Adj_rules.allow 0 3 Adj_rules.RIGHT Adj_rules.empty)
+      (Adj_rules.allow 0 3 Adj_rules.RIGHT (Adj_rules.empty 2))
       true;
     is_allowed_test "is allow (0,3,right) in set with (0, 3, left)" 0 3
       Adj_rules.RIGHT
-      (Adj_rules.allow 0 3 Adj_rules.LEFT Adj_rules.empty)
+      (Adj_rules.allow 0 3 Adj_rules.LEFT (Adj_rules.empty 2))
       false;
     is_allowed_test "is allow (0,3,right) in set with (3, 0, right)" 0 3
       Adj_rules.RIGHT
-      (Adj_rules.allow 3 0 Adj_rules.RIGHT Adj_rules.empty)
+      (Adj_rules.allow 3 0 Adj_rules.RIGHT (Adj_rules.empty 2))
       false;
     opposite_dir_test "opposite direction of UP = DOWN" Adj_rules.UP
       Adj_rules.DOWN;
