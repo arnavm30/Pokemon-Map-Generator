@@ -19,3 +19,6 @@ val mem : int * int -> t -> bool
 
 val press : t -> (unit -> unit) -> unit
 (** [press b f] is execute [f] *)
+
+val allow_press : t -> unit
+val disallow_press : t -> unit

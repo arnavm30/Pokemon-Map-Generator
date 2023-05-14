@@ -7,9 +7,11 @@ type t = {
   height : int;
   c : color;
   text : string;
+  mutable can_be_pressed : bool;
 }
 
-let make x y w h c str = { x; y; width = w; height = h; c; text = str }
+let make x y w h c str =
+  { x; y; width = w; height = h; c; text = str; can_be_pressed = true }
 
 let draw b =
   set_color b.c;
@@ -31,4 +33,8 @@ let mem (x, y) b =
   let h = b.height in
   x >= x0 && x <= x0 + w && y >= y0 && y <= y0 + h
 
-let press (b : t) (f : unit -> unit) : unit = f ()
+let allow_press b = b.can_be_pressed <- true
+let disallow_press b = b.can_be_pressed <- false
+
+let press (b : t) (f : unit -> unit) : unit =
+  if b.can_be_pressed then f () else ()

@@ -5,4 +5,6 @@
   graphics
   camlimages.core
   camlimages.png
-  camlimages.graphics))
+  camlimages.graphics
+  lwt
+  lwt.unix))

@@ -220,6 +220,27 @@ let run_wfc map_st () =
   in
   State.draw result_state map_posi map_st.chosen_tiles
 
+let concurrent_wfc b map_st () =
+  (* let p =
+       Lwt_preemptive.detach
+         (fun () ->
+           Button.disallow_press b;
+           run_wfc map_st ();
+           Button.allow_press b)
+         ()
+     in
+     let _ = Lwt_main.run p in
+     () *)
+  let _ =
+    Thread.create
+      (fun () ->
+        Button.disallow_press b;
+        run_wfc map_st ();
+        Button.allow_press b)
+      ()
+  in
+  ()
+
 (* handles what happens when mouse clicks *)
 let f_mouse map_st x y =
   try
@@ -234,7 +255,8 @@ let f_mouse map_st x y =
     in
     match compn with
     | Tog t -> Toggle.press t (fun b -> ())
-    | Butn b -> Button.press b (run_wfc map_st)
+    | Butn b -> Button.press b (concurrent_wfc b map_st)
+    (* | Butn b -> Button.press b (run_wfc map_st) *)
     | LstPanel l -> List_panel.press l (x, y) (change_size map_st l)
   with Not_found -> print_endline "did not press a component"
 
