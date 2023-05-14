@@ -20,7 +20,7 @@ let change_size map_st (p : List_panel.t) () =
 
 (* create the adjacency rules based on the given tiles*)
 let create_adj_rules (tiles : Tile.t array) =
-  let r = ref Adj_rules.empty in
+  let r = ref (Adj_rules.empty ()) in
   print_endline "initial adjacency rules, should be empty: ";
   Adj_rules.print_to_string !r;
   for i = 0 to Array.length tiles - 1 do
@@ -30,7 +30,7 @@ let create_adj_rules (tiles : Tile.t array) =
     let tile_down = Tile.get_down tile in
     let tile_left = Tile.get_left tile in
     let rules =
-      Adj_rules.empty
+      Adj_rules.empty ()
       |> List.fold_right
            (fun indx acc -> Adj_rules.allow i indx Adj_rules.UP acc)
            tile_up

@@ -21,14 +21,7 @@ val press : t -> (unit -> unit) -> unit
 (** [press b f] is execute [f] *)
 
 val allow_press : t -> unit
-<<<<<<< HEAD
 (** [allow_press b] allows b to execute when clicked *)
 
 val disallow_press : t -> unit
 (** [disallow_press b] prevents b from executing when clicked *)
-=======
-(** [allow_press b] allows presses to button [b] *)
-
-val disallow_press : t -> unit
-(** [disallow_press b] disallows presses to button [b] *)
->>>>>>> b7ef165584b9f39fc416dbea6a26c3923c0bc26c

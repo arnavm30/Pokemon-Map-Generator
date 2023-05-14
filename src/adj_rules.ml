@@ -22,7 +22,7 @@ let string_of_dir dir =
   | LEFT -> "left"
   | RIGHT -> "right"
 
-let empty = Hashtbl.create 10
+let empty () = Hashtbl.create 10
 
 let allow a b dir ht =
   Hashtbl.add ht (a, b, dir) ();

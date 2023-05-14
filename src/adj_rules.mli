@@ -6,7 +6,7 @@ type t
 (** The abstract type of directions *)
 type directions = UP | DOWN | LEFT | RIGHT
 
-val empty : t
+val empty : unit -> t
 (** [empty] is empty adjancey rules. *)
 
 val allow : int -> int -> directions -> t -> t
