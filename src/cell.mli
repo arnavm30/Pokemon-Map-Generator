@@ -54,6 +54,13 @@ val remove_tile : float array -> int -> t -> unit
 (** [remove_tile tile c] removes tile [tile] from this cell [c] *)
 
 val to_string : t -> string
+(** [to_string c] is the cell [c] as a string *)
+
 val enablers_to_string : t -> string
+(** [enablers_to_string c] is the enablers of cell [c] as a string *)
+
 val enabler_dirs_to_string : directions -> string
+(** [enabler_dirs_to_string c] is the enabler directions of cell [c] as a string *)
+
 val options_to_string : t -> string
+(** [options_to_string c] is the options of cell [c] as a string *)

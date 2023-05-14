@@ -14,11 +14,15 @@ type map_state = {
   size_data : size_data array;
 }
 
+(* based on panel, change size of map rendered *)
 let change_size map_st (p : List_panel.t) () =
   map_st.size <- List_panel.get_active_text p
 
+(* create the adjacency rules based on the given tiles*)
 let create_adj_rules (tiles : Tile.t array) =
   let r = ref Adj_rules.empty in
+  print_endline "initial adjacency rules, should be empty: ";
+  Adj_rules.print_to_string !r;
   for i = 0 to Array.length tiles - 1 do
     let tile = tiles.(i) in
     let tile_up = Tile.get_up tile in
@@ -42,9 +46,11 @@ let create_adj_rules (tiles : Tile.t array) =
     in
     r := Adj_rules.combine rules !r
   done;
+  print_endline "reuslting adjacency rules: ";
   Adj_rules.print_to_string !r;
   !r
 
+(* based on the status of toggles, choose which tiles will be used *)
 let choose_tiles map_st =
   let compn_lst = map_st.ui in
   let index_lst =
@@ -117,6 +123,7 @@ let event_loop f_init f_key f_mouse =
     else if s.button then f_mouse s.mouse_x s.mouse_y
   done
 
+(* helper function to store size data *)
 let extract_size_data placements =
   let result =
     List.map
@@ -155,10 +162,12 @@ let init map_st () =
       | LstPanel l -> List_panel.draw l)
     map_st.ui
 
+(* clear renderings, redraw interface *)
 let clear map_st () =
   clear_graph ();
   init map_st ()
 
+(* run the wfc algorithm given the map state *)
 let run_wfc map_st () =
   clear map_st ();
   choose_tiles map_st;
@@ -177,6 +186,7 @@ let run_wfc map_st () =
   in
   State.draw result_state map_posi map_st.chosen_tiles
 
+(* run the wfc algorithm concurrently given map state and status of button *)
 let concurrent_wfc b map_st () =
   let _ =
     Thread.create
@@ -203,15 +213,11 @@ let f_mouse map_st x y =
     match compn with
     | Tog t -> Toggle.press t (fun b -> ())
     | Butn b -> Button.press b (concurrent_wfc b map_st)
-    (* | Butn b -> Button.press b (run_wfc map_st) *)
     | LstPanel l -> List_panel.press l (x, y) (change_size map_st l)
   with Not_found -> print_endline "did not press a component"
 
-let f_key map_st k =
-  if k = ' ' then (
-    clear_graph ();
-    init map_st ())
-  else ()
+(* handles what happens when there's a key press *)
+let f_key map_st k = if k = ' ' then clear map_st () else ()
 
 (** [main ()] opens a graphics window and runs event loop*)
 let main () =

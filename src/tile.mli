@@ -31,5 +31,5 @@ val analyze : t -> t array -> t
     down right filled with the indexes of the cells it can be tiled next to *)
 
 val from_json : Yojson.Basic.t -> t array * (string * (string * int) list) list
-(** [from_json j] is the tiles that [j] represents. Requires: [j] is a valid
-        JSON tiles representation. *)
+(** [from_json j] is the (tiles, size placements) that [j] represents. 
+    Requires: [j] is a valid JSON tiles representation. *)
