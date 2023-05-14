@@ -47,6 +47,20 @@ let tile_of_json j =
   let edges = j |> member "edges" |> edges_of_json in
   make (Graphic_image.of_image (Png.load img_path [])) edges
 
+let sizes_of_json j =
+  let dim_x = j |> member "dim_x" |> to_int in
+  let dim_y = j |> member "dim_y" |> to_int in
+  let x = j |> member "x" |> to_int in
+  let y = j |> member "y" |> to_int in
+  [ ("dim_x", dim_x); ("dim_y", dim_y); ("x", x); ("y", y) ]
+
+let palcement_of_json j =
+  let small = j |> member "small" |> sizes_of_json in
+  let medium = j |> member "medium" |> sizes_of_json in
+  let large = j |> member "large" |> sizes_of_json in
+  [ ("small", small); ("medium", medium); ("large", large) ]
+
 let from_json j =
   let tiles_lst = j |> member "tiles" |> to_list |> List.map tile_of_json in
-  Array.of_list tiles_lst
+  let placement = j |> member "placement" |> palcement_of_json in
+  (Array.of_list tiles_lst, placement)

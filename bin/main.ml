@@ -3,6 +3,7 @@ open Generator
 open Graphics
 
 type compn = Butn of Button.t | Tog of Toggle.t | LstPanel of List_panel.t
+type size_data = { dim_x : int; dim_y : int; x : int; y : int }
 
 (* state of window *)
 type map_state = {
@@ -11,6 +12,7 @@ type map_state = {
   tiles : Tile.t array;
   mutable chosen_tiles : Tile.t array;
   mutable size : string;
+  size_data : size_data array;
 }
 
 let change_size map_st (p : List_panel.t) () =
@@ -109,6 +111,18 @@ let event_loop f_init f_key f_mouse =
     else if s.button then f_mouse s.mouse_x s.mouse_y
   done
 
+let extract_size_data placements =
+  let result =
+    List.map
+      (fun (size, size_data) ->
+        match size_data with
+        | [ ("dim_x", dim_x); ("dim_y", dim_y); ("x", x); ("y", y) ] ->
+            { dim_x; dim_y; x; y }
+        | _ -> failwith "something's wrong")
+      placements
+  in
+  Array.of_list result
+
 (* create the map state that'll be passed to functions in event_loop *)
 let create_map_state () =
   open_graph "";
@@ -116,7 +130,7 @@ let create_map_state () =
   (* let tiles = Tile.from_json (Yojson.Basic.from_file "data/corners.json") *)
   (* let tiles =
      Tile.from_json (Yojson.Basic.from_file "data/flexible_corners.json") *)
-  let tiles =
+  let tiles, placements =
     Tile.from_json (Yojson.Basic.from_file "data/pokemon_grass.json")
   in
   let width = size_x () in
@@ -128,6 +142,7 @@ let create_map_state () =
     tiles;
     chosen_tiles = tiles;
     size = "small";
+    size_data = extract_size_data placements;
   }
 
 (* initialize things, render UI elements *)
@@ -151,20 +166,20 @@ let run_wfc map_st () =
   let adj_rules = create_adj_rules map_st.chosen_tiles in
   let map_size =
     match map_st.size with
-    | "small" -> (20, 20)
-    | "medium" -> (35, 75)
-    | "large" -> (55, 130)
-    | _ -> (20, 20)
+    | "small" -> (map_st.size_data.(0).dim_x, map_st.size_data.(0).dim_y)
+    | "medium" -> (map_st.size_data.(1).dim_x, map_st.size_data.(1).dim_y)
+    | "large" -> (map_st.size_data.(2).dim_x, map_st.size_data.(2).dim_y)
+    | _ -> (map_st.size_data.(0).dim_x, map_st.size_data.(0).dim_y)
   in
   let result_state =
     Wfc.wfc map_size tiles_len (Array.make tiles_len 1.) adj_rules
   in
   let map_posi =
     match map_st.size with
-    | "small" -> (600, size_y () / 2)
-    | "medium" -> (350, (size_y () / 3) + 20)
-    | "large" -> (75, size_y () / 4)
-    | _ -> (600, size_y () / 2)
+    | "small" -> (map_st.size_data.(0).x, map_st.size_data.(0).y)
+    | "medium" -> (map_st.size_data.(1).x, map_st.size_data.(1).y)
+    | "large" -> (map_st.size_data.(2).x, map_st.size_data.(2).y)
+    | _ -> (map_st.size_data.(0).x, map_st.size_data.(0).y)
   in
   State.draw result_state map_posi map_st.chosen_tiles
 
