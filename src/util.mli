@@ -13,3 +13,4 @@ val ( ///. ) : float array -> float array -> float array
 (* [entropy f_arr] is the shannon entropy of [f_arr], array of float weights *)
 
 val string_of_int_pair : int * int -> string
+val string_of_int_list : int list -> string

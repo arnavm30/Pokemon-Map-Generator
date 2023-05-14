@@ -71,6 +71,36 @@ let choose_tiles map_st =
   done;
   map_st.chosen_tiles <- new_tiles
 
+(* let run_wfc map_st () =
+   let tiles_len = Array.length map_st.tiles in
+   choose_tiles map_st;
+   let adj_rules = create_adj_rules map_st.chosen_tiles in
+   let result_state =
+     Wfc.wfc 40 40 tiles_len (Array.make tiles_len 1.) adj_rules
+   in
+   State.draw result_state 600 (size_y () / 2) map_st.chosen_tiles *)
+
+(* this was used for testing, feel free to delete*)
+(* let run_wfc map_st () =
+   let tiles_len = Array.length map_st.tiles in
+   choose_tiles map_st;
+   let adj_rules = create_adj_rules map_st.chosen_tiles in
+   let init_state = Wfc.init 2 2 tiles_len (Array.make tiles_len 1.) adj_rules in
+   let ws = Array.make tiles_len 1. in
+   let _ = State.collapse_cell ws init_state.grid.(0).(1) init_state in
+   let state =
+     match State.propogate tiles_len ws adj_rules init_state with
+     | FINISHED state ->
+         print_endline (string_of_int state.grid.(0).(1).tile);
+         print_endline (Cell.enablers_to_string state.grid.(0).(0));
+         state
+     | CONTRADICTION -> raise Not_found
+   in
+   print_endline (string_of_int state.grid.(0).(1).tile);
+   print_endline (Cell.enablers_to_string state.grid.(0).(0)) *)
+
+(* State.draw state 600 (size_y () / 2) map_st.chosen_tiles *)
+
 (*--------------------------EVENT LOOP----------------------------------------*)
 
 (* generate interface of UI elements, where to place them *)

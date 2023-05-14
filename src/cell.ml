@@ -50,7 +50,13 @@ let cmp a b = if entropy a <= entropy b then -1 else 1
 let check_collapsed t = if t.sum_of_ones = 1 then t.collapsed <- true
 
 let check_contradiction t =
-  if t.sum_of_ones = 0 then raise Contradiction else ()
+  if t.sum_of_ones = 0 then (
+    print_endline "We have contradiction";
+    print_endline (Util.string_of_int_pair t.coords);
+    print_endline (options_to_string t);
+    print_endline (enablers_to_string t);
+    raise Contradiction)
+  else ()
 
 let copy_enablers enablers =
   let copy_directions { up; down; left; right } = { up; down; left; right } in
@@ -95,12 +101,6 @@ let choose_random_option ws t =
   let r = Random.float t.sum_of_weights |> ref in
   let i = ref 0 in
   while !i < Array.length t.options && !r >= 0. do
-    (* print_endline "length: ";
-       print_endline (string_of_int (Array.length t.options));
-       print_endline "options: ";
-       print_endline (string_of_float t.options.(!i));
-       print_endline "weights: ";
-       print_endline (string_of_float ws.(!i)); *)
     if t.options.(!i) = 1. then r := !r -. ws.(!i);
     incr i
   done;
@@ -115,17 +115,6 @@ let collapse ws t =
     if x = 1. && i <> chosen then (i + 1, i :: lst) else (i + 1, lst)
   in
   let _, removed = Array.fold_left aux (0, []) t.options in
-  (* print_endline "options: ";
-     Array.iter (fun x -> print_string (string_of_float x ^ " ")) t.options;
-     print_endline (string_of_int chosen);
-     print_endline "removed: ";
-     List.iter (fun x -> print_string (string_of_int x ^ " ")) removed; *)
-  (* if t.coords = (0, 0) then (
-       print_endline ("first: " ^ options_to_string t);
-       print_endline (enablers_to_string t));
-     if t.coords = (1, 0) then (
-       print_endline ("second: " ^ options_to_string t);
-       print_endline (enablers_to_string t)); *)
   t.options <- Array.make (Array.length t.options) 0.;
   t.options.(chosen) <- 1.;
   t.sum_of_ones <- 1;
@@ -136,10 +125,22 @@ let has_zero_direction tile t =
   let dirs = t.tile_enablers.(tile) in
   dirs.up <= 0 || dirs.left <= 0 || dirs.right <= 0 || dirs.down <= 0
 
+let print_stats t =
+  print_endline "Cell: ";
+  print_endline (Util.string_of_int_pair t.coords);
+  print_endline (options_to_string t);
+  print_endline (enablers_to_string t);
+  print_endline ("Sum of ones: " ^ string_of_int t.sum_of_ones);
+  print_endline ""
+
 let remove_tile ws tile t =
+  (* print_endline "remove tile:";
+     print_endline ("tile: " ^ string_of_int tile);
+     print_stats t; *)
   t.options.(tile) <- 0.;
-  print_endline "hello";
   t.sum_of_ones <- t.sum_of_ones - 1;
+  (* print_endline "result:";
+     print_stats t; *)
   t.sum_of_weights <- t.sum_of_weights -. ws.(tile);
   t.sum_of_weight_log_weights <-
     t.sum_of_weight_log_weights -. (ws.(tile) *. log ws.(tile))
