@@ -13,4 +13,7 @@ val ( ///. ) : float array -> float array -> float array
 (* [entropy f_arr] is the shannon entropy of [f_arr], array of float weights *)
 
 val string_of_int_pair : int * int -> string
+(** [string_of_int_pair (x,y)] is the pair [(x,y)] as a string *)
+
 val string_of_int_list : int list -> string
+(** [string_of_int_list lst] is the int list [lst] as a string *)

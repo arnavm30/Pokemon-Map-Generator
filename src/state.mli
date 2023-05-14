@@ -21,7 +21,7 @@ val make_test : int -> int -> Tile.t array -> t
     and tiles initialized with [l] options *)
 
 (* val smallest_entropies : t -> float array -> (int * int) list *)
-(** [smallest_entropies state weights] is the list of tiles with the smallest 
+(* [smallest_entropies state weights] is the list of tiles with the smallest
     entropies from [state] *)
 
 val smallest_entropy : t -> Cell.t option
@@ -33,8 +33,9 @@ val collapse_cell : float array -> Cell.t -> t -> unit
 with [weights] *)
 
 val propogate : int -> float array -> Adj_rules.t -> t -> result
-(** [propogate state] eliminates tiles in cells of [state] that can no longer be chosen  *)
+(** [propogate num_tiles ws adj_rules state] eliminates tiles in cells of [state] 
+    that can no longer be chosen  *)
 
 val draw : t -> int * int -> Tile.t array -> unit
-(** [draw state x y cells] renders the state to screen with bottom left corner 
-    at ([x],[y])*)
+(** [draw state (x,y) cells] renders the state to screen with bottom left corner 
+    at [(x,y)]*)

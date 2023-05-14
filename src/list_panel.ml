@@ -24,7 +24,7 @@ let make x y w h strs active =
         index = i;
       }
   done;
-  { x; y; width = w; height = h; options = r; active = 0 }
+  { x; y; width = w; height = h; options = r; active }
 
 let get_active_text p = p.options.(p.active).text
 

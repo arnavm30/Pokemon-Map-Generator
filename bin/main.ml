@@ -3,11 +3,10 @@ open Generator
 open Graphics
 
 type compn = Butn of Button.t | Tog of Toggle.t | LstPanel of List_panel.t
-type size_data = { dim_x : int; dim_y : int; x : int; y : int }
+type size_data = { dims : int * int; place : int * int }
 
 (* state of window *)
 type map_state = {
-  s : State.t;
   ui : compn list;
   tiles : Tile.t array;
   mutable chosen_tiles : Tile.t array;
@@ -15,11 +14,15 @@ type map_state = {
   size_data : size_data array;
 }
 
+(* based on panel, change size of map rendered *)
 let change_size map_st (p : List_panel.t) () =
   map_st.size <- List_panel.get_active_text p
 
+(* create the adjacency rules based on the given tiles*)
 let create_adj_rules (tiles : Tile.t array) =
   let r = ref Adj_rules.empty in
+  print_endline "initial adjacency rules, should be empty: ";
+  Adj_rules.print_to_string !r;
   for i = 0 to Array.length tiles - 1 do
     let tile = tiles.(i) in
     let tile_up = Tile.get_up tile in
@@ -43,9 +46,11 @@ let create_adj_rules (tiles : Tile.t array) =
     in
     r := Adj_rules.combine rules !r
   done;
+  print_endline "reuslting adjacency rules: ";
   Adj_rules.print_to_string !r;
   !r
 
+(* based on the status of toggles, choose which tiles will be used *)
 let choose_tiles map_st =
   let compn_lst = map_st.ui in
   let index_lst =
@@ -70,36 +75,6 @@ let choose_tiles map_st =
     new_tiles.(i) <- mutated_tile
   done;
   map_st.chosen_tiles <- new_tiles
-
-(* let run_wfc map_st () =
-   let tiles_len = Array.length map_st.tiles in
-   choose_tiles map_st;
-   let adj_rules = create_adj_rules map_st.chosen_tiles in
-   let result_state =
-     Wfc.wfc 40 40 tiles_len (Array.make tiles_len 1.) adj_rules
-   in
-   State.draw result_state 600 (size_y () / 2) map_st.chosen_tiles *)
-
-(* this was used for testing, feel free to delete*)
-(* let run_wfc map_st () =
-   let tiles_len = Array.length map_st.tiles in
-   choose_tiles map_st;
-   let adj_rules = create_adj_rules map_st.chosen_tiles in
-   let init_state = Wfc.init 2 2 tiles_len (Array.make tiles_len 1.) adj_rules in
-   let ws = Array.make tiles_len 1. in
-   let _ = State.collapse_cell ws init_state.grid.(0).(1) init_state in
-   let state =
-     match State.propogate tiles_len ws adj_rules init_state with
-     | FINISHED state ->
-         print_endline (string_of_int state.grid.(0).(1).tile);
-         print_endline (Cell.enablers_to_string state.grid.(0).(0));
-         state
-     | CONTRADICTION -> raise Not_found
-   in
-   print_endline (string_of_int state.grid.(0).(1).tile);
-   print_endline (Cell.enablers_to_string state.grid.(0).(0)) *)
-
-(* State.draw state 600 (size_y () / 2) map_st.chosen_tiles *)
 
 (*--------------------------EVENT LOOP----------------------------------------*)
 
@@ -148,33 +123,28 @@ let event_loop f_init f_key f_mouse =
     else if s.button then f_mouse s.mouse_x s.mouse_y
   done
 
+(* helper function to store size data *)
 let extract_size_data placements =
   let result =
     List.map
       (fun (size, size_data) ->
         match size_data with
         | [ ("dim_x", dim_x); ("dim_y", dim_y); ("x", x); ("y", y) ] ->
-            { dim_x; dim_y; x; y }
+            { dims = (dim_x, dim_y); place = (x, y) }
         | _ -> failwith "something's wrong")
       placements
   in
   Array.of_list result
 
 (* create the map state that'll be passed to functions in event_loop *)
-let create_map_state () =
+let create_map_state file_path () =
   open_graph "";
   resize_window 1450 800;
-  (* let tiles = Tile.from_json (Yojson.Basic.from_file "data/corners.json") *)
-  (* let tiles =
-     Tile.from_json (Yojson.Basic.from_file "data/flexible_corners.json") *)
-  let tiles, placements =
-    Tile.from_json (Yojson.Basic.from_file "data/corners.json")
-  in
+  let tiles, placements = Tile.from_json (Yojson.Basic.from_file file_path) in
   let width = size_x () in
   let height = size_y () in
   let components = gen_interface tiles width (height / 2) (0, 0) in
   {
-    s = State.make_test (width / 5) (height / 5) tiles;
     ui = components;
     tiles;
     chosen_tiles = tiles;
@@ -192,45 +162,32 @@ let init map_st () =
       | LstPanel l -> List_panel.draw l)
     map_st.ui
 
+(* clear renderings, redraw interface *)
 let clear map_st () =
   clear_graph ();
   init map_st ()
 
+(* run the wfc algorithm given the map state *)
 let run_wfc map_st () =
   clear map_st ();
   choose_tiles map_st;
   let tiles_len = Array.length map_st.chosen_tiles in
   let adj_rules = create_adj_rules map_st.chosen_tiles in
-  let map_size =
+  let map_size, map_posi =
     match map_st.size with
-    | "small" -> (map_st.size_data.(0).dim_x, map_st.size_data.(0).dim_y)
-    | "medium" -> (map_st.size_data.(1).dim_x, map_st.size_data.(1).dim_y)
-    | "large" -> (map_st.size_data.(2).dim_x, map_st.size_data.(2).dim_y)
-    | _ -> (map_st.size_data.(0).dim_x, map_st.size_data.(0).dim_y)
+    | "small" -> (map_st.size_data.(0).dims, map_st.size_data.(0).place)
+    | "medium" -> (map_st.size_data.(1).dims, map_st.size_data.(1).place)
+    | "large" -> (map_st.size_data.(2).dims, map_st.size_data.(2).place)
+    | _ -> (map_st.size_data.(0).dims, map_st.size_data.(0).place)
   in
+
   let result_state =
     Wfc.wfc map_size tiles_len (Array.make tiles_len 1.) adj_rules
   in
-  let map_posi =
-    match map_st.size with
-    | "small" -> (map_st.size_data.(0).x, map_st.size_data.(0).y)
-    | "medium" -> (map_st.size_data.(1).x, map_st.size_data.(1).y)
-    | "large" -> (map_st.size_data.(2).x, map_st.size_data.(2).y)
-    | _ -> (map_st.size_data.(0).x, map_st.size_data.(0).y)
-  in
   State.draw result_state map_posi map_st.chosen_tiles
 
+(* run the wfc algorithm concurrently given map state and status of button *)
 let concurrent_wfc b map_st () =
-  (* let p =
-       Lwt_preemptive.detach
-         (fun () ->
-           Button.disallow_press b;
-           run_wfc map_st ();
-           Button.allow_press b)
-         ()
-     in
-     let _ = Lwt_main.run p in
-     () *)
   let _ =
     Thread.create
       (fun () ->
@@ -256,19 +213,15 @@ let f_mouse map_st x y =
     match compn with
     | Tog t -> Toggle.press t (fun b -> ())
     | Butn b -> Button.press b (concurrent_wfc b map_st)
-    (* | Butn b -> Button.press b (run_wfc map_st) *)
     | LstPanel l -> List_panel.press l (x, y) (change_size map_st l)
   with Not_found -> print_endline "did not press a component"
 
-let f_key map_st k =
-  if k = ' ' then (
-    clear_graph ();
-    init map_st ())
-  else ()
+(* handles what happens when there's a key press *)
+let f_key map_st k = if k = ' ' then clear map_st () else ()
 
 (** [main ()] opens a graphics window and runs event loop*)
 let main () =
-  let s = create_map_state () in
+  let s = create_map_state "data/corners.json" () in
   event_loop (init s) (f_key s) (f_mouse s)
 
 (* Execute the graphics engine. *)

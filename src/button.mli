@@ -12,7 +12,7 @@ val make : int -> int -> int -> int -> Graphics.color -> string -> t
     at ([x],[y]) with width [w], height [h], color [c], and text [str] across *)
 
 val draw : t -> unit
-(** [draw b] renders button [b] to window as a filled rectange *)
+(** [draw b] renders button [b] to window as a filled rectange with text across *)
 
 val mem : int * int -> t -> bool
 (** [mem (x,y) b] is whether mouse point [(x,y)] is in button [b] *)
@@ -21,7 +21,14 @@ val press : t -> (unit -> unit) -> unit
 (** [press b f] is execute [f] *)
 
 val allow_press : t -> unit
+<<<<<<< HEAD
 (** [allow_press b] allows b to execute when clicked *)
 
 val disallow_press : t -> unit
 (** [disallow_press b] prevents b from executing when clicked *)
+=======
+(** [allow_press b] allows presses to button [b] *)
+
+val disallow_press : t -> unit
+(** [disallow_press b] disallows presses to button [b] *)
+>>>>>>> b7ef165584b9f39fc416dbea6a26c3923c0bc26c
