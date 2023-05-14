@@ -6,17 +6,19 @@ type compn = Butn of Button.t | Tog of Toggle.t | LstPanel of List_panel.t
 type size_data = { dims : int * int; place : int * int }
 
 (* state of window *)
+(* state of window *)
 type map_state = {
-  ui : compn list;
-  tiles : Tile.t array;
+  mutable ui : compn list;
+  tiles : Tile.t array array;
+  size_data : size_data array array;
+  mutable active_tiles : int;
   mutable chosen_tiles : Tile.t array;
   mutable size : string;
-  size_data : size_data array;
 }
 
 (* based on panel, change size of map rendered *)
-let change_size map_st (p : List_panel.t) () =
-  map_st.size <- List_panel.get_active_text p
+(* let change_size map_st (p : List_panel.t) () =
+   map_st.size <- List_panel.get_active_text p *)
 
 (* create the adjacency rules based on the given tiles*)
 let create_adj_rules (tiles : Tile.t array) =
@@ -64,10 +66,10 @@ let choose_tiles map_st =
   in
   let index_array = Array.of_list index_lst in
   let index_len = Array.length index_array in
-  let new_tiles = Array.make index_len map_st.tiles.(0) in
+  let new_tiles = Array.make index_len map_st.tiles.(map_st.active_tiles).(0) in
   for i = 0 to index_len - 1 do
     let index = index_array.(i) in
-    new_tiles.(i) <- map_st.tiles.(index)
+    new_tiles.(i) <- map_st.tiles.(map_st.active_tiles).(index)
   done;
   for i = 0 to index_len - 1 do
     let curr_tile = new_tiles.(i) in
@@ -79,7 +81,8 @@ let choose_tiles map_st =
 (*--------------------------EVENT LOOP----------------------------------------*)
 
 (* generate interface of UI elements, where to place them *)
-let gen_interface tiles width height (x, y) : compn list =
+let gen_interface tiles width height (x, y) active_size active_file : compn list
+    =
   let num_toggles = Array.length tiles in
   let toggle_width = width / num_toggles in
   let toggle_height = y + (height / 4) in
@@ -103,13 +106,13 @@ let gen_interface tiles width height (x, y) : compn list =
   let lst_pnl =
     List_panel.make (width / 15) 50 (width / 10) 75
       [ "small"; "medium"; "large" ]
-      0
+      active_size
   in
   r := LstPanel lst_pnl :: !r;
   let file_lst_pnl =
     List_panel.make
       ((12 * width / 15) + 20)
-      50 (width / 10) 75 [ "pipes"; "pokemon" ] 0
+      50 (width / 10) 75 [ "pipes"; "pokemon" ] active_file
   in
   r := LstPanel file_lst_pnl :: !r;
   !r
@@ -137,20 +140,52 @@ let extract_size_data placements =
   Array.of_list result
 
 (* create the map state that'll be passed to functions in event_loop *)
-let create_map_state file_path () =
+let create_map_state (files : string array) () =
   open_graph "";
   resize_window 1450 800;
-  let tiles, placements = Tile.from_json (Yojson.Basic.from_file file_path) in
+  let file_tiles, file_placements =
+    Tile.from_json (Yojson.Basic.from_file files.(0))
+  in
+  let files_len = Array.length files in
+  let tiles_arr = Array.make files_len file_tiles in
+  let sizes_arr = Array.make files_len (extract_size_data file_placements) in
+
+  for i = 1 to files_len - 1 do
+    let file_tiles, file_placements =
+      Tile.from_json (Yojson.Basic.from_file files.(i))
+    in
+    tiles_arr.(i) <- file_tiles;
+    sizes_arr.(i) <- extract_size_data file_placements
+  done;
   let width = size_x () in
   let height = size_y () in
-  let components = gen_interface tiles width (height / 2) (0, 0) in
+  let components = gen_interface tiles_arr.(0) width (height / 2) (0, 0) 0 0 in
   {
     ui = components;
-    tiles;
-    chosen_tiles = tiles;
+    tiles = tiles_arr;
+    size_data = sizes_arr;
+    active_tiles = 0;
+    chosen_tiles = tiles_arr.(0);
     size = "small";
-    size_data = extract_size_data placements;
   }
+
+let update_map_state map_st =
+  let width = size_x () in
+  let height = size_y () in
+  let active_size =
+    match map_st.size with
+    | "small" -> 0
+    | "medium" -> 1
+    | "large" -> 2
+    | _ -> failwith "something's wrong with update map state"
+  in
+  let components =
+    gen_interface
+      map_st.tiles.(map_st.active_tiles)
+      width (height / 2) (0, 0) active_size map_st.active_tiles
+  in
+  map_st.ui <- components;
+  map_st.chosen_tiles <- map_st.tiles.(map_st.active_tiles)
 
 (* initialize things, render UI elements *)
 let init map_st () =
@@ -167,20 +202,35 @@ let clear map_st () =
   clear_graph ();
   init map_st ()
 
+let handle_menus map_st (p : List_panel.t) () =
+  match List_panel.get_active_text p with
+  | "small" -> map_st.size <- "small"
+  | "medium" -> map_st.size <- "medium"
+  | "large" -> map_st.size <- "large"
+  | "pipes" ->
+      map_st.active_tiles <- 0;
+      update_map_state map_st;
+      clear map_st ()
+  | "pokemon" ->
+      map_st.active_tiles <- 1;
+      update_map_state map_st;
+      clear map_st ()
+  | _ -> failwith "what's going on"
+
 (* run the wfc algorithm given the map state *)
 let run_wfc map_st () =
   clear map_st ();
   choose_tiles map_st;
   let tiles_len = Array.length map_st.chosen_tiles in
   let adj_rules = create_adj_rules map_st.chosen_tiles in
+  let active_size_data = map_st.size_data.(map_st.active_tiles) in
   let map_size, map_posi =
     match map_st.size with
-    | "small" -> (map_st.size_data.(0).dims, map_st.size_data.(0).place)
-    | "medium" -> (map_st.size_data.(1).dims, map_st.size_data.(1).place)
-    | "large" -> (map_st.size_data.(2).dims, map_st.size_data.(2).place)
-    | _ -> (map_st.size_data.(0).dims, map_st.size_data.(0).place)
+    | "small" -> (active_size_data.(0).dims, active_size_data.(0).place)
+    | "medium" -> (active_size_data.(1).dims, active_size_data.(1).place)
+    | "large" -> (active_size_data.(2).dims, active_size_data.(2).place)
+    | _ -> (active_size_data.(0).dims, active_size_data.(0).place)
   in
-
   let result_state =
     Wfc.wfc map_size tiles_len (Array.make tiles_len 1.) adj_rules
   in
@@ -213,7 +263,7 @@ let f_mouse map_st x y =
     match compn with
     | Tog t -> Toggle.press t (fun b -> ())
     | Butn b -> Button.press b (run_wfc map_st)
-    | LstPanel l -> List_panel.press l (x, y) (change_size map_st l)
+    | LstPanel l -> List_panel.press l (x, y) (handle_menus map_st l)
   with Not_found -> print_endline "did not press a component"
 
 (* handles what happens when there's a key press *)
@@ -221,7 +271,11 @@ let f_key map_st k = if k = ' ' then clear map_st () else ()
 
 (** [main ()] opens a graphics window and runs event loop*)
 let main () =
-  let s = create_map_state "data/corners.json" () in
+  (* "data/corners.json" *)
+  (* "data/pokemon_grass.json" *)
+  let s =
+    create_map_state [| "data/corners.json"; "data/pokemon_grass.json" |] ()
+  in
   event_loop (init s) (f_key s) (f_mouse s)
 
 (* Execute the graphics engine. *)
