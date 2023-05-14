@@ -151,32 +151,31 @@ let enablers_in_direction t dir c =
   | RIGHT -> c.tile_enablers.(t).right
 
 let get_enabled num_tiles tile dir adj_rules n =
-  let enabled = Array.make num_tiles 0 in
+  let enabled = ref [] in
   for i = 0 to num_tiles - 1 do
-    if Adj_rules.is_allowed i tile dir adj_rules then enabled.(i) <- 1
+    if Adj_rules.is_allowed i tile dir adj_rules then enabled := i :: !enabled
   done;
-  enabled
+  !enabled
 
 let subtract_enablers num_tiles tile dir ws adj_rules n st =
-  let enabled = get_enabled num_tiles tile dir adj_rules n in
   let opp_dir = Adj_rules.opposite_dir dir in
-  print_endline "asdf2";
-  let aux h x =
-    if x = 1 then (
-      let enablers = enablers_in_direction h opp_dir n in
-      print_endline "asdf3";
-      if enablers = 1 && (not (Cell.has_zero_direction h n)) && not n.collapsed
-      then (
-        Cell.remove_tile ws h n;
-        print_endline "asdf4";
-        Cell.check_contradiction n;
-        print_endline "asdf5";
-        Pairing_heap.add st.heap n;
-        print_endline "asdf6";
-        Stack.push (n, h) st.stack);
-      decr_dir h opp_dir n)
+  let enabled = get_enabled num_tiles tile dir adj_rules n in
+  let rec aux enabled =
+    match enabled with
+    | [] -> ()
+    | h :: t ->
+        let enablers = enablers_in_direction h opp_dir n in
+        if
+          enablers = 1 && (not (Cell.has_zero_direction h n)) && not n.collapsed
+        then (
+          Cell.remove_tile ws h n;
+          Cell.check_contradiction n;
+          Pairing_heap.add st.heap n;
+          Stack.push (n, h) st.stack);
+        decr_dir h opp_dir n;
+        aux t
   in
-  Array.iteri aux enabled
+  aux enabled
 (* print_endline "subtract enablers: ";
    print_endline ("tile: " ^ string_of_int tile);
    print_endline ("dir: " ^ Adj_rules.string_of_dir dir);
@@ -204,6 +203,34 @@ let rec propogate (num_tiles : int) (ws : float array) (adj_rules : Adj_rules.t)
   | Cell.Contradiction -> CONTRADICTION
 (* let (i,j) = smallest_entropy st (Array.make (Array.length cells) 1.) in
    let tile = st.(i).(j) in *)
+
+let validate adj_rules st =
+  let valid = ref true in
+  for y = 0 to Array.length st.grid - 1 do
+    for x = 0 to Array.length st.grid.(0) - 1 do
+      let open Adj_rules in
+      let tile = st.grid.(y).(x).tile in
+      if x > 0 then
+        if
+          not
+            (Adj_rules.is_allowed tile st.grid.(y).(x - 1).tile LEFT adj_rules)
+        then valid := false;
+      if x < st.w - 1 then
+        if
+          not
+            (Adj_rules.is_allowed tile st.grid.(y).(x + 1).tile RIGHT adj_rules)
+        then valid := false;
+      if y > 0 then
+        if not (Adj_rules.is_allowed tile st.grid.(y - 1).(x).tile UP adj_rules)
+        then valid := false;
+      if y < st.h - 1 then
+        if
+          not
+            (Adj_rules.is_allowed tile st.grid.(y + 1).(x).tile DOWN adj_rules)
+        then valid := false
+    done
+  done;
+  if !valid then print_endline "valid" else print_endline "not valid"
 
 let draw (st : t) (x, y) (tiles : Tile.t array) =
   for i = 0 to Array.length st.grid - 1 do

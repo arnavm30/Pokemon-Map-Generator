@@ -36,6 +36,8 @@ val propogate : int -> float array -> Adj_rules.t -> t -> result
 (** [propogate num_tiles ws adj_rules state] eliminates tiles in cells of [state] 
     that can no longer be chosen  *)
 
+val validate : Adj_rules.t -> t -> unit
+
 val draw : t -> int * int -> Tile.t array -> unit
 (** [draw state (x,y) cells] renders the state to screen with bottom left corner 
     at [(x,y)]*)

@@ -225,7 +225,6 @@ let handle_menus map_st (p : List_panel.t) () =
 (* run the wfc algorithm given the map state *)
 let run_wfc map_st () =
   clear map_st ();
-  print_endline "hello1";
   choose_tiles map_st;
   let tiles_len = Array.length map_st.chosen_tiles in
   let adj_rules = create_adj_rules map_st.chosen_tiles in
@@ -240,9 +239,9 @@ let run_wfc map_st () =
   let result_state =
     Wfc.wfc map_size tiles_len (Array.make tiles_len 1.) adj_rules
   in
-  print_endline "hello2";
-  State.draw result_state map_posi map_st.chosen_tiles;
-  print_endline "hello3"
+  (* used for testing *)
+  State.validate adj_rules result_state;
+  State.draw result_state map_posi map_st.chosen_tiles
 
 let copy_map_state { ui; tiles; size_data; active_tiles; chosen_tiles; size } =
   let copy_tiles =
@@ -257,9 +256,7 @@ let concurrent_wfc b map_st () =
     Thread.create
       (fun () ->
         Button.disallow_press b;
-        print_endline "hello";
         run_wfc map_st ();
-        print_endline "hello";
         Button.allow_press b)
       ()
   in
