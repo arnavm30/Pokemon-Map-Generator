@@ -128,8 +128,15 @@ let gen_interface tiles width height (x, y) : compn list =
   let lst_pnl =
     List_panel.make (width / 15) 50 (width / 10) 75
       [ "small"; "medium"; "large" ]
+      0
   in
   r := LstPanel lst_pnl :: !r;
+  let file_lst_pnl =
+    List_panel.make
+      ((12 * width / 15) + 20)
+      50 (width / 10) 75 [ "pipes"; "pokemon" ] 0
+  in
+  r := LstPanel file_lst_pnl :: !r;
   !r
 
 (* [event_loop f_init f_key f_mouse] is the event loop *)
@@ -161,7 +168,7 @@ let create_map_state () =
   (* let tiles =
      Tile.from_json (Yojson.Basic.from_file "data/flexible_corners.json") *)
   let tiles, placements =
-    Tile.from_json (Yojson.Basic.from_file "data/pokemon_grass.json")
+    Tile.from_json (Yojson.Basic.from_file "data/corners.json")
   in
   let width = size_x () in
   let height = size_y () in
@@ -191,8 +198,8 @@ let clear map_st () =
 
 let run_wfc map_st () =
   clear map_st ();
-  let tiles_len = Array.length map_st.tiles in
   choose_tiles map_st;
+  let tiles_len = Array.length map_st.chosen_tiles in
   let adj_rules = create_adj_rules map_st.chosen_tiles in
   let map_size =
     match map_st.size with

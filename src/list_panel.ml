@@ -11,10 +11,10 @@ type t = {
   mutable active : int;
 }
 
-let make x y w h strs =
+let make x y w h strs active =
   let num_strs = List.length strs in
   let strs_arr = Array.of_list strs in
-  let r = Array.make num_strs { y0 = 0; h0 = 0; text = ""; index = 0 } in
+  let r = Array.make num_strs { y0 = 0; h0 = 0; text = ""; index = active } in
   for i = 0 to num_strs - 1 do
     r.(i) <-
       {
@@ -37,6 +37,7 @@ let draw p =
   fill_rect x y w h;
   set_color 0x303030;
   let active_option = p.options.(p.active) in
+
   fill_rect x active_option.y0 w active_option.h0;
   set_color white;
   set_font "-*-fixed-medium-r-semicondensed--20-*-*-*-*-*-iso8859-1";

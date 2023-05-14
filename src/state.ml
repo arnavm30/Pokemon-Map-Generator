@@ -208,6 +208,8 @@ let draw (st : t) (x, y) (tiles : Tile.t array) =
   for i = 0 to Array.length st.grid - 1 do
     for j = 0 to Array.length st.grid.(0) - 1 do
       let index = st.grid.(i).(j).tile in
+      (* print_endline "in draw, index: ";
+         print_endline (string_of_int index); *)
       let img = Tile.get_img tiles.(index) in
       let img_color_array = Graphics.dump_image img in
       let img_width = Array.length img_color_array in

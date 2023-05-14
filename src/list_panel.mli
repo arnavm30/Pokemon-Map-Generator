@@ -7,9 +7,10 @@
 type t
 (** The abstract type of values representing list panels. *)
 
-val make : int -> int -> int -> int -> string list -> t
-(** [make x y w h strs] is the list panel drawn in the window with bottom left corner
-     at ([x],[y]) with width [w], height [h], color [c], and texts in [strs] displayed *)
+val make : int -> int -> int -> int -> string list -> int -> t
+(** [make x y w h strs active] is the list panel drawn in the window with bottom 
+    left corner at ([x],[y]) with width [w], height [h], color [c], and texts in 
+    [strs] displayed where index [active] is darkened as active *)
 
 val get_active_text : t -> string
 (** [get_active_text p] is the text of the active option of the list panel [p] *)
