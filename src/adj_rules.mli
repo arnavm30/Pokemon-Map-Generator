@@ -14,11 +14,7 @@ val allow : int -> int -> directions -> t -> t
     where tile with index [j] can tile next to tile with index [i] in direction [dir] *)
 
 val combine : t -> t -> t
-<<<<<<< HEAD
-(** [combine ht1 ht2] combines the adjaceny rules of [ht1] and [ht2] into one set *)
-=======
-(** [combine s1 s2] combines the adjaceny rules of [s1] and [s2] into one hash table *)
->>>>>>> b7ef165584b9f39fc416dbea6a26c3923c0bc26c
+(** [combine ht1 ht2] combines the adjaceny rules of [ht1] and [ht2] into one hash table *)
 
 val fold_dirs : (directions -> 'a -> 'a) -> 'a -> 'a
 (** [fold_dirs f acc] accumulates result of [f] as it operates on 
