@@ -188,44 +188,35 @@ let handle_menus map_st (p : List_panel.t) () =
       clear map_st ()
   | _ -> failwith "what's going on"
 
+let error_msg text =
+  set_color 0xFF6000;
+  fill_rect 520 440 460 75;
+  moveto 550 450;
+  set_font "-*-fixed-medium-r-semicondensed--50-*-*-*-*-*-iso8859-1";
+  set_color black;
+  draw_string text
+
 (* run the wfc algorithm given the map state *)
 let run_wfc map_st () =
   clear map_st ();
   choose_tiles map_st;
-  let tiles_len = Array.length map_st.chosen_tiles in
-  let adj_rules = Tile.create_adj_rules map_st.chosen_tiles in
-  let weights = Tile.create_weights map_st.chosen_tiles in
-  let active_size_data = map_st.size_data.(map_st.active_tiles) in
-  let map_size, map_posi =
-    match map_st.size with
-    | "small" -> (active_size_data.(0).dims, active_size_data.(0).place)
-    | "medium" -> (active_size_data.(1).dims, active_size_data.(1).place)
-    | "large" -> (active_size_data.(2).dims, active_size_data.(2).place)
-    | _ -> (active_size_data.(0).dims, active_size_data.(0).place)
-  in
-  let result_state = Wfc.wfc map_size tiles_len weights adj_rules in
-  (* used for testing *)
-  State.validate adj_rules result_state;
-  State.draw result_state map_posi map_st.chosen_tiles
-
-let copy_map_state { ui; tiles; size_data; active_tiles; chosen_tiles; size } =
-  let copy_tiles =
-    Array.init (Array.length chosen_tiles) (fun i -> Tile.copy chosen_tiles.(i))
-  in
-  { ui; tiles; size_data; active_tiles; chosen_tiles = copy_tiles; size }
-
-(* run the wfc algorithm concurrently given map state and status of button *)
-(* let concurrent_wfc b map_st () =
-   (* let map_st = copy_map_state map_st in *)
-   let _ =
-     Thread.create
-       (fun () ->
-         Button.disallow_press b;
-         run_wfc map_st ();
-         Button.allow_press b)
-       ()
-   in
-   () *)
+  if Array.length map_st.chosen_tiles = 0 then error_msg "Inavlid Selection"
+  else
+    let tiles_len = Array.length map_st.chosen_tiles in
+    let adj_rules = Tile.create_adj_rules map_st.chosen_tiles in
+    let weights = Tile.create_weights map_st.chosen_tiles in
+    let active_size_data = map_st.size_data.(map_st.active_tiles) in
+    let map_size, map_posi =
+      match map_st.size with
+      | "small" -> (active_size_data.(0).dims, active_size_data.(0).place)
+      | "medium" -> (active_size_data.(1).dims, active_size_data.(1).place)
+      | "large" -> (active_size_data.(2).dims, active_size_data.(2).place)
+      | _ -> (active_size_data.(0).dims, active_size_data.(0).place)
+    in
+    let result_state = Wfc.wfc map_size tiles_len weights adj_rules in
+    (* used for testing *)
+    State.validate adj_rules result_state;
+    State.draw result_state map_posi map_st.chosen_tiles
 
 (* handles what happens when mouse clicks *)
 let f_mouse map_st x y =
