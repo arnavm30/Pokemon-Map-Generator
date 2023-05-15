@@ -199,13 +199,14 @@ let validate adj_rules st =
   if valid then print_endline "valid" else print_endline "not valid"
 
 let draw (st : t) (x, y) (tiles : Tile.t array) =
+  let img = Tile.get_img tiles.(0) in
+  let img_color_array = Graphics.dump_image img in
+  let img_width = Array.length img_color_array in
+  let img_height = Array.length img_color_array.(0) in
   for i = 0 to Array.length st.grid - 1 do
     for j = 0 to Array.length st.grid.(0) - 1 do
       let index = st.grid.(i).(j).tile in
       let img = Tile.get_img tiles.(index) in
-      let img_color_array = Graphics.dump_image img in
-      let img_width = Array.length img_color_array in
-      let img_height = Array.length img_color_array.(0) in
       Graphics.draw_image img
         (x + (img_width * j))
         (y + (img_height * (st.h - i)))
