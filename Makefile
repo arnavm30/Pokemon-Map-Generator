@@ -21,6 +21,10 @@ clean:
 	dune clean
 	rm -f generator.zip
 
+zip:
+	rm -f pokemon_map.zip
+	zip -r pokemon_map.zip . 
+
 doc:
 	dune build @doc
 

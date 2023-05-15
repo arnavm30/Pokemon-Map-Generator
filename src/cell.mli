@@ -59,7 +59,5 @@ val options_to_string : t -> string
 (** [options_to_string c] is the options of cell [c] as a string *)
 
 val print_stats : t -> unit
-(** [print_stats c] prints information of cell [c] 
-    
-   Effects: Prints coords_to_string, enablers_to_string, options_to_string, 
-            c.sum_of_ones, and c.tile *)
+(** [print_stats c] prints [coords_to_string], [enablers_to_string], [options_to_string], 
+      [c.sum_of_ones], and [c.tile] *)

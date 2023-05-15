@@ -29,6 +29,8 @@ val propogate : int -> float array -> Adj_rules.t -> t -> result
     that can no longer be chosen  *)
 
 val validate : Adj_rules.t -> t -> unit
+(** [validate rules st] prints valid if state [st] satisfies adjacency rules [rules]
+    and prints invalid if not *)
 
 val check_valid : Adj_rules.t -> t -> bool * string list
 (** [validate rules st] is whether state [st] is valid given adjacency rules [rules]*)
@@ -38,10 +40,8 @@ val draw : t -> int * int -> Tile.t array -> unit
     at [(x,y)]*)
 
 val print_neighbors : Cell.t -> t -> unit
-(** [print_neighbors c st] prints information of neighboring cells to cell [c] in [st]
-    (up, down, left, rigt)
-    
-    Effect: Prints Cell.stats for each neighboring cell *)
+(** [print_neighbors c st] prints Cell.print_stats of each neighboring cell to cell [c] in [st.grid]
+    (up, down, left, right) *)
 
 val print_tiles : t -> unit
-(** [print_tiles st] has the following effect: prints [cell.tile] for each cell in [st.grid] *)
+(** [print_tiles st] prints [cell.tile] for each cell in [st.grid] *)
