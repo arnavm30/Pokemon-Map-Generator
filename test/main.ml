@@ -76,6 +76,27 @@ let button_mem_test (name : string) ((x, y) : int * int) (b : Button.t)
   assert_equal expected_output (Button.mem (x, y) b) ~printer:string_of_bool
 
 (*------------------------Cell Tests------------------------------------------*)
+let cell_cmp_test (name : string) (a : Cell.t) (b : Cell.t)
+    (expected_output : int) : test =
+  name >:: fun _ ->
+  assert_equal expected_output (Cell.cmp a b) ~printer:string_of_int
+
+let cell_check_contradiction_test (name : string) (t : Cell.t)
+    (expected_output : unit) : test =
+  name >:: fun _ -> assert_equal expected_output (Cell.check_contradiction t)
+
+let cell_check_contradiction_exn_test (name : string) (t : Cell.t)
+    (expected_output : exn) : test =
+  name >:: fun _ ->
+  assert_raises expected_output (fun _ -> Cell.check_contradiction t)
+
+let cell_has_zero_direction_test (name : string) (tile : int) (t : Cell.t)
+    (expected_output : bool) : test =
+  name >:: fun _ ->
+  assert_equal expected_output
+    (Cell.has_zero_direction tile t)
+    ~printer:string_of_bool
+
 (*------------------------State Tests-----------------------------------------*)
 (*------------------------Tile Tests------------------------------------------*)
 (*------------------------Toggle Tests----------------------------------------*)
@@ -124,6 +145,11 @@ let sum_test (name : string) (ints : int array) (expected_output : int) : test =
   name >:: fun _ -> assert_equal expected_output (sum ints)
 
 (*---------------------------WFC Tests----------------------------------------*)
+
+let c =
+  Cell.make 0 (exp 1.) 1.0
+    (Array.make 0 Cell.{ up = 0; right = 0; down = 0; left = 0 })
+    (0, 0)
 
 let tests =
   [
@@ -189,6 +215,63 @@ let tests =
       (Button.make 0 0 11 20 Graphics.red "")
       true;
     (* cell tests *)
+    cell_cmp_test "entropy of a equals b = -1" c c (-1);
+    cell_cmp_test "entropy of a less than b = -1"
+      (Cell.make 0 (exp 1.) 1.0
+         (Array.make 0 Cell.{ up = 0; right = 0; down = 0; left = 0 })
+         (0, 0))
+      (Cell.make 0 (exp 2.) 1.0
+         (Array.make 0 Cell.{ up = 0; right = 0; down = 0; left = 0 })
+         (0, 0))
+      (-1);
+    cell_cmp_test "entropy of a less than b = 1"
+      (Cell.make 0 (exp 2.) 1.0
+         (Array.make 0 Cell.{ up = 0; right = 0; down = 0; left = 0 })
+         (0, 0))
+      (Cell.make 0 (exp 1.) 1.0
+         (Array.make 0 Cell.{ up = 0; right = 0; down = 0; left = 0 })
+         (0, 0))
+      1;
+    cell_check_contradiction_test ">0 options returns unit"
+      (Cell.make 1 (exp 1.) 1.0
+         (Array.make 1 Cell.{ up = 0; right = 0; down = 0; left = 0 })
+         (0, 0))
+      ();
+    cell_check_contradiction_exn_test "0 options raises Contradiction"
+      (Cell.make 0 (exp 1.) 1.0
+         (Array.make 1 Cell.{ up = 0; right = 0; down = 0; left = 0 })
+         (0, 0))
+      Cell.Contradiction;
+    cell_has_zero_direction_test "tile with 0s in all directions = false" 0
+      (Cell.make 1 (exp 1.) 1.0
+         (Array.make 1 Cell.{ up = 0; right = 0; down = 0; left = 0 })
+         (0, 0))
+      true;
+    cell_has_zero_direction_test "tile with 0 for up = false" 0
+      (Cell.make 1 (exp 1.) 1.0
+         (Array.make 1 Cell.{ up = 0; right = 1; down = 1; left = 1 })
+         (0, 0))
+      true;
+    cell_has_zero_direction_test "tile with 0 for right = false" 0
+      (Cell.make 1 (exp 1.) 1.0
+         (Array.make 1 Cell.{ up = 1; right = 0; down = 1; left = 1 })
+         (0, 0))
+      true;
+    cell_has_zero_direction_test "tile with 0 for down = false" 0
+      (Cell.make 1 (exp 1.) 1.0
+         (Array.make 1 Cell.{ up = 1; right = 1; down = 0; left = 1 })
+         (0, 0))
+      true;
+    cell_has_zero_direction_test "tile with 0 for left = false" 0
+      (Cell.make 1 (exp 1.) 1.0
+         (Array.make 1 Cell.{ up = 1; right = 1; down = 1; left = 0 })
+         (0, 0))
+      true;
+    cell_has_zero_direction_test "tile with >0 in all directions = true" 0
+      (Cell.make 1 (exp 1.) 1.0
+         (Array.make 1 Cell.{ up = 1; right = 1; down = 1; left = 1 })
+         (0, 0))
+      false;
     (* state tests *)
     (* tile tests *)
     (* toggle tests *)

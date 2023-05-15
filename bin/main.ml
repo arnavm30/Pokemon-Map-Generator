@@ -196,7 +196,7 @@ let error_msg text =
 let run_wfc map_st () =
   clear map_st ();
   choose_tiles map_st;
-  if Array.length map_st.chosen_tiles = 0 then error_msg "Inavlid Selection"
+  if Array.length map_st.chosen_tiles = 0 then error_msg "Invalid Selection"
   else
     let tiles_len = Array.length map_st.chosen_tiles in
     let adj_rules = Tile.create_adj_rules map_st.chosen_tiles in
