@@ -136,4 +136,4 @@ let observe (i : int) (t : t) =
   check_collapsed t
 
 let options t = t.options
-let to_string t = Util.string_of_int_pair t.coords
+let coords_to_string t = Util.string_of_int_pair t.coords

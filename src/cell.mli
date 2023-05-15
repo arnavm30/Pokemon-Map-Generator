@@ -46,8 +46,8 @@ val has_zero_direction : int -> t -> bool
 val remove_tile : float array -> int -> t -> unit
 (** [remove_tile tile c] removes tile [tile] from this cell [c] *)
 
-val to_string : t -> string
-(** [to_string c] is the cell [c] as a string *)
+val coords_to_string : t -> string
+(** [to_string c] is the coords of cell [c] as a string *)
 
 val enablers_to_string : t -> string
 (** [enablers_to_string c] is the enablers of cell [c] as a string *)
@@ -59,3 +59,7 @@ val options_to_string : t -> string
 (** [options_to_string c] is the options of cell [c] as a string *)
 
 val print_stats : t -> unit
+(** [print_stats c] prints information of cell [c] 
+    
+   Effects: Prints coords_to_string, enablers_to_string, options_to_string, 
+            c.sum_of_ones, and c.tile *)
