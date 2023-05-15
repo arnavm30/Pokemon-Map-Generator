@@ -37,7 +37,10 @@ val propogate : int -> float array -> Adj_rules.t -> t -> result
     that can no longer be chosen  *)
 
 val validate : Adj_rules.t -> t -> unit
+val check_valid : Adj_rules.t -> t -> bool * string list
 
 val draw : t -> int * int -> Tile.t array -> unit
 (** [draw state (x,y) cells] renders the state to screen with bottom left corner 
     at [(x,y)]*)
+
+val print_neighbors : Cell.t -> t -> unit

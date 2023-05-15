@@ -64,3 +64,5 @@ val enabler_dirs_to_string : directions -> string
 
 val options_to_string : t -> string
 (** [options_to_string c] is the options of cell [c] as a string *)
+
+val print_stats : t -> unit

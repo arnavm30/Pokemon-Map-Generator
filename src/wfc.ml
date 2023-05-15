@@ -12,6 +12,14 @@ let run_once num_tiles ws adj_rules st =
     | None -> raise Unfinished
   in
   State.collapse_cell ws c st;
+  (* let valid, violations = State.check_valid adj_rules st in
+     (* if not valid then (
+        print_endline "Violations: ";
+        List.iter (fun x -> print_endline x) violations;
+        print_endline "Neighbors: ";
+        State.print_neighbors c st;
+        Cell.print_stats c;
+        raise Unfinished); *) *)
   State.propogate num_tiles ws adj_rules st
 
 let rec run num_tiles ws adj_rules st =

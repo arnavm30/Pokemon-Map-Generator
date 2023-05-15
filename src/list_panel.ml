@@ -56,6 +56,8 @@ let mem (x, y) p =
   mem_helper (x, y) (x0, y0, w, h)
 
 let press p (x, y) (f : unit -> unit) : unit =
+  (* print_endline (string_of_int (p.terminate_wfc ()));
+     if p.terminate_wfc () <> -1 then Unix.kill (p.terminate_wfc ()) Sys.sigabrt; *)
   let selected_opt =
     Array.find_opt
       (fun o -> mem_helper (x, y) (p.x, o.y0, p.width, o.h0))
@@ -67,3 +69,6 @@ let press p (x, y) (f : unit -> unit) : unit =
       draw p;
       f ()
   | None -> ()
+(*
+   let set_terminate p i = p.terminate_wfc <- i
+   let reset_terminate p = p.terminate_wfc <- (fun () -> -1) *)

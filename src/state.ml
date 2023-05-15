@@ -61,7 +61,7 @@ let make (x : int) (y : int) (num_tiles : int) (ws : float array)
   let heap = Pairing_heap.create ~min_size:(x * y) ~cmp:Cell.cmp () in
   let stack = Stack.create () in
   Array.iter (Array.iter (Pairing_heap.add heap)) grid;
-  (* print_endline (Cell.enablers_to_string grid.(0).(0)); *)
+  print_endline (Cell.enablers_to_string grid.(0).(0));
   { grid; heap; stack; w = x; h = y; uncollapsed = x * y }
 
 let make_test (x : int) (y : int) (tiles : Tile.t array) =
@@ -159,7 +159,7 @@ let get_enabled num_tiles tile dir adj_rules n =
 
 let subtract_enablers num_tiles tile dir ws adj_rules n st =
   let opp_dir = Adj_rules.opposite_dir dir in
-  let enabled = get_enabled num_tiles tile dir adj_rules n in
+  let enabled = get_enabled num_tiles tile opp_dir adj_rules n in
   let rec aux enabled =
     match enabled with
     | [] -> ()
@@ -204,33 +204,72 @@ let rec propogate (num_tiles : int) (ws : float array) (adj_rules : Adj_rules.t)
 (* let (i,j) = smallest_entropy st (Array.make (Array.length cells) 1.) in
    let tile = st.(i).(j) in *)
 
-let validate adj_rules st =
+let check_valid adj_rules st =
   let valid = ref true in
+  let violations = ref [] in
   for y = 0 to Array.length st.grid - 1 do
     for x = 0 to Array.length st.grid.(0) - 1 do
       let open Adj_rules in
       let tile = st.grid.(y).(x).tile in
-      if x > 0 then
-        if
-          not
-            (Adj_rules.is_allowed tile st.grid.(y).(x - 1).tile LEFT adj_rules)
-        then valid := false;
-      if x < st.w - 1 then
-        if
-          not
-            (Adj_rules.is_allowed tile st.grid.(y).(x + 1).tile RIGHT adj_rules)
-        then valid := false;
-      if y > 0 then
-        if not (Adj_rules.is_allowed tile st.grid.(y - 1).(x).tile UP adj_rules)
-        then valid := false;
-      if y < st.h - 1 then
-        if
-          not
-            (Adj_rules.is_allowed tile st.grid.(y + 1).(x).tile DOWN adj_rules)
-        then valid := false
+      if tile <> -1 then (
+        if x > 0 && st.grid.(y).(x - 1).tile <> -1 then
+          if
+            not
+              (Adj_rules.is_allowed tile st.grid.(y).(x - 1).tile LEFT adj_rules)
+          then (
+            valid := false;
+            violations :=
+              ("("
+              ^ Util.string_of_int_pair (x - 1, y)
+              ^ ", "
+              ^ Adj_rules.string_of_dir LEFT
+              ^ ")")
+              :: !violations);
+        if x < st.w - 1 && st.grid.(y).(x + 1).tile <> -1 then
+          if
+            not
+              (Adj_rules.is_allowed tile st.grid.(y).(x + 1).tile RIGHT
+                 adj_rules)
+          then (
+            valid := false;
+            violations :=
+              ("("
+              ^ Util.string_of_int_pair (x + 1, y)
+              ^ ", "
+              ^ Adj_rules.string_of_dir RIGHT
+              ^ ")")
+              :: !violations);
+        if y > 0 && st.grid.(y - 1).(x).tile <> -1 then
+          if
+            not
+              (Adj_rules.is_allowed tile st.grid.(y - 1).(x).tile UP adj_rules)
+          then (
+            valid := false;
+            violations :=
+              ("("
+              ^ Util.string_of_int_pair (x, y - 1)
+              ^ ", " ^ Adj_rules.string_of_dir UP ^ ")")
+              :: !violations);
+        if y < st.h - 1 && st.grid.(y + 1).(x).tile <> -1 then
+          if
+            not
+              (Adj_rules.is_allowed tile st.grid.(y + 1).(x).tile DOWN adj_rules)
+          then (
+            valid := false;
+            violations :=
+              ("("
+              ^ Util.string_of_int_pair (x, y + 1)
+              ^ ", "
+              ^ Adj_rules.string_of_dir DOWN
+              ^ ")")
+              :: !violations))
     done
   done;
-  if !valid then print_endline "valid" else print_endline "not valid"
+  (!valid, !violations)
+
+let validate adj_rules st =
+  let valid, _ = check_valid adj_rules st in
+  if valid then print_endline "valid" else print_endline "not valid"
 
 let draw (st : t) (x, y) (tiles : Tile.t array) =
   for i = 0 to Array.length st.grid - 1 do
@@ -245,3 +284,21 @@ let draw (st : t) (x, y) (tiles : Tile.t array) =
       Graphics.draw_image img (x + (img_width * j)) (y + (img_height * i))
     done
   done
+
+let apply_to_neighbors f c st acc =
+  let open Adj_rules in
+  let x, y = c.coords in
+  let grid = st.grid in
+  let acc = if y > 0 then f grid.(y - 1).(x) UP acc else acc in
+  let acc = if y < st.h - 1 then f grid.(y + 1).(x) DOWN acc else acc in
+  let acc = if x > 0 then f grid.(y).(x - 1) LEFT acc else acc in
+  if x < st.w - 1 then f grid.(y).(x + 1) RIGHT acc else acc
+
+let iter_neighbors f c st = apply_to_neighbors (fun x dir _ -> f x dir) c st ()
+
+let print_neighbors c st =
+  let print_neighbors n dir =
+    print_endline ("Neighbor Dir: " ^ Adj_rules.string_of_dir dir);
+    Cell.print_stats n
+  in
+  iter_neighbors print_neighbors c st

@@ -50,12 +50,12 @@ let cmp a b = if entropy a <= entropy b then -1 else 1
 let check_collapsed t = if t.sum_of_ones = 1 then t.collapsed <- true
 
 let check_contradiction t =
-  if t.sum_of_ones = 0 then (
-    print_endline "We have contradiction";
-    print_endline (Util.string_of_int_pair t.coords);
-    print_endline (options_to_string t);
-    print_endline (enablers_to_string t);
-    raise Contradiction)
+  if t.sum_of_ones = 0 then
+    (* print_endline "We have contradiction";
+       print_endline (Util.string_of_int_pair t.coords);
+       print_endline (options_to_string t);
+       print_endline (enablers_to_string t); *)
+    raise Contradiction
   else ()
 
 let copy_enablers enablers =
@@ -131,6 +131,7 @@ let print_stats t =
   print_endline (options_to_string t);
   print_endline (enablers_to_string t);
   print_endline ("Sum of ones: " ^ string_of_int t.sum_of_ones);
+  print_endline ("Tile: " ^ string_of_int t.tile);
   print_endline ""
 
 let remove_tile ws tile t =
