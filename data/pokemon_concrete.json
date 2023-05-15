@@ -91,6 +91,42 @@
       "weight": 1.0
     },
     {
+      "img_path": "assets/grass/concrete_upper_right_corner.png",
+      "edges": {
+        "up": [
+          "grass"
+        ],
+        "right": [
+          "grass"
+        ],
+        "down": [
+          "concrete_vert_right"
+        ],
+        "left": [
+          "concrete_horiz_up"
+        ]
+      },
+      "weight": 1.0
+    },
+    {
+      "img_path": "assets/grass/concrete_upper_left_corner.png",
+      "edges": {
+        "up": [
+          "grass"
+        ],
+        "right": [
+          "concrete_horiz_up"
+        ],
+        "down": [
+          "concrete_vert_left"
+        ],
+        "left": [
+          "grass"
+        ]
+      },
+      "weight": 1.0
+    },
+    {
       "img_path": "assets/grass/concrete_vert_left.png",
       "edges": {
         "up": [
