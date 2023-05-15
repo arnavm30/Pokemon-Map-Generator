@@ -6,10 +6,3 @@ val wfc : int * int -> int -> float array -> Adj_rules.t -> State.t
 (* exposed for testing *)
 val init : int -> int -> int -> float array -> Adj_rules.t -> State.t
 (** [init x y num_tiles ws adj_rules] is the initial state of wf *)
-
-val run : int -> float array -> Adj_rules.t -> State.t -> State.result
-(** [run num_tiles ws adj_rules st] runs [run_once] until all cells in [st] have collapsed
-    or a contradiction occurs *)
-
-val run_once : int -> float array -> Adj_rules.t -> State.t -> State.result
-(** [run_once num_tiles ws adj_rules st] is one cycle of wfc on [st] with weights [ws] *)

@@ -16,29 +16,9 @@ val allow : int -> int -> directions -> t -> t
 val combine : t -> t -> t
 (** [combine ht1 ht2] combines the adjaceny rules of [ht1] and [ht2] into one hash table *)
 
-val fold_dirs : (directions -> 'a -> 'a) -> 'a -> 'a
-(** [fold_dirs f acc] accumulates result of [f] as it operates on 
-    directions UP, DOWN, LEFT, RIGHT in that order. *)
-
-val fold_dirs_tile_indexed : (t -> directions -> 'b -> 'b) -> t -> 'b -> 'b
-(** [fold_dirs_tile_indexed f t acc] accumulates result of [f] as it operates on 
-    adjacency rules [t] in directions UP, DOWN, LEFT, RIGHT in that order. *)
-
-val allow_all : int -> int -> t -> t
-(** [allow_all i j ht] is the adjacency rules of [ht] appended with rule that allows 
-    tile [j] to be next to tile [i] in all directions *)
-
 val is_allowed : int -> int -> directions -> t -> bool
 (** [is_allowed i j dir ht] is whether adjacency rule [(i, j, dir)] is in 
     adjacency rules [s] *)
-
-val get_all_allowed : int -> int -> t -> (int * int * directions) list
-(** [get_all_allowed i t ht] is list of all adjacency rules in [s] that tile [i] 
-    can be tiled next to *)
-
-val count_enablers_for_one : int -> int -> t -> Cell.directions
-(** [count_enablers_for_one a t ht] is the count of enablers in [ht] in each direction for one
-    tile [a], if there are [t] + 1 total tiles *)
 
 val count_init_enablers : int -> t -> Cell.directions array
 (** [count_init_enablers t ht] is the count of enablers in [ht] each direction for each

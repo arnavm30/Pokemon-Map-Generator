@@ -4,13 +4,13 @@
       "img_path": "assets/water/left_center.png",
       "edges": {
         "up": [
-          "water_vert"
+          "water_left_center_upper_left_corner"
         ],
         "right": [
           "water"
         ],
         "down": [
-          "water_vert"
+          "water_left_center_lower_left_corner"
         ],
         "left": [
           "grass"
@@ -24,13 +24,13 @@
           "water"
         ],
         "right": [
-          "water_horiz"
+          "water_lower_center_lower_right_corner"
         ],
         "down": [
           "grass"
         ],
         "left": [
-          "water_horiz"
+          "water_lower_center_lower_left_corner"
         ]
       }
     },
@@ -38,10 +38,10 @@
       "img_path": "assets/water/lower_left_corner.png",
       "edges": {
         "up": [
-          "water_vert"
+          "water_left_center_upper_left_corner"
         ],
         "right": [
-          "water_horiz"
+          "water_lower_center_lower_right_corner"
         ],
         "down": [
           "grass"
@@ -55,7 +55,7 @@
       "img_path": "assets/water/lower_right_corner.png",
       "edges": {
         "up": [
-          "water_vert"
+          "water_right_center_upper_right_corner"
         ],
         "right": [
           "grass"
@@ -64,7 +64,7 @@
           "grass"
         ],
         "left": [
-          "water_horiz"
+          "water_lower_center_lower_left_corner"
         ]
       }
     },
@@ -72,13 +72,13 @@
       "img_path": "assets/water/right_center.png",
       "edges": {
         "up": [
-          "water_vert"
+          "water_right_center_upper_right_corner"
         ],
         "right": [
           "grass"
         ],
         "down": [
-          "water_vert"
+          "water_right_center_lower_right_corner"
         ],
         "left": [
           "water"
@@ -92,13 +92,13 @@
           "grass"
         ],
         "right": [
-          "water_horiz"
+          "water_upper_center_upper_right_corner"
         ],
         "down": [
           "water"
         ],
         "left": [
-          "water_horiz"
+          "water_upper_center_upper_left_corner"
         ]
       }
     },
@@ -109,10 +109,10 @@
           "grass"
         ],
         "right": [
-          "water_horiz"
+          "water_upper_center_upper_right_corner"
         ],
         "down": [
-          "water_vert"
+          "water_left_center_lower_left_corner"
         ],
         "left": [
           "grass"
@@ -129,10 +129,10 @@
           "grass"
         ],
         "down": [
-          "water_vert"
+          "water_right_center_lower_right_corner"
         ],
         "left": [
-          "water_horiz"
+          "water_upper_center_upper_left_corner"
         ]
       }
     },

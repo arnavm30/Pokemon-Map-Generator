@@ -18,10 +18,6 @@ let make img edges =
   { img; edges = new_edges; up = []; right = []; down = []; left = [] }
 
 let get_img tile = tile.img
-let get_up tile = tile.up
-let get_right tile = tile.right
-let get_down tile = tile.down
-let get_left tile = tile.left
 let is_overlap s1 s2 = not (StrSet.is_empty (StrSet.inter s1 s2))
 
 let analyze curr_tile tiles =
@@ -42,6 +38,38 @@ let analyze curr_tile tiles =
       curr_tile.left <- i :: curr_tile.left
   done;
   curr_tile
+
+(* create the adjacency rules based on the given tiles*)
+let create_adj_rules (tiles : t array) =
+  let r = ref (Adj_rules.empty (Array.length tiles)) in
+  print_endline "initial adjacency rules, should be empty: ";
+  Adj_rules.print_to_string !r;
+  for i = 0 to Array.length tiles - 1 do
+    let tile = tiles.(i) in
+    let tile_up = tile.up in
+    let tile_right = tile.right in
+    let tile_down = tile.down in
+    let tile_left = tile.left in
+    let rules =
+      Adj_rules.empty (Array.length tiles)
+      |> List.fold_right
+           (fun indx acc -> Adj_rules.allow i indx Adj_rules.UP acc)
+           tile_up
+      |> List.fold_right
+           (fun indx acc -> Adj_rules.allow i indx Adj_rules.DOWN acc)
+           tile_down
+      |> List.fold_right
+           (fun indx acc -> Adj_rules.allow i indx Adj_rules.LEFT acc)
+           tile_left
+      |> List.fold_right
+           (fun indx acc -> Adj_rules.allow i indx Adj_rules.RIGHT acc)
+           tile_right
+    in
+    r := Adj_rules.combine rules !r
+  done;
+  print_endline "reuslting adjacency rules: ";
+  Adj_rules.print_to_string !r;
+  !r
 
 let edges_of_json j =
   let up_edge = j |> member "up" |> to_list |> List.map to_string in
