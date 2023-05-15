@@ -1,18 +1,4 @@
 type directions = UP | DOWN | LEFT | RIGHT
-
-(* module TileTriple = struct
-     type t = int * int * directions
-     (* (a, b, dir) implies that b is in the dir of a, i.e. (0, 1, UP) means that tile 1 is above 0 *)
-
-     let compare a b =
-       match (a, b) with
-       | (w, x, d1), (y, z, d2) -> if w = y && x = z && d1 = d2 then 0 else 1
-     (* let c = compare w y in
-        if c = 0 then -1 else 1 *)
-   end *)
-
-(* module AdjSet = Set.Make (TileTriple) *)
-
 type t = (int * int * directions, unit) Hashtbl.t
 
 let string_of_dir dir =
@@ -94,8 +80,6 @@ let count_init_enablers t s =
 
 let opposite_dir dir =
   match dir with UP -> DOWN | DOWN -> UP | LEFT -> RIGHT | RIGHT -> LEFT
-(* let get_allowed a b dir s =
-   let *)
 
 let cmp (w, x, d1) (y, z, d2) =
   if w < y then -1

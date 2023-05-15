@@ -15,38 +15,6 @@ type map_state = {
   mutable size : string;
 }
 
-(* create the adjacency rules based on the given tiles*)
-let create_adj_rules (tiles : Tile.t array) =
-  let r = ref (Adj_rules.empty (Array.length tiles)) in
-  print_endline "initial adjacency rules, should be empty: ";
-  Adj_rules.print_to_string !r;
-  for i = 0 to Array.length tiles - 1 do
-    let tile = tiles.(i) in
-    let tile_up = Tile.get_up tile in
-    let tile_right = Tile.get_right tile in
-    let tile_down = Tile.get_down tile in
-    let tile_left = Tile.get_left tile in
-    let rules =
-      Adj_rules.empty (Array.length tiles)
-      |> List.fold_right
-           (fun indx acc -> Adj_rules.allow i indx Adj_rules.UP acc)
-           tile_up
-      |> List.fold_right
-           (fun indx acc -> Adj_rules.allow i indx Adj_rules.DOWN acc)
-           tile_down
-      |> List.fold_right
-           (fun indx acc -> Adj_rules.allow i indx Adj_rules.LEFT acc)
-           tile_left
-      |> List.fold_right
-           (fun indx acc -> Adj_rules.allow i indx Adj_rules.RIGHT acc)
-           tile_right
-    in
-    r := Adj_rules.combine rules !r
-  done;
-  print_endline "reuslting adjacency rules: ";
-  Adj_rules.print_to_string !r;
-  !r
-
 (* based on the status of toggles, choose which tiles will be used *)
 let choose_tiles map_st =
   let compn_lst = map_st.ui in
@@ -227,7 +195,7 @@ let run_wfc map_st () =
   clear map_st ();
   choose_tiles map_st;
   let tiles_len = Array.length map_st.chosen_tiles in
-  let adj_rules = create_adj_rules map_st.chosen_tiles in
+  let adj_rules = Tile.create_adj_rules map_st.chosen_tiles in
   let active_size_data = map_st.size_data.(map_st.active_tiles) in
   let map_size, map_posi =
     match map_st.size with

@@ -81,21 +81,6 @@ let make (num_tiles : int) (sw : float) (swlw : float)
     coords;
   }
 
-let make_test (tiles : Tile.t array) =
-  Random.self_init ();
-  let rnd_index = Random.float 4. in
-  {
-    collapsed = true;
-    tile = -1;
-    options = [| rnd_index |];
-    sum_of_ones = 1;
-    sum_of_weights = 1.;
-    sum_of_weight_log_weights = 1.;
-    noise = 0.;
-    tile_enablers = [| { up = 1; right = 1; down = 1; left = 1 } |];
-    coords = (0, 0);
-  }
-
 (* chooses a random option based on frequency *)
 let choose_random_option ws t =
   let r = Random.float t.sum_of_weights |> ref in
@@ -145,14 +130,6 @@ let remove_tile ws tile t =
   t.sum_of_weights <- t.sum_of_weights -. ws.(tile);
   t.sum_of_weight_log_weights <-
     t.sum_of_weight_log_weights -. (ws.(tile) *. log ws.(tile))
-
-(* let decr_dir tile dir t =
-   let open Adj_rules in
-   match dir with
-   | UP -> t.tile_enablers.(tile).up <- t.tile_enablers.(tile).up - 1
-   | DOWN -> t.tile_enablers.(tile).down <- t.tile_enablers.(tile).down - 1
-   | LEFT -> t.tile_enablers.(tile).left <- t.tile_enablers.(tile).left - 1
-   | RIGHT -> t.tile_enablers.(tile).right <- t.tile_enablers.(tile).right - 1 *)
 
 let observe (i : int) (t : t) =
   t.options.(i) <- 0.;
