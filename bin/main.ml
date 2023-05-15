@@ -257,7 +257,7 @@ let main () =
       [|
         "data/corners.json";
         "data/pokemon_grass.json";
-        "data/pokemon_concrete.json";
+        "data/pokemon_concrete copy.json";
         "data/pokemon_water.json";
       |]
       ()
