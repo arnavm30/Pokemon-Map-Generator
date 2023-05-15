@@ -302,3 +302,12 @@ let print_neighbors c st =
     Cell.print_stats n
   in
   iter_neighbors print_neighbors c st
+
+let print_tiles st =
+  let grid = st.grid in
+  for i = 0 to Array.length grid - 1 do
+    Array.iter
+      (fun cell -> print_string (string_of_int cell.tile ^ " "))
+      grid.(i);
+    print_endline ""
+  done

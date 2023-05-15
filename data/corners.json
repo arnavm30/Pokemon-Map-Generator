@@ -3,37 +3,69 @@
     {
       "img_path": "assets/testing_corners/corner1.png",
       "edges": {
-        "up": "green",
-        "right": "green",
-        "down": "grey",
-        "left": "grey"
+        "up": [
+          "green"
+        ],
+        "right": [
+          "green"
+        ],
+        "down": [
+          "grey"
+        ],
+        "left": [
+          "grey"
+        ]
       }
     },
     {
       "img_path": "assets/testing_corners/corner2.png",
       "edges": {
-        "up": "green",
-        "right": "grey",
-        "down": "grey",
-        "left": "green"
+        "up": [
+          "green"
+        ],
+        "right": [
+          "grey"
+        ],
+        "down": [
+          "grey"
+        ],
+        "left": [
+          "green"
+        ]
       }
     },
     {
       "img_path": "assets/testing_corners/corner3.png",
       "edges": {
-        "up": "grey",
-        "right": "grey",
-        "down": "green",
-        "left": "green"
+        "up": [
+          "grey"
+        ],
+        "right": [
+          "grey"
+        ],
+        "down": [
+          "green"
+        ],
+        "left": [
+          "green"
+        ]
       }
     },
     {
       "img_path": "assets/testing_corners/corner4.png",
       "edges": {
-        "up": "grey",
-        "right": "green",
-        "down": "green",
-        "left": "grey"
+        "up": [
+          "grey"
+        ],
+        "right": [
+          "green"
+        ],
+        "down": [
+          "green"
+        ],
+        "left": [
+          "grey"
+        ]
       }
     }
   ],

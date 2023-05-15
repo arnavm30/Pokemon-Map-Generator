@@ -3,7 +3,7 @@
 type t
 (** The abstract type of values representing a tile. *)
 
-val make : Graphics.image -> string array -> t
+val make : Graphics.image -> string list array -> t
 (** [make img edges] is the tile with img [img] and edges [edges], and the rest 
     of the fields are empty lists *)
 
@@ -35,3 +35,4 @@ val from_json : Yojson.Basic.t -> t array * (string * (string * int) list) list
     Requires: [j] is a valid JSON tiles representation. *)
 
 val copy : t -> t
+(** [copy t] is new tile with same info as tile [t] *)

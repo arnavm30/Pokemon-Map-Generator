@@ -44,3 +44,4 @@ val draw : t -> int * int -> Tile.t array -> unit
     at [(x,y)]*)
 
 val print_neighbors : Cell.t -> t -> unit
+val print_tiles : t -> unit

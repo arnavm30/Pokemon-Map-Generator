@@ -241,6 +241,7 @@ let run_wfc map_st () =
   in
   (* used for testing *)
   State.validate adj_rules result_state;
+  State.print_tiles result_state;
   State.draw result_state map_posi map_st.chosen_tiles
 
 let copy_map_state { ui; tiles; size_data; active_tiles; chosen_tiles; size } =
@@ -287,11 +288,13 @@ let f_key map_st k = if k = ' ' then clear map_st () else ()
 let main () =
   let s =
     create_map_state
+      (* "data/orners.json" *)
+      (* "data/flexible_corners.json" *)
       [|
-        "data/corners.json";
+        "data/flexible_corners.json";
         "data/pokemon_grass.json";
         "data/pokemon_concrete.json";
-        "data/pokemon_water.json";
+        "data/pokemon_water copy.json";
       |]
       ()
   in
