@@ -20,3 +20,13 @@ Clicking the red generate button will render the map based on the chosen tiles.
 If no tiles are selected, an error message will appear on screen.
 
 You can also clear the map by pressing the space bar. 
+
+## Sources
+Pokemon images were cropped from: 
+https://www.deviantart.com/thedeadheroalistair/art/Project-Heliodor-Large-RPG-Maker-XP-Tileset-921038941 
+
+The pipe tiles were from: 
+https://github.com/mxgmn/WaveFunctionCollapse/blob/master/tilesets/Knots/corner.png 
+
+Pokemon jungle tiles were cropped from: 
+https://www.spriters-resource.com/game_boy_advance/pokemonemerald/sheet/8358/ 

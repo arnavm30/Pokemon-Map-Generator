@@ -165,17 +165,24 @@ let clear map_st () =
 
 (* helper function on what to do when menu is clicked *)
 let handle_menus map_st (p : List_panel.t) () =
-  (match List_panel.get_active_text p with
+  match List_panel.get_active_text p with
   | "small" -> map_st.size <- "small"
   | "medium" -> map_st.size <- "medium"
   | "large" -> map_st.size <- "large"
   | "pipes" -> map_st.active_tiles <- 0
-  | "pokemon grass" -> map_st.active_tiles <- 1
-  | "pokemon concrete" -> map_st.active_tiles <- 2
-  | "pokemon water" -> map_st.active_tiles <- 3
-  | _ -> failwith "something's wrong with handling menus");
-  update_map_state map_st;
-  clear map_st ()
+  | "pokemon grass" ->
+      map_st.active_tiles <- 1;
+      update_map_state map_st;
+      clear map_st ()
+  | "pokemon concrete" ->
+      map_st.active_tiles <- 2;
+      update_map_state map_st;
+      clear map_st ()
+  | "pokemon water" ->
+      map_st.active_tiles <- 3;
+      update_map_state map_st;
+      clear map_st ()
+  | _ -> failwith "something's wrong with handling menus"
 
 let error_msg text =
   set_color 0xFF6000;
