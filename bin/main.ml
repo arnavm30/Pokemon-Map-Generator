@@ -241,7 +241,6 @@ let run_wfc map_st () =
   in
   (* used for testing *)
   State.validate adj_rules result_state;
-  State.print_tiles result_state;
   State.draw result_state map_posi map_st.chosen_tiles
 
 let copy_map_state { ui; tiles; size_data; active_tiles; chosen_tiles; size } =
