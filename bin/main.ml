@@ -28,18 +28,15 @@ let choose_tiles map_st =
       [] compn_lst
   in
   let index_array = Array.of_list index_lst in
-  let index_len = Array.length index_array in
-  let new_tiles = Array.make index_len map_st.tiles.(map_st.active_tiles).(0) in
-  for i = 0 to index_len - 1 do
-    let index = index_array.(i) in
-    new_tiles.(i) <- map_st.tiles.(map_st.active_tiles).(index)
-  done;
-  for i = 0 to index_len - 1 do
-    let curr_tile = new_tiles.(i) in
-    let mutated_tile = Tile.analyze curr_tile new_tiles in
-    new_tiles.(i) <- mutated_tile
-  done;
-  map_st.chosen_tiles <- new_tiles
+  let new_tiles =
+    Array.init (Array.length index_array) (fun i ->
+        map_st.tiles.(map_st.active_tiles).(index_array.(i)))
+  in
+  let mutated_tiles =
+    Array.init (Array.length index_array) (fun i ->
+        Tile.analyze new_tiles.(i) new_tiles)
+  in
+  map_st.chosen_tiles <- mutated_tiles
 
 (*--------------------------EVENT LOOP----------------------------------------*)
 
@@ -97,7 +94,7 @@ let extract_size_data placements =
         match size_data with
         | [ ("dim_x", dim_x); ("dim_y", dim_y); ("x", x); ("y", y) ] ->
             { dims = (dim_x, dim_y); place = (x, y) }
-        | _ -> failwith "something's wrong")
+        | _ -> failwith "something's wrong when extracting size data")
       placements
   in
   Array.of_list result
@@ -132,6 +129,7 @@ let create_map_state (files : string array) () =
     size = "small";
   }
 
+(* update the map state to use different tiles *)
 let update_map_state map_st =
   let width = size_x () in
   let height = size_y () in
@@ -165,28 +163,19 @@ let clear map_st () =
   clear_graph ();
   init map_st ()
 
+(* helper function on what to do when menu is clicked *)
 let handle_menus map_st (p : List_panel.t) () =
-  match List_panel.get_active_text p with
+  (match List_panel.get_active_text p with
   | "small" -> map_st.size <- "small"
   | "medium" -> map_st.size <- "medium"
   | "large" -> map_st.size <- "large"
-  | "pipes" ->
-      map_st.active_tiles <- 0;
-      update_map_state map_st;
-      clear map_st ()
-  | "pokemon grass" ->
-      map_st.active_tiles <- 1;
-      update_map_state map_st;
-      clear map_st ()
-  | "pokemon concrete" ->
-      map_st.active_tiles <- 2;
-      update_map_state map_st;
-      clear map_st ()
-  | "pokemon water" ->
-      map_st.active_tiles <- 3;
-      update_map_state map_st;
-      clear map_st ()
-  | _ -> failwith "what's going on"
+  | "pipes" -> map_st.active_tiles <- 0
+  | "pokemon grass" -> map_st.active_tiles <- 1
+  | "pokemon concrete" -> map_st.active_tiles <- 2
+  | "pokemon water" -> map_st.active_tiles <- 3
+  | _ -> failwith "something's wrong with handling menus");
+  update_map_state map_st;
+  clear map_st ()
 
 let error_msg text =
   set_color 0xFF6000;

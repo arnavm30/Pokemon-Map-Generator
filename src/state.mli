@@ -29,6 +29,8 @@ val propogate : int -> float array -> Adj_rules.t -> t -> result
     that can no longer be chosen  *)
 
 val validate : Adj_rules.t -> t -> unit
+(** [validate rules st] prints valid if state [st] satisfies adjacency rules [rules]
+    and prints invalid if not *)
 
 val check_valid : Adj_rules.t -> t -> bool * string list
 (** [validate rules st] is whether state [st] is valid given adjacency rules [rules]*)
