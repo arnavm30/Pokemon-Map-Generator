@@ -258,7 +258,7 @@ let main () =
       (* "data/orners.json" *)
       (* "data/flexible_corners.json" *)
       [|
-        "data/flexible_corners.json";
+        "data/corners.json";
         "data/pokemon_grass.json";
         "data/pokemon_concrete.json";
         "data/pokemon_water.json";
