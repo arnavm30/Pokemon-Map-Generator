@@ -17,7 +17,6 @@ type map_state = {
 
 (* based on the status of toggles, choose which tiles will be used *)
 let choose_tiles map_st =
-  let compn_lst = map_st.ui in
   let index_lst =
     List.fold_left
       (fun acc c ->
@@ -25,11 +24,14 @@ let choose_tiles map_st =
         | Tog t -> if Toggle.is_on t then Toggle.get_index t :: acc else acc
         | Butn b -> acc
         | LstPanel l -> acc)
-      [] compn_lst
+      [] map_st.ui
   in
   let index_array = Array.of_list index_lst in
+  print_endline "hello";
+  print_endline (string_of_int (Array.length index_array));
   let new_tiles =
     Array.init (Array.length index_array) (fun i ->
+        print_endline (string_of_int index_array.(i));
         map_st.tiles.(map_st.active_tiles).(index_array.(i)))
   in
   let mutated_tiles =
@@ -169,7 +171,10 @@ let handle_menus map_st (p : List_panel.t) () =
   | "small" -> map_st.size <- "small"
   | "medium" -> map_st.size <- "medium"
   | "large" -> map_st.size <- "large"
-  | "pipes" -> map_st.active_tiles <- 0
+  | "pipes" ->
+      map_st.active_tiles <- 0;
+      update_map_state map_st;
+      clear map_st ()
   | "pokemon grass" ->
       map_st.active_tiles <- 1;
       update_map_state map_st;
