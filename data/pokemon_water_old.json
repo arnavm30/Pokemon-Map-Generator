@@ -4,15 +4,13 @@
       "img_path": "assets/water/left_center.png",
       "edges": {
         "up": [
-          "water_left_center",
-          "water_upper_left_corner"
+          "water_vert"
         ],
         "right": [
           "water"
         ],
         "down": [
-          "water_left_center",
-          "water_lower_left_corner"
+          "water_vert"
         ],
         "left": [
           "grass"
@@ -26,15 +24,13 @@
           "water"
         ],
         "right": [
-          "water_lower_center",
-          "water_lower_right_corner"
+          "water_horiz"
         ],
         "down": [
           "grass"
         ],
         "left": [
-          "water_lower_center",
-          "water_lower_left_corner"
+          "water_horiz"
         ]
       }
     },
@@ -42,12 +38,10 @@
       "img_path": "assets/water/lower_left_corner.png",
       "edges": {
         "up": [
-          "water_left_center",
-          "water_upper_left_corner"
+          "water_vert"
         ],
         "right": [
-          "water_lower_center",
-          "water_lower_right_corner"
+          "water_horiz"
         ],
         "down": [
           "grass"
@@ -61,8 +55,7 @@
       "img_path": "assets/water/lower_right_corner.png",
       "edges": {
         "up": [
-          "water_right_center",
-          "water_upper_right_corner"
+          "water_vert"
         ],
         "right": [
           "grass"
@@ -71,8 +64,7 @@
           "grass"
         ],
         "left": [
-          "water_lower_center",
-          "water_lower_left_corner"
+          "water_horiz"
         ]
       }
     },
@@ -80,15 +72,13 @@
       "img_path": "assets/water/right_center.png",
       "edges": {
         "up": [
-          "water_right_center",
-          "water_upper_right_corner"
+          "water_vert"
         ],
         "right": [
           "grass"
         ],
         "down": [
-          "water_right_center",
-          "water_lower_right_corner"
+          "water_vert"
         ],
         "left": [
           "water"
@@ -102,15 +92,13 @@
           "grass"
         ],
         "right": [
-          "water_upper_center",
-          "water_upper_right_corner"
+          "water_horiz"
         ],
         "down": [
           "water"
         ],
         "left": [
-          "water_upper_center",
-          "water_upper_left_corner"
+          "water_horiz"
         ]
       }
     },
@@ -121,12 +109,10 @@
           "grass"
         ],
         "right": [
-          "water_upper_center",
-          "water_upper_right_corner"
+          "water_horiz"
         ],
         "down": [
-          "water_left_center",
-          "water_lower_left_corner"
+          "water_vert"
         ],
         "left": [
           "grass"
@@ -143,12 +129,10 @@
           "grass"
         ],
         "down": [
-          "water_right_center",
-          "lower_right_corner"
+          "water_vert"
         ],
         "left": [
-          "water_upper_center",
-          "water_upper_left_corner"
+          "water_horiz"
         ]
       }
     },
@@ -373,8 +357,8 @@
     "large": {
       "dim_x": 15,
       "dim_y": 44,
-      "x": 1000,
-      "y": 300
+      "x": 20,
+      "y": 280
     }
   }
 }

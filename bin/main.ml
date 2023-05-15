@@ -261,7 +261,7 @@ let main () =
         "data/flexible_corners.json";
         "data/pokemon_grass.json";
         "data/pokemon_concrete.json";
-        "data/pokemon_water copy.json";
+        "data/pokemon_water.json";
       |]
       ()
   in
