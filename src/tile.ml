@@ -68,8 +68,7 @@ let create_adj_rules (tiles : t array) =
   !r
 
 let create_weights (tiles : t array) =
-  let tiles_len = Array.length tiles in
-  Array.make tiles_len 1.
+  Array.init (Array.length tiles) (fun i -> tiles.(i).w)
 
 let edges_of_json j =
   let up_edge = j |> member "up" |> to_list |> List.map to_string in

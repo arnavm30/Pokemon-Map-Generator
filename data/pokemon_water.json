@@ -18,7 +18,7 @@
           "grass_separator_a"
         ]
       },
-      "weight": 1.0
+      "weight": 2.0
     },
     {
       "img_path": "assets/water/lower_center.png",
@@ -38,7 +38,7 @@
           "water_lower_left_corner"
         ]
       },
-      "weight": 1.0
+      "weight": 2.0
     },
     {
       "img_path": "assets/water/lower_left_corner.png",
@@ -58,7 +58,7 @@
           "grass_separator_c"
         ]
       },
-      "weight": 1.0
+      "weight": 0.5
     },
     {
       "img_path": "assets/water/lower_right_corner.png",
@@ -68,17 +68,17 @@
           "water_upper_right_corner"
         ],
         "right": [
-          "grass_separator_c"
+          "grass_separator_d"
         ],
         "down": [
-          "grass_separator_c"
+          "grass_separator_d"
         ],
         "left": [
           "water_lower_center",
           "water_lower_left_corner"
         ]
       },
-      "weight": 1.0
+      "weight": 2.0
     },
     {
       "img_path": "assets/water/right_center.png",
@@ -88,7 +88,7 @@
           "water_upper_right_corner"
         ],
         "right": [
-          "grass_separator_d"
+          "grass_separator_e"
         ],
         "down": [
           "water_right_center",
@@ -98,13 +98,13 @@
           "water"
         ]
       },
-      "weight": 1.0
+      "weight": 2.0
     },
     {
       "img_path": "assets/water/upper_center.png",
       "edges": {
         "up": [
-          "grass_separator_e"
+          "grass_separator_f"
         ],
         "right": [
           "water_upper_center",
@@ -118,13 +118,13 @@
           "water_upper_left_corner"
         ]
       },
-      "weight": 1.0
+      "weight": 2.0
     },
     {
       "img_path": "assets/water/upper_left_corner.png",
       "edges": {
         "up": [
-          "grass_separator_c"
+          "grass_separator_g"
         ],
         "right": [
           "water_upper_center",
@@ -135,19 +135,19 @@
           "water_lower_left_corner"
         ],
         "left": [
-          "grass_separator_c"
+          "grass_separator_g"
         ]
       },
-      "weight": 1.0
+      "weight": 0.5
     },
     {
       "img_path": "assets/water/upper_right_corner.png",
       "edges": {
         "up": [
-          "grass_separator_c"
+          "grass_separator_h"
         ],
         "right": [
-          "grass_separator_c"
+          "grass_separator_h"
         ],
         "down": [
           "water_right_center",
@@ -158,7 +158,7 @@
           "water_upper_left_corner"
         ]
       },
-      "weight": 1.0
+      "weight": 0.5
     },
     {
       "img_path": "assets/water/center_water.png",
@@ -176,7 +176,7 @@
           "water"
         ]
       },
-      "weight": 1.0
+      "weight": 8.0
     },
     {
       "img_path": "assets/water/water_rock.png",
@@ -194,7 +194,7 @@
           "water"
         ]
       },
-      "weight": 1.0
+      "weight": 0.5
     },
     {
       "img_path": "assets/water/flowering_lilypad.png",
@@ -212,7 +212,7 @@
           "water"
         ]
       },
-      "weight": 1.0
+      "weight": 0.5
     },
     {
       "img_path": "assets/water/lilypad.png",
@@ -230,7 +230,7 @@
           "water"
         ]
       },
-      "weight": 1.0
+      "weight": 0.5
     },
     {
       "img_path": "assets/grass/bush.png",
@@ -331,7 +331,10 @@
           "grass_separator_b",
           "grass_separator_c",
           "grass_separator_d",
-          "grass_separator_e"
+          "grass_separator_e",
+          "grass_separator_f",
+          "grass_separator_g",
+          "grass_separator_h"
         ],
         "right": [
           "grass",
@@ -339,7 +342,10 @@
           "grass_separator_b",
           "grass_separator_c",
           "grass_separator_d",
-          "grass_separator_e"
+          "grass_separator_e",
+          "grass_separator_f",
+          "grass_separator_g",
+          "grass_separator_h"
         ],
         "down": [
           "grass",
@@ -347,7 +353,10 @@
           "grass_separator_b",
           "grass_separator_c",
           "grass_separator_d",
-          "grass_separator_e"
+          "grass_separator_e",
+          "grass_separator_f",
+          "grass_separator_g",
+          "grass_separator_h"
         ],
         "left": [
           "grass",
@@ -355,10 +364,13 @@
           "grass_separator_b",
           "grass_separator_c",
           "grass_separator_d",
-          "grass_separator_e"
+          "grass_separator_e",
+          "grass_separator_f",
+          "grass_separator_g",
+          "grass_separator_h"
         ]
       },
-      "weight": 1.0
+      "weight": 2.0
     },
     {
       "img_path": "assets/grass/grass_2.png",
@@ -369,7 +381,10 @@
           "grass_separator_b",
           "grass_separator_c",
           "grass_separator_d",
-          "grass_separator_e"
+          "grass_separator_e",
+          "grass_separator_f",
+          "grass_separator_g",
+          "grass_separator_h"
         ],
         "right": [
           "grass",
@@ -377,7 +392,10 @@
           "grass_separator_b",
           "grass_separator_c",
           "grass_separator_d",
-          "grass_separator_e"
+          "grass_separator_e",
+          "grass_separator_f",
+          "grass_separator_g",
+          "grass_separator_h"
         ],
         "down": [
           "grass",
@@ -385,7 +403,10 @@
           "grass_separator_b",
           "grass_separator_c",
           "grass_separator_d",
-          "grass_separator_e"
+          "grass_separator_e",
+          "grass_separator_f",
+          "grass_separator_g",
+          "grass_separator_h"
         ],
         "left": [
           "grass",
@@ -393,10 +414,13 @@
           "grass_separator_b",
           "grass_separator_c",
           "grass_separator_d",
-          "grass_separator_e"
+          "grass_separator_e",
+          "grass_separator_f",
+          "grass_separator_g",
+          "grass_separator_h"
         ]
       },
-      "weight": 1.0
+      "weight": 2.0
     },
     {
       "img_path": "assets/grass/grass_3.png",
@@ -407,7 +431,10 @@
           "grass_separator_b",
           "grass_separator_c",
           "grass_separator_d",
-          "grass_separator_e"
+          "grass_separator_e",
+          "grass_separator_f",
+          "grass_separator_g",
+          "grass_separator_h"
         ],
         "right": [
           "grass",
@@ -415,7 +442,10 @@
           "grass_separator_b",
           "grass_separator_c",
           "grass_separator_d",
-          "grass_separator_e"
+          "grass_separator_e",
+          "grass_separator_f",
+          "grass_separator_g",
+          "grass_separator_h"
         ],
         "down": [
           "grass",
@@ -423,7 +453,10 @@
           "grass_separator_b",
           "grass_separator_c",
           "grass_separator_d",
-          "grass_separator_e"
+          "grass_separator_e",
+          "grass_separator_f",
+          "grass_separator_g",
+          "grass_separator_h"
         ],
         "left": [
           "grass",
@@ -431,10 +464,13 @@
           "grass_separator_b",
           "grass_separator_c",
           "grass_separator_d",
-          "grass_separator_e"
+          "grass_separator_e",
+          "grass_separator_f",
+          "grass_separator_g",
+          "grass_separator_h"
         ]
       },
-      "weight": 1.0
+      "weight": 2.0
     }
   ],
   "placement": {
