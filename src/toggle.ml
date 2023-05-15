@@ -18,10 +18,7 @@ let draw toggle =
   let img = toggle.img in
   let img_color_array = dump_image img in
   let img_width = Array.length img_color_array in
-  let img_height = Array.length img_color_array.(0) in
-  Graphics.draw_image img
-    (toggle.x - (img_width / 2))
-    (toggle.y + (2 * img_height));
+  Graphics.draw_image img (toggle.x - (img_width / 2)) (toggle.y + 20);
   fill_circle toggle.x toggle.y toggle.r
 
 let mem (x, y) toggle =

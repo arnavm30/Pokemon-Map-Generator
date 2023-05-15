@@ -41,7 +41,7 @@ let draw p =
   set_color white;
   set_font "-*-fixed-medium-r-semicondensed--20-*-*-*-*-*-iso8859-1";
   for i = 0 to Array.length p.options - 1 do
-    moveto (x + (w / 8)) (p.options.(i).y0 + 5);
+    moveto (x + (w / 8)) p.options.(i).y0;
     draw_string p.options.(i).text
   done
 

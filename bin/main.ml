@@ -53,11 +53,9 @@ let gen_interface tiles width height (x, y) active_size active_file : compn list
   let r = ref [] in
   for i = 0 to num_toggles - 1 do
     let img = Tile.get_img tiles.(i) in
-    let img_color_array = dump_image img in
-    let img_width = Array.length img_color_array in
     let tog =
       Toggle.make
-        (x + (i * toggle_width) + (toggle_width / 2) - (img_width / 2))
+        (x + (i * toggle_width) + (toggle_width / 2))
         (toggle_height + (toggle_height / 2))
         radius img i
     in
@@ -67,7 +65,7 @@ let gen_interface tiles width height (x, y) active_size active_file : compn list
   let genr_butn = Button.make (width / 4) 50 (width / 2) 50 red "generate" in
   r := Butn genr_butn :: !r;
   let lst_pnl =
-    List_panel.make (width / 15) 50 (width / 10) 75
+    List_panel.make (width / 15) 35 (width / 10) 75
       [ "small"; "medium"; "large" ]
       active_size
   in
@@ -75,7 +73,7 @@ let gen_interface tiles width height (x, y) active_size active_file : compn list
   let file_lst_pnl =
     List_panel.make
       ((12 * width / 15) + 20)
-      50 (width / 7) 75
+      35 (width / 7) 75
       [ "pipes"; "pokemon grass"; "pokemon concrete"; "pokemon water" ]
       active_file
   in

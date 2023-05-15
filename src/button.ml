@@ -21,7 +21,7 @@ let draw b =
   let h = b.height in
   fill_rect x y w h;
   let text_x, text_y = text_size b.text in
-  moveto (x + (w / 3) + (text_x / 3)) (y + (text_y / 3));
+  moveto (x + (w / 3) + (text_x / 3) + 20) (y + (text_y / 3));
   set_font "-*-fixed-medium-r-semicondensed--40-*-*-*-*-*-iso8859-1";
   set_color black;
   draw_string b.text
