@@ -17,7 +17,8 @@
         "left": [
           "grey"
         ]
-      }
+      },
+      "weight": 1.0
     },
     {
       "img_path": "assets/testing_corners/corner2.png",
@@ -36,7 +37,8 @@
         "left": [
           "green"
         ]
-      }
+      },
+      "weight": 1.0
     },
     {
       "img_path": "assets/testing_corners/corner3.png",
@@ -54,7 +56,8 @@
           "green",
           "grey"
         ]
-      }
+      },
+      "weight": 1.0
     },
     {
       "img_path": "assets/testing_corners/corner4.png",
@@ -72,7 +75,8 @@
         "left": [
           "grey"
         ]
-      }
+      },
+      "weight": 1.0
     }
   ],
   "placement": {

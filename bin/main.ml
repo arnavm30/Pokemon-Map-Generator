@@ -196,6 +196,7 @@ let run_wfc map_st () =
   choose_tiles map_st;
   let tiles_len = Array.length map_st.chosen_tiles in
   let adj_rules = Tile.create_adj_rules map_st.chosen_tiles in
+  let weights = Tile.create_weights map_st.chosen_tiles in
   let active_size_data = map_st.size_data.(map_st.active_tiles) in
   let map_size, map_posi =
     match map_st.size with
@@ -204,9 +205,7 @@ let run_wfc map_st () =
     | "large" -> (active_size_data.(2).dims, active_size_data.(2).place)
     | _ -> (active_size_data.(0).dims, active_size_data.(0).place)
   in
-  let result_state =
-    Wfc.wfc map_size tiles_len (Array.make tiles_len 1.) adj_rules
-  in
+  let result_state = Wfc.wfc map_size tiles_len weights adj_rules in
   (* used for testing *)
   State.validate adj_rules result_state;
   State.draw result_state map_posi map_st.chosen_tiles
