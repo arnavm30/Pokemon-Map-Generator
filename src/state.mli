@@ -38,4 +38,8 @@ val draw : t -> int * int -> Tile.t array -> unit
     at [(x,y)]*)
 
 val print_neighbors : Cell.t -> t -> unit
+(** [draw print_neighbors c st] prints the cell stats of the neighbors of cell [c] 
+    in the state [st]*)
+
 val print_tiles : t -> unit
+(** [print_tiles st] prints the index of the tiles of state [st]*)

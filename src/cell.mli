@@ -59,3 +59,4 @@ val options_to_string : t -> string
 (** [options_to_string c] is the options of cell [c] as a string *)
 
 val print_stats : t -> unit
+(** [print_stats c] prints the stats of the cell [c] *)
