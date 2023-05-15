@@ -287,8 +287,10 @@ let f_key map_st k = if k = ' ' then clear map_st () else ()
 let main () =
   let s =
     create_map_state
+      (* "data/orners.json" *)
+      (* "data/flexible_corners.json" *)
       [|
-        "data/corners.json";
+        "data/flexible_corners.json";
         "data/pokemon_grass.json";
         "data/pokemon_concrete.json";
         "data/pokemon_water.json";
