@@ -3,6 +3,7 @@ module StrSet = Set.Make (String)
 
 type t = {
   img : Graphics.image;
+  w : float;
   edges : StrSet.t array;
   mutable up : int list;
   mutable right : int list;
@@ -13,9 +14,9 @@ type t = {
 let lst_to_set (lst : string list) : StrSet.t =
   List.fold_left (fun acc el -> StrSet.add el acc) StrSet.empty lst
 
-let make img edges =
+let make img w edges =
   let new_edges = Array.map (fun el -> lst_to_set el) edges in
-  { img; edges = new_edges; up = []; right = []; down = []; left = [] }
+  { img; w; edges = new_edges; up = []; right = []; down = []; left = [] }
 
 let get_img tile = tile.img
 let is_overlap s1 s2 = not (StrSet.is_empty (StrSet.inter s1 s2))
@@ -39,11 +40,8 @@ let analyze curr_tile tiles =
   done;
   curr_tile
 
-(* create the adjacency rules based on the given tiles*)
 let create_adj_rules (tiles : t array) =
   let r = ref (Adj_rules.empty (Array.length tiles)) in
-  print_endline "initial adjacency rules, should be empty: ";
-  Adj_rules.print_to_string !r;
   for i = 0 to Array.length tiles - 1 do
     let tile = tiles.(i) in
     let tile_up = tile.up in
@@ -67,9 +65,11 @@ let create_adj_rules (tiles : t array) =
     in
     r := Adj_rules.combine rules !r
   done;
-  print_endline "reuslting adjacency rules: ";
-  Adj_rules.print_to_string !r;
   !r
+
+let create_weights (tiles : t array) =
+  let tiles_len = Array.length tiles in
+  Array.make tiles_len 1.
 
 let edges_of_json j =
   let up_edge = j |> member "up" |> to_list |> List.map to_string in
@@ -81,7 +81,8 @@ let edges_of_json j =
 let tile_of_json j =
   let img_path = j |> member "img_path" |> to_string in
   let edges = j |> member "edges" |> edges_of_json in
-  make (Graphic_image.of_image (Png.load img_path [])) edges
+  let weight = j |> member "weight" |> to_float in
+  make (Graphic_image.of_image (Png.load img_path [])) weight edges
 
 let sizes_of_json j =
   let dim_x = j |> member "dim_x" |> to_int in
@@ -101,6 +102,6 @@ let from_json j =
   let placement = j |> member "placement" |> palcement_of_json in
   (Array.of_list tiles_lst, placement)
 
-let copy { img; edges; up; down; left; right } =
+let copy { img; w; edges; up; down; left; right } =
   let copy_edges = Array.init (Array.length edges) (fun i -> edges.(i)) in
-  { img; edges = copy_edges; up; down; left; right }
+  { img; w; edges = copy_edges; up; down; left; right }

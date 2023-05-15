@@ -15,7 +15,8 @@
         "left": [
           "grass"
         ]
-      }
+      },
+      "weight": 1.0
     },
     {
       "img_path": "assets/water/lower_center.png",
@@ -32,7 +33,8 @@
         "left": [
           "water_horiz"
         ]
-      }
+      },
+      "weight": 1.0
     },
     {
       "img_path": "assets/water/lower_left_corner.png",
@@ -49,7 +51,8 @@
         "left": [
           "grass"
         ]
-      }
+      },
+      "weight": 1.0
     },
     {
       "img_path": "assets/water/lower_right_corner.png",
@@ -66,7 +69,8 @@
         "left": [
           "water_horiz"
         ]
-      }
+      },
+      "weight": 1.0
     },
     {
       "img_path": "assets/water/right_center.png",
@@ -83,7 +87,8 @@
         "left": [
           "water"
         ]
-      }
+      },
+      "weight": 1.0
     },
     {
       "img_path": "assets/water/upper_center.png",
@@ -100,7 +105,8 @@
         "left": [
           "water_horiz"
         ]
-      }
+      },
+      "weight": 1.0
     },
     {
       "img_path": "assets/water/upper_left_corner.png",
@@ -117,7 +123,8 @@
         "left": [
           "grass"
         ]
-      }
+      },
+      "weight": 1.0
     },
     {
       "img_path": "assets/water/upper_right_corner.png",
@@ -134,7 +141,8 @@
         "left": [
           "water_horiz"
         ]
-      }
+      },
+      "weight": 1.0
     },
     {
       "img_path": "assets/water/center_water.png",
@@ -151,7 +159,8 @@
         "left": [
           "water"
         ]
-      }
+      },
+      "weight": 1.0
     },
     {
       "img_path": "assets/water/water_rock.png",
@@ -168,7 +177,8 @@
         "left": [
           "water"
         ]
-      }
+      },
+      "weight": 1.0
     },
     {
       "img_path": "assets/water/flowering_lilypad.png",
@@ -185,7 +195,8 @@
         "left": [
           "water"
         ]
-      }
+      },
+      "weight": 1.0
     },
     {
       "img_path": "assets/water/lilypad.png",
@@ -202,7 +213,8 @@
         "left": [
           "water"
         ]
-      }
+      },
+      "weight": 1.0
     },
     {
       "img_path": "assets/grass/bush.png",
@@ -219,7 +231,8 @@
         "left": [
           "grass"
         ]
-      }
+      },
+      "weight": 1.0
     },
     {
       "img_path": "assets/grass/dirt_patch.png",
@@ -236,7 +249,8 @@
         "left": [
           "grass"
         ]
-      }
+      },
+      "weight": 1.0
     },
     {
       "img_path": "assets/grass/fern_1.png",
@@ -253,7 +267,8 @@
         "left": [
           "grass"
         ]
-      }
+      },
+      "weight": 1.0
     },
     {
       "img_path": "assets/grass/fern_2.png",
@@ -270,7 +285,8 @@
         "left": [
           "grass"
         ]
-      }
+      },
+      "weight": 1.0
     },
     {
       "img_path": "assets/grass/flowers.png",
@@ -287,7 +303,8 @@
         "left": [
           "grass"
         ]
-      }
+      },
+      "weight": 1.0
     },
     {
       "img_path": "assets/grass/grass_1.png",
@@ -304,7 +321,8 @@
         "left": [
           "grass"
         ]
-      }
+      },
+      "weight": 1.0
     },
     {
       "img_path": "assets/grass/grass_2.png",
@@ -321,7 +339,8 @@
         "left": [
           "grass"
         ]
-      }
+      },
+      "weight": 1.0
     },
     {
       "img_path": "assets/grass/grass_3.png",
@@ -338,7 +357,8 @@
         "left": [
           "grass"
         ]
-      }
+      },
+      "weight": 1.0
     }
   ],
   "placement": {
