@@ -1,0 +1,505 @@
+{
+  "tiles": [
+    {
+      "img_path": "assets/jungle/cliff_ground.png",
+      "edges": {
+        "up": [
+          "cliff"
+        ],
+        "right": [
+          "cliff"
+        ],
+        "down": [
+          "stairs",
+          "cliff"
+        ],
+        "left": [
+          "cliff"
+        ]
+      },
+      "weight": 2.0
+    },
+    {
+      "img_path": "assets/jungle/cliff_inner_upper_center.png",
+      "edges": {
+        "up": [
+          "jungle",
+          "cliff"
+        ],
+        "right": [
+          "c_up",
+          "cliff"
+        ],
+        "down": [
+          "c_up",
+          "cliff"
+        ],
+        "left": [
+          "cliff"
+        ]
+      },
+      "weight": 2.0
+    },
+    {
+      "img_path": "assets/jungle/cliff_inner_upper_left_corner.png",
+      "edges": {
+        "up": [
+          "jungle",
+          "cliff"
+        ],
+        "right": [
+          "c_up",
+          "stairs"
+        ],
+        "down": [
+          "c_left"
+        ],
+        "left": [
+          "cliff",
+          "jungle"
+        ]
+      },
+      "weight": 0.5
+    },
+    {
+      "img_path": "assets/jungle/cliff_inner_upper_right_corner.png",
+      "edges": {
+        "up": [
+          "jungle",
+          "cliff"
+        ],
+        "right": [
+          "jungle",
+          "cliff"
+        ],
+        "down": [
+          "c_right"
+        ],
+        "left": [
+          "c_up",
+          "stairs"
+        ]
+      },
+      "weight": 2.0
+    },
+    {
+      "img_path": "assets/jungle/cliff_inner_vertical_center.png",
+      "edges": {
+        "up": [
+          "c_left"
+        ],
+        "right": [
+          "cliff"
+        ],
+        "down": [
+          "c_left"
+        ],
+        "left": [
+          "jungle",
+          "cliff"
+        ]
+      },
+      "weight": 2.0
+    },
+    {
+      "img_path": "assets/jungle/cliff_outer_bottom_left_corner.png",
+      "edges": {
+        "up": [
+          "c_right"
+        ],
+        "right": [
+          "c_up"
+        ],
+        "down": [
+          "cliff"
+        ],
+        "left": [
+          "cliff"
+        ]
+      },
+      "weight": 2.0
+    },
+    {
+      "img_path": "assets/jungle/cliff_right_vertical_center.png",
+      "edges": {
+        "up": [
+          "c_right"
+        ],
+        "right": [
+          "jungle",
+          "cliff"
+        ],
+        "down": [
+          "c_right"
+        ],
+        "left": [
+          "cliff"
+        ]
+      },
+      "weight": 0.5
+    },
+    {
+      "img_path": "assets/jungle/cliff_rock.png",
+      "edges": {
+        "up": [
+          "cliff"
+        ],
+        "right": [
+          "cliff"
+        ],
+        "down": [
+          "cliff"
+        ],
+        "left": [
+          "cliff"
+        ]
+      },
+      "weight": 0.5
+    },
+    {
+      "img_path": "assets/jungle/flower.png",
+      "edges": {
+        "up": [
+          "jungle"
+        ],
+        "right": [
+          "jungle"
+        ],
+        "down": [
+          "jungle"
+        ],
+        "left": [
+          "jungle"
+        ]
+      },
+      "weight": 8.0
+    },
+    {
+      "img_path": "assets/jungle/rock.png",
+      "edges": {
+        "up": [
+          "jungle"
+        ],
+        "right": [
+          "jungle"
+        ],
+        "down": [
+          "jungle"
+        ],
+        "left": [
+          "jungle"
+        ]
+      },
+      "weight": 0.5
+    },
+    {
+      "img_path": "assets/jungle/sign.png",
+      "edges": {
+        "up": [
+          "cliff"
+        ],
+        "right": [
+          "cliff"
+        ],
+        "down": [
+          "cliff"
+        ],
+        "left": [
+          "cliff"
+        ]
+      },
+      "weight": 0.5
+    },
+    {
+      "img_path": "assets/jungle/stairs.png",
+      "edges": {
+        "up": [
+          "cliff",
+          "jungle",
+          "stairs"
+        ],
+        "right": [
+          "stairs"
+        ],
+        "down": [
+          "cliff",
+          "stairs"
+        ],
+        "left": [
+          "stairs"
+        ]
+      },
+      "weight": 1.0
+    },
+    {
+      "img_path": "assets/jungle/top_tree.png",
+      "edges": {
+        "up": [
+          "jungle"
+        ],
+        "right": [
+          "jungle"
+        ],
+        "down": [
+          "top_whole_tree"
+        ],
+        "left": [
+          "jungle"
+        ]
+      },
+      "weight": 1.0
+    },
+    {
+      "img_path": "assets/jungle/top_whole_tree.png",
+      "edges": {
+        "up": [
+          "top_whole_tree",
+          "jungle"
+        ],
+        "right": [
+          "jungle"
+        ],
+        "down": [
+          "whole_tree"
+        ],
+        "left": [
+          "jungle"
+        ]
+      },
+      "weight": 1.0
+    },
+    {
+      "img_path": "assets/jungle/bottom_whole_tree.png",
+      "edges": {
+        "up": [
+          "whole_tree"
+        ],
+        "right": [
+          "jungle"
+        ],
+        "down": [
+          "jungle"
+        ],
+        "left": [
+          "jungle"
+        ]
+      },
+      "weight": 1.0
+    },
+    {
+      "img_path": "assets/jungle/grass.png",
+      "edges": {
+        "up": [
+          "jungle"
+        ],
+        "right": [
+          "jungle"
+        ],
+        "down": [
+          "jungle"
+        ],
+        "left": [
+          "jungle"
+        ]
+      },
+      "weight": 2.0
+    },
+    {
+      "img_path": "assets/jungle/medium_grass.png",
+      "edges": {
+        "up": [
+          "grass"
+        ],
+        "right": [
+          "grass_up_center",
+          "grass_up_right_corner"
+        ],
+        "down": [
+          "grass_inner"
+        ],
+        "left": [
+          "grass_up_center",
+          "grass_up_left_corner"
+        ]
+      },
+      "weight": 0.05
+    },
+    {
+      "img_path": "assets/jungle/medium_grass.png",
+      "edges": {
+        "up": [
+          "grass"
+        ],
+        "right": [
+          "grass"
+        ],
+        "down": [
+          "grass_right_center",
+          "grass_lower_right_corner"
+        ],
+        "left": [
+          "grass_up_center",
+          "grass_up_left_corner"
+        ]
+      },
+      "weight": 0.05
+    },
+    {
+      "img_path": "assets/jungle/medium_grass.png",
+      "edges": {
+        "up": [
+          "grass_right_center",
+          "grass_up_right_corner"
+        ],
+        "right": [
+          "grass"
+        ],
+        "down": [
+          "grass_right_center"
+        ],
+        "left": [
+          "inner_grass"
+        ]
+      },
+      "weight": 0.05
+    },
+    {
+      "img_path": "assets/jungle/medium_grass.png",
+      "edges": {
+        "up": [
+          "grass_right_center",
+          "grass_up_right_corner"
+        ],
+        "right": [
+          "grass"
+        ],
+        "down": [
+          "grass"
+        ],
+        "left": [
+          "grass_low_center",
+          "grass_low_left_corner"
+        ]
+      },
+      "weight": 0.05
+    },
+    {
+      "img_path": "assets/jungle/medium_grass.png",
+      "edges": {
+        "up": [
+          "inner_grass"
+        ],
+        "right": [
+          "grass_low_center",
+          "grass_low_right_corner"
+        ],
+        "down": [
+          "grass"
+        ],
+        "left": [
+          "grass_low_center",
+          "grass_low_left_corner"
+        ]
+      },
+      "weight": 0.05
+    },
+    {
+      "img_path": "assets/jungle/medium_grass.png",
+      "edges": {
+        "up": [
+          "grass_left_center",
+          "grass_up_left_corner"
+        ],
+        "right": [
+          "grass_low_center",
+          "grass_low_right_corner"
+        ],
+        "down": [
+          "grass"
+        ],
+        "left": [
+          "grass"
+        ]
+      },
+      "weight": 0.05
+    },
+    {
+      "img_path": "assets/jungle/medium_grass.png",
+      "edges": {
+        "up": [
+          "grass_left_center",
+          "grass_up_left_corner"
+        ],
+        "right": [
+          "inner_grass"
+        ],
+        "down": [
+          "grass_left_center",
+          "grass_low_left_corner"
+        ],
+        "left": [
+          "grass"
+        ]
+      },
+      "weight": 0.05
+    },
+    {
+      "img_path": "assets/jungle/medium_grass.png",
+      "edges": {
+        "up": [
+          "grass"
+        ],
+        "right": [
+          "grass_up_center",
+          "grass_up_right_corner"
+        ],
+        "down": [
+          "grass_left_center",
+          "grass_low_left_corner"
+        ],
+        "left": [
+          "grass"
+        ]
+      },
+      "weight": 0.05
+    },
+    {
+      "img_path": "assets/jungle/medium_grass.png",
+      "edges": {
+        "up": [
+          "inner_grass"
+        ],
+        "right": [
+          "inner_grass"
+        ],
+        "down": [
+          "inner_grass"
+        ],
+        "left": [
+          "inner_grass"
+        ]
+      },
+      "weight": 0.05
+    }
+  ],
+  "placement": {
+    "small": {
+      "dim_x": 10,
+      "dim_y": 10,
+      "x": 550,
+      "y": 325
+    },
+    "medium": {
+      "dim_x": 20,
+      "dim_y": 15,
+      "x": 400,
+      "y": 230
+    },
+    "large": {
+      "dim_x": 43,
+      "dim_y": 17,
+      "x": 35,
+      "y": 200
+    }
+  }
+}

@@ -82,6 +82,7 @@ let make (num_tiles : int) (sw : float) (swlw : float)
   }
 
 (* chooses a random option based on frequency *)
+(* algorithm from andrew cooke: https://stackoverflow.com/questions/14992521/python-weighted-random*)
 let choose_random_option ws t =
   let r = Random.float t.sum_of_weights |> ref in
   let i = ref 0 in

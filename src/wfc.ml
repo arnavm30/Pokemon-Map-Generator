@@ -32,6 +32,7 @@ let rec run num_tiles ws adj_rules st =
       | CONTRADICTION -> CONTRADICTION
   with Unfinished -> raise Unfinished (* CONTRADICTION *)
 
+(* Overall algorithm outline inspired by: https://www.gridbugs.org/wave-function-collapse/*)
 let rec wfc (x, y) num_tiles ws adj_rules =
   let init_st = init x y num_tiles ws adj_rules in
   match run num_tiles ws adj_rules init_st with
