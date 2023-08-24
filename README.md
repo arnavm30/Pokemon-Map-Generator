@@ -30,3 +30,9 @@ https://github.com/mxgmn/WaveFunctionCollapse/blob/master/tilesets/Knots/corner.
 
 Pokemon jungle tiles were cropped from: 
 https://www.spriters-resource.com/game_boy_advance/pokemonemerald/sheet/8358/ 
+
+## Demo
+
+
+https://github.com/awu-lgtm/Pokemon-Map-Generator/assets/98050822/f8c83b81-d626-41ec-975e-f101375f41df
+
