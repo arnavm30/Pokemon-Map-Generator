@@ -33,6 +33,5 @@ https://www.spriters-resource.com/game_boy_advance/pokemonemerald/sheet/8358/
 
 ## Demo
 
-
-https://github.com/awu-lgtm/Pokemon-Map-Generator/assets/98050822/f8c83b81-d626-41ec-975e-f101375f41df
+https://github.com/arnavm30/Pokemon-Map-Generator/assets/263121568-f8c83b81-d626-41ec-975e-f101375f41df.mov
 
